@@ -32,7 +32,7 @@ class AdmobIOS
 		if (!_initialized)
 		{
 			_initialized = true;
-			initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobStatus));	
+			initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobStatus));
 		}
 		else
 			dispatchEvent(AdmobEvent.FAIL, "Admob extension has been already initialized");
@@ -170,7 +170,7 @@ class AdmobIOS
 			return hasAdmobConsentForPurpose(purpose);
 		else
 			dispatchFrustration();
-		
+
 		return -1;
 	}
 
@@ -185,7 +185,7 @@ class AdmobIOS
 			return getAdmobConsent();
 		else
 			dispatchFrustration();
-		
+
 		return "";
 	}
 
@@ -200,7 +200,7 @@ class AdmobIOS
 			return isAdmobPrivacyOptionsRequired();
 		else
 			dispatchFrustration();
-		
+
 		return false;
 	}
 
@@ -214,7 +214,7 @@ class AdmobIOS
 		else
 			dispatchFrustration();
 	}
-	
+
 	/**
 	 * Add events' listener
 	 */
@@ -222,7 +222,7 @@ class AdmobIOS
 	{
 		_callback = callback;
 	}
-	
+
 	/**
 	 * Dispatcjh and event, if there is a listener
 	 */
@@ -231,7 +231,7 @@ class AdmobIOS
 		if (_callback != null)
 			_callback(event, data);
 	}
-	
+
 	/**
 	 * I don't how to describe this
 	 */
