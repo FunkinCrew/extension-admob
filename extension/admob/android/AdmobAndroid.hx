@@ -60,9 +60,7 @@ class AdmobAndroid
 	@:noCompletion
 	private static var _showPrivacyOptionsForm:Null<Dynamic> = null;
 
-	/**
-	 * Event triggered for status updates from AdMob.
-	 */
+	@:noCompletion
 	private static var _callback:Null<String->String->Void> = null;
 
 	/**
