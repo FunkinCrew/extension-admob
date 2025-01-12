@@ -12,9 +12,7 @@ import haxe.MainLoop;
 @:headerInclude("admob.hpp")
 class AdmobIOS
 {
-	/**
-	 * Event triggered for status updates from AdMob.
-	 */
+	@:noCompletion
 	private static var _callback:Null<String->String->Void> = null;
 
 	@:noCompletion
@@ -32,6 +30,7 @@ class AdmobIOS
 		if (!_initialized)
 		{
 			_initialized = true;
+
 			initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobStatus));
 		}
 		else

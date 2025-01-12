@@ -18,25 +18,46 @@ class AdmobAndroid
 	@:noCompletion
 	private static var _initialized:Bool = false;
 
+	@:noCompletion
 	private static var _init:Null<Dynamic> = null;
 
+	@:noCompletion
 	private static var _showBanner:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _hideBanner:Null<Dynamic> = null;
 
+	@:noCompletion
 	private static var _loadInterstitial:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _showInterstitial:Null<Dynamic> = null;
 
+	@:noCompletion
 	private static var _loadRewarded:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _showRewarded:Null<Dynamic> = null;
 
+	@:noCompletion
 	private static var _loadAppOpen:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _showAppOpen:Null<Dynamic> = null;
 
+	@:noCompletion
 	private static var _setVolume:Null<Dynamic> = null;
 
+	@:noCompletion
 	private static var _hasConsentForPurpose:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _getConsent:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _isPrivacyOptionsRequired:Null<Dynamic> = null;
+
+	@:noCompletion
 	private static var _showPrivacyOptionsForm:Null<Dynamic> = null;
 
 	/**
@@ -58,21 +79,15 @@ class AdmobAndroid
 			_initialized = true;
 
 			_init = JNI.createStaticMethod("org/haxe/extension/Admob", "init", "(ZZZLorg/haxe/lime/HaxeObject;)V");
-
 			_showBanner = JNI.createStaticMethod("org/haxe/extension/Admob", "showBanner", "(Ljava/lang/String;II)V");
 			_hideBanner = JNI.createStaticMethod("org/haxe/extension/Admob", "hideBanner", "()V");
-
 			_loadInterstitial = JNI.createStaticMethod("org/haxe/extension/Admob", "loadInterstitial", "(Ljava/lang/String;Z)V");
 			_showInterstitial = JNI.createStaticMethod("org/haxe/extension/Admob", "showInterstitial", "()V");
-
 			_loadRewarded = JNI.createStaticMethod("org/haxe/extension/Admob", "loadRewarded", "(Ljava/lang/String;Z)V");
 			_showRewarded = JNI.createStaticMethod("org/haxe/extension/Admob", "showRewarded", "()V");
-
 			_loadAppOpen = JNI.createStaticMethod("org/haxe/extension/Admob", "loadAppOpen", "(Ljava/lang/String;Z)V");
 			_showAppOpen = JNI.createStaticMethod("org/haxe/extension/Admob", "showAppOpen", "()V");
-
 			_setVolume = JNI.createStaticMethod("org/haxe/extension/Admob", "setVolume", "(F)V");
-
 			_hasConsentForPurpose = JNI.createStaticMethod("org/haxe/extension/Admob", "hasConsentForPurpose", "(I)I");
 			_getConsent = JNI.createStaticMethod("org/haxe/extension/Admob", "getConsent", "()Ljava/lang/String;");
 			_isPrivacyOptionsRequired = JNI.createStaticMethod("org/haxe/extension/Admob", "isPrivacyOptionsRequired", "()Z");
