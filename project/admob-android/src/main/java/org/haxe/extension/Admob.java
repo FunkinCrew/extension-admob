@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.os.Build;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -27,8 +25,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-//https://developers.google.com/admob/android/quick-start?hl=en
-
+/**
+ * @see https://developers.google.com/admob/android/quick-start?hl=en
+ */
 public class Admob extends Extension
 {
 	private static AdView _adView;
@@ -42,22 +41,20 @@ public class Admob extends Extension
 	public static void init(final boolean testingAds, final boolean childDirected, final boolean enableRDP, HaxeObject callback)
 	{
 		_callback = callback;
-		
-		//> use this to debug GDPR
-		/*ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(mainContext)
-			.setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
-			.addTestDeviceHashedId("[TEST_DEVICE_ID]")
-			.build();
 
-		ConsentRequestParameters params = new ConsentRequestParameters
-			.Builder()
-			.setConsentDebugSettings(debugSettings)
-			.build();*/
-		//<
+		ConsentRequestParameters params = new ConsentRequestParameters.Builder();
+
+		// ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(mainContext);
+		// debugSettings.setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA);
+		// debugSettings.addTestDeviceHashedId("[TEST_DEVICE_ID]");
+		// debugSettings.build();
+		// params.setConsentDebugSettings(debugSettings);
+
+		params.setTagForUnderAgeOfConsent(childDirected);
+		params.build();
 
 		_consentInformation = UserMessagingPlatform.getConsentInformation(mainContext);
-
-		_consentInformation.requestConsentInfoUpdate(mainActivity, new ConsentRequestParameters.Builder().setTagForUnderAgeOfConsent(childDirected).build() /*params*/, new ConsentInformation.OnConsentInfoUpdateSuccessListener()
+		_consentInformation.requestConsentInfoUpdate(mainActivity, params, new ConsentInformation.OnConsentInfoUpdateSuccessListener()
 		{
 			public void onConsentInfoUpdateSuccess()
 			{
@@ -221,7 +218,7 @@ public class Admob extends Extension
 						if (_callback != null)
 							_callback.call("onStatus", new Object[] { "BANNER_LOADED", "" });
 
-						_adView.setVisibility(View.VISIBLE); //to fix this problem, if it is still valid: https://groups.google.com/forum/#!topic/google-admob-ads-sdk/avwVXvBt_sM
+						_adView.setVisibility(View.VISIBLE); // to fix this problem, if it is still valid: https://groups.google.com/forum/#!topic/google-admob-ads-sdk/avwVXvBt_sM
 					}
 
 					@Override
@@ -528,8 +525,10 @@ public class Admob extends Extension
 			MobileAds.setAppMuted(true);
 	}
 
-	//https://support.google.com/admob/answer/9760862
-	//https://iabeurope.eu/iab-europe-transparency-consent-framework-policies/#A_Purposes
+	/**
+	 * @see https://support.google.com/admob/answer/9760862
+	 * @see https://iabeurope.eu/iab-europe-transparency-consent-framework-policies/#A_Purposes
+	 */
 	public static int hasConsentForPurpose(final int purpose)
 	{
 		String purposeConsents = getConsent();
@@ -563,25 +562,21 @@ public class Admob extends Extension
 			}
 		});
 	}
-	
-	//> copy/paste from https://developers.google.com/admob/android/banner/anchored-adaptive
-	private static AdSize getAdSize()
+
+	/**
+	 * @see https://developers.google.com/admob/android/banner/anchored-adaptive
+	 */
+	public static AdSize getAdSize()
 	{
-		DisplayMetrics displayMetrics = mainActivity.getResources().getDisplayMetrics();
+		DisplayMetrics displayMetrics = mainContext.getResources().getDisplayMetrics();
+
 		int adWidthPixels = displayMetrics.widthPixels;
 
-		if (VERSION.SDK_INT >= VERSION_CODES.R)
-		{
-			WindowMetrics windowMetrics = mainActivity.getWindowManager().getCurrentWindowMetrics();
-			adWidthPixels = windowMetrics.getBounds().width();
-		}
+		if (VERSION.SDK_INT >= 30)
+			adWidthPixels = mainActivity.getWindowManager().getCurrentWindowMetrics().getBounds().width();
 
-		float density = displayMetrics.density;
-		int adWidth = (int) (adWidthPixels / density);
-		
-		return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(mainActivity, adWidth);
+		return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(mainContext, (int) (adWidthPixels / displayMetrics.density));
 	}
-	//<
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
