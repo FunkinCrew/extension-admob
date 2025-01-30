@@ -18,6 +18,7 @@ import com.google.android.gms.ads.interstitial.*;
 import com.google.android.gms.ads.rewarded.*;
 import com.google.android.gms.ads.*;
 import com.google.android.ump.*;
+import com.unity3d.ads.metadata.MetaData;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
 import java.security.MessageDigest;
@@ -154,6 +155,18 @@ public class Admob extends Extension
 			editor.putInt("gad_rdp", 1);
 			editor.commit();
 		}
+
+		String purposeConsents = getConsent();
+
+		MetaData gdprMetaData = new MetaData(context);
+		gdprMetaData.set("gdpr.consent", !purposeConsents.isEmpty() && purposeConsents.charAt(0) == '1');
+		gdprMetaData.commit();
+
+		String usPrivacyString = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "");
+
+		MetaData ccpaMetaData = new MetaData(context);
+		ccpaMetaData.set("privacy.consent", !usPrivacyString.startsWith("1Y"));
+		ccpaMetaData.commit();
 
 		MobileAds.setRequestConfiguration(configuration.build());
 
