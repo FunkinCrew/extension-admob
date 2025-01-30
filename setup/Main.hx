@@ -22,12 +22,12 @@ class Main
 
 	public static function main():Void
 	{
-		/*if (Sys.systemName() != 'Mac')
-		{
-			printlnColor('You can only run this script on MacOS.', AnsiColor.Red);
+		if (Sys.systemName() != 'Mac')
+			{
+				printlnColor('You can only run this script on MacOS.', AnsiColor.Red);
 
-			Sys.exit(1);
-		}*/
+				Sys.exit(1);
+		}
 
 		final libPath:Null<String> = libPath('extension-admob');
 
@@ -71,39 +71,44 @@ class Main
 			}
 		}
 
-		for (file in FileSystem.readDirectory(TEMP_DIR))
+		for (dependency in FileSystem.readDirectory(TEMP_DIR))
 		{
 			final oldCwd:String = Sys.getCwd();
 
-			final path:String = Path.join([TEMP_DIR, file]);
+			final path:String = Path.join([TEMP_DIR, dependency]);
 
 			Sys.setCwd(path);
 
-			if (FileSystem.isDirectory(path) && Path.extension(file) == "xcframework")
+			for (file in FileSystem.readDirectory(path))
 			{
-				for (archDir in FileSystem.readDirectory(path))
+				final filePath:String = Path.join([path, file]);
+
+				if (FileSystem.isDirectory(filePath) && Path.extension(filePath) == 'xcframework')
 				{
-					final archPath:String = Path.join([path, archDir]);
-
-					if (FileSystem.isDirectory(archPath) && archDir.indexOf("ios-") == 0)
+					for (archDir in FileSystem.readDirectory(filePath))
 					{
-						printlnColor('Found architecture directory: $archDir', AnsiColor.Blue);
+						final archPath:String = Path.join([filePath, archDir]);
 
-						final frameworkDir:Null<String> = findFrameworkDirectory(archPath);
-
-						if (frameworkDir != null)
+						if (FileSystem.isDirectory(archPath) && archDir.indexOf('ios-') == 0)
 						{
-							final archName:String = extractArchName(archDir);
-							final destDir:String = Path.join([OUTPUT_DIR, archName]);
-							final frameworkName:String = Path.withoutDirectory(frameworkDir);
-							final destPath:String = Path.join([destDir, frameworkName]);
+							printlnColor('Found architecture directory: $archDir', AnsiColor.Blue);
 
-							printlnColor('Copying $frameworkName to $destDir', AnsiColor.Blue);
+							final frameworkDir:Null<String> = findFrameworkDirectory(archPath);
 
-							copyDirectory(frameworkDir, destPath);
+							if (frameworkDir != null)
+							{
+								final archName:String = extractArchName(archDir);
+								final destDir:String = Path.join([OUTPUT_DIR, archName]);
+								final frameworkName:String = Path.withoutDirectory(frameworkDir);
+								final destPath:String = Path.join([destDir, frameworkName]);
+
+								printlnColor('Copying $frameworkName to $destDir', AnsiColor.Blue);
+
+								copyDirectory(frameworkDir, destPath);
+							}
+							else
+								printlnColor('No .framework file found in $archDir', AnsiColor.Blue);
 						}
-						else
-							printlnColor('No .framework file found in $archDir', AnsiColor.Blue);
 					}
 				}
 			}
@@ -188,7 +193,7 @@ class Main
 		{
 			final path:String = Path.join([directory, file]);
 
-			if (FileSystem.isDirectory(path) && Path.extension(file) == "framework")
+			if (FileSystem.isDirectory(path) && Path.extension(file) == 'framework')
 				return path;
 		}
 
