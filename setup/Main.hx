@@ -78,7 +78,7 @@ class Main
 
 			if (FileSystem.isDirectory(path) && Path.extension(path) == 'xcframework')
 				findFrameworks(path);
-			else
+			else if (FileSystem.isDirectory(path))
 			{
 				for (file in FileSystem.readDirectory(path))
 				{
