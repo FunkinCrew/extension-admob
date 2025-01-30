@@ -156,16 +156,12 @@ public class Admob extends Extension
 			editor.commit();
 		}
 
-		String purposeConsents = getConsent();
-
-		MetaData gdprMetaData = new MetaData(context);
-		gdprMetaData.set("gdpr.consent", !purposeConsents.isEmpty() && purposeConsents.charAt(0) == '1');
+		MetaData gdprMetaData = new MetaData(mainActivity);
+		gdprMetaData.set("gdpr.consent", hasConsentForPurpose(0) == 1);
 		gdprMetaData.commit();
 
-		String usPrivacyString = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "");
-
-		MetaData ccpaMetaData = new MetaData(context);
-		ccpaMetaData.set("privacy.consent", !usPrivacyString.startsWith("1Y"));
+		MetaData ccpaMetaData = new MetaData(mainActivity);
+		ccpaMetaData.set("privacy.consent", !context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "").startsWith("1Y"));
 		ccpaMetaData.commit();
 
 		MobileAds.setRequestConfiguration(configuration.build());
