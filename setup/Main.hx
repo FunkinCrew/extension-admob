@@ -87,8 +87,6 @@ class Main
 
 						if (FileSystem.isDirectory(archPath) && archDir.indexOf('ios-') == 0)
 						{
-							printlnColor('Found architecture directory: $archDir', AnsiColor.Blue);
-
 							final frameworkDir:Null<String> = findFrameworkDirectory(archPath);
 
 							if (frameworkDir != null)
@@ -98,7 +96,7 @@ class Main
 								final frameworkName:String = Path.withoutDirectory(frameworkDir);
 								final destPath:String = Path.join([destDir, frameworkName]);
 
-								printlnColor('Copying $frameworkName to $destDir', AnsiColor.Blue);
+								printlnColor('Copying $frameworkName to $destDir', AnsiColor.Green);
 
 								copyDirectory(frameworkDir, destPath);
 							}
@@ -110,11 +108,11 @@ class Main
 			}
 		}
 
-		printlnColor('Cleaning up...', AnsiColor.Blue);
+		printlnColor('Cleaning up...', AnsiColor.Yellow);
 
 		deleteDirectory(TEMP_DIR);
 
-		printlnColor('Frameworks have been organized in $OUTPUT_DIR!', AnsiColor.Blue);
+		printlnColor('Frameworks have been organized in $OUTPUT_DIR!', AnsiColor.Green);
 	}
 
 	@:noCompletion
