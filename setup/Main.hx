@@ -73,11 +73,7 @@ class Main
 
 		for (dependency in FileSystem.readDirectory(TEMP_DIR))
 		{
-			final oldCwd:String = Sys.getCwd();
-
 			final path:String = Path.join([TEMP_DIR, dependency]);
-
-			Sys.setCwd(path);
 
 			for (file in FileSystem.readDirectory(path))
 			{
@@ -112,8 +108,6 @@ class Main
 					}
 				}
 			}
-
-			Sys.setCwd(oldCwd);
 		}
 
 		printlnColor('Cleaning up...', AnsiColor.Blue);
