@@ -43,19 +43,17 @@ public class Admob extends Extension
 	{
 		_callback = callback;
 
-		ConsentRequestParameters params = new ConsentRequestParameters.Builder();
+		ConsentRequestParameters.Builder params = new ConsentRequestParameters.Builder();
 
-		// ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(mainContext);
+		// ConsentDebugSettings.Builder debugSettings = new ConsentDebugSettings.Builder(mainContext);
 		// debugSettings.setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA);
 		// debugSettings.addTestDeviceHashedId("[TEST_DEVICE_ID]");
-		// debugSettings.build();
-		// params.setConsentDebugSettings(debugSettings);
+		// params.setConsentDebugSettings(debugSettings.build());
 
 		params.setTagForUnderAgeOfConsent(childDirected);
-		params.build();
 
 		_consentInformation = UserMessagingPlatform.getConsentInformation(mainContext);
-		_consentInformation.requestConsentInfoUpdate(mainActivity, params, new ConsentInformation.OnConsentInfoUpdateSuccessListener()
+		_consentInformation.requestConsentInfoUpdate(mainActivity, params.build(), new ConsentInformation.OnConsentInfoUpdateSuccessListener()
 		{
 			public void onConsentInfoUpdateSuccess()
 			{
