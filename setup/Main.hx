@@ -51,7 +51,7 @@ class Main
 		{
 			printlnColor('Downloading $key from $value...', AnsiColor.Blue);
 
-			final result:Int = Sys.command('curl', ['-s', '-o', key, value]);
+			final result:Int = Sys.command('curl', ['-s', '-L', '-o', key, value]);
 
 			if (result != 0)
 			{
