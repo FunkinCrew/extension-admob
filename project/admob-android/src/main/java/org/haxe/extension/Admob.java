@@ -161,7 +161,7 @@ public class Admob extends Extension
 		gdprMetaData.commit();
 
 		MetaData ccpaMetaData = new MetaData(mainActivity);
-		ccpaMetaData.set("privacy.consent", !context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "").startsWith("1Y"));
+		ccpaMetaData.set("privacy.consent", !mainContext.getSharedPreferences(mainContext.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "").startsWith("1Y"));
 		ccpaMetaData.commit();
 
 		MobileAds.setRequestConfiguration(configuration.build());
@@ -581,7 +581,7 @@ public class Admob extends Extension
 
 		int adWidthPixels = displayMetrics.widthPixels;
 
-		if (VERSION.SDK_INT >= 30)
+		if (Build.VERSION.SDK_INT >= 30)
 			adWidthPixels = mainActivity.getWindowManager().getCurrentWindowMetrics().getBounds().width();
 
 		return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(mainContext, (int) (adWidthPixels / displayMetrics.density));

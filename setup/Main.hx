@@ -22,12 +22,12 @@ class Main
 
 	public static function main():Void
 	{
-		if (Sys.systemName() != 'Mac')
+		/*if (Sys.systemName() != 'Mac')
 		{
 			printlnColor('You can only run this script on MacOS.', AnsiColor.Red);
 
 			Sys.exit(1);
-		}
+		}*/
 
 		final libPath:Null<String> = libPath('extension-admob');
 
@@ -50,7 +50,7 @@ class Main
 		{
 			printlnColor('Downloading $key from $value...', AnsiColor.Blue);
 
-			final result:Int = Sys.command('curl', ['-o', key, value]);
+			final result:Int = Sys.command('curl', ['-s', '-o', key, value]);
 
 			if (result != 0)
 			{
@@ -121,12 +121,15 @@ class Main
 	@:noCompletion
 	private static function libPath(lib:String):Null<String>
 	{
-		return new Process('haxelib', ['path', lib]).stdout.readLine();
+		return new Process('haxelib', ['libpath', lib]).stdout.readLine();
 	}
 
 	@:noCompletion
 	private static function deleteDirectory(path:String):Void
 	{
+		if (!FileSystem.exists(path))
+			return;
+
 		if (FileSystem.isDirectory(path))
 		{
 			for (file in FileSystem.readDirectory(path))
