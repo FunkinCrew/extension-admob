@@ -11,6 +11,7 @@ class Main
 	@:noCompletion
 	private static final URLS:Map<String, String> = [
 		'googlemobileadssdkios.zip' => 'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
+		'UnityAds.zip' => 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.13.1/UnityAds.zip',
 		'UnityAdapter-4.12.5.0.zip' => 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.12.5.0.zip'
 	];
 
@@ -23,10 +24,10 @@ class Main
 	public static function main():Void
 	{
 		if (Sys.systemName() != 'Mac')
-			{
-				printlnColor('You can only run this script on MacOS.', AnsiColor.Red);
+		{
+			printlnColor('You can only run this script on MacOS.', AnsiColor.Red);
 
-				Sys.exit(1);
+			Sys.exit(1);
 		}
 
 		final libPath:Null<String> = libPath('extension-admob');
@@ -75,35 +76,16 @@ class Main
 		{
 			final path:String = Path.join([TEMP_DIR, dependency]);
 
-			for (file in FileSystem.readDirectory(path))
+			if (FileSystem.isDirectory(path) && Path.extension(path) == 'xcframework')
+				findFrameworks(path);
+			else
 			{
-				final filePath:String = Path.join([path, file]);
-
-				if (FileSystem.isDirectory(filePath) && Path.extension(filePath) == 'xcframework')
+				for (file in FileSystem.readDirectory(path))
 				{
-					for (archDir in FileSystem.readDirectory(filePath))
-					{
-						final archPath:String = Path.join([filePath, archDir]);
+					final filePath:String = Path.join([path, file]);
 
-						if (FileSystem.isDirectory(archPath) && archDir.indexOf('ios-') == 0)
-						{
-							final frameworkDir:Null<String> = findFrameworkDirectory(archPath);
-
-							if (frameworkDir != null)
-							{
-								final archName:String = extractArchName(archDir);
-								final destDir:String = Path.join([OUTPUT_DIR, archName]);
-								final frameworkName:String = Path.withoutDirectory(frameworkDir);
-								final destPath:String = Path.join([destDir, frameworkName]);
-
-								printlnColor('Copying $frameworkName to $destDir', AnsiColor.Green);
-
-								copyDirectory(frameworkDir, destPath);
-							}
-							else
-								printlnColor('No .framework file found in $archDir', AnsiColor.Blue);
-						}
-					}
+					if (FileSystem.isDirectory(filePath) && Path.extension(filePath) == 'xcframework')
+						findFrameworks(filePath);
 				}
 			}
 		}
@@ -175,6 +157,35 @@ class Main
 				copyDirectory(srcPath, destPath);
 			else
 				File.copy(srcPath, destPath);
+		}
+	}
+
+	@:noCompletion
+	private static function findFrameworks(filePath:String):Void
+	{
+		for (archDir in FileSystem.readDirectory(filePath))
+		{
+			final archPath:String = Path.join([filePath, archDir]);
+
+			if (FileSystem.isDirectory(archPath) && archDir.indexOf('ios-') == 0)
+			{
+				final frameworkDir:Null<String> = findFrameworkDirectory(archPath);
+
+				if (frameworkDir != null)
+				{
+					final archName:String = extractArchName(archDir);
+
+					final destDir:String = Path.join([OUTPUT_DIR, archName]);
+					final frameworkName:String = Path.withoutDirectory(frameworkDir);
+					final destPath:String = Path.join([destDir, frameworkName]);
+
+					printlnColor('Copying $frameworkName to $destDir', AnsiColor.Green);
+
+					copyDirectory(frameworkDir, destPath);
+				}
+				else
+					printlnColor('No .framework file found in $archDir', AnsiColor.Blue);
+			}
 		}
 	}
 
