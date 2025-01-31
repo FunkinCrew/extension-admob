@@ -4,6 +4,7 @@
 #import <CommonCrypto/CommonDigest.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <UserMessagingPlatform/UserMessagingPlatform.h>
+#import <UnityAds/UnityAds.h>
 
 //need to update admob-Info.plist from time to time from here: https://developers.google.com/admob/ios/ios14?hl=en
 
@@ -358,6 +359,17 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 							GADMobileAds.sharedInstance.versionNumber.majorVersion,
 							GADMobileAds.sharedInstance.versionNumber.minorVersion,
 							GADMobileAds.sharedInstance.versionNumber.patchVersion] getCString:_message maxLength:sizeof(_message) encoding:NSUTF8StringEncoding];
+	
+	UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
+	[gdprMetaData set:@"gdpr.consent" value:hasAdmobConsentForPurpose(0) == 1 ? @YES : @NO];
+	[gdprMetaData commit];
+
+	NSString *iabUSPrivacyString = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABUSPrivacy_String"];
+
+	UADSMetaData *ccpaMetaData = [[UADSMetaData alloc] init];
+	[ccpaMetaData set:@"privacy.consent" value:@(!(iabUSPrivacyString && [iabUSPrivacyString hasPrefix:@"1Y"]))];
+	[ccpaMetaData commit];
+
 	if (@available(iOS 14.0, *))
 	{
 		int purpose = hasAdmobConsentForPurpose(0);
