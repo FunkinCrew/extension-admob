@@ -23,7 +23,7 @@
 
 		<file name="${haxelib:extension-admob}/project/admob-ios/src/admob.mm" />
 
-		<vflag value="-weak-lswiftCore" />
+		<flag value="-weak-lswiftCore" />
 	</files>
 
 	<target id="haxe">
