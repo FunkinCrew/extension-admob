@@ -270,10 +270,6 @@
 		C01FCF4F08A954540054247B /* Debug */ = {/* Build configuration list for PBXProject "::APP_TITLE::" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) /usr/lib/swift";
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift $(inherited)";
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = ::CURRENT_ARCHS::;
 				::if (OBJC_ARC)::
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -318,10 +314,6 @@
 		C01FCF5008A954540054247B /* Release */ = {/* Build configuration list for PBXProject "::APP_TITLE::" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) /usr/lib/swift";
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift $(inherited)";
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ARCHS = ::CURRENT_ARCHS::;
 				::if (OBJC_ARC)::
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -362,8 +354,6 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {/* Build configuration list for PBXNativeTarget "::APP_TITLE::" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) /usr/lib/swift";
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift $(inherited)";
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				::if (IOS_LAUNCH_STORYBOARD == null)::ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;::end::
@@ -416,14 +406,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "::APP_PACKAGE::";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {/* Build configuration list for PBXNativeTarget "::APP_TITLE::" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) /usr/lib/swift";
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift $(inherited)";
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				::if (IOS_LAUNCH_STORYBOARD == null)::ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;::end::
@@ -471,15 +461,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "::APP_PACKAGE::";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 		1EF0A880121AE1CE003F2F59 /* Debug */ = {/* Build configuration list for PBXLegacyTarget "Build Haxe" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) /usr/lib/swift";
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift $(inherited)";
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				::if (OBJC_ARC)::
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -503,9 +492,6 @@
 		1EF0A881121AE1CE003F2F59 /* Release */ = {/* Build configuration list for PBXLegacyTarget "Build Haxe" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) /usr/lib/swift";
-				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift $(inherited)";
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				::if (OBJC_ARC)::
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
