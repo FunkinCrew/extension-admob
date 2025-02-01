@@ -30,6 +30,8 @@ class Main
 			Sys.exit(1);
 		}
 
+		final oldCwd:String = Sys.getCwd();
+
 		final libPath:Null<String> = libPath('extension-admob');
 
 		if (libPath == null)
@@ -95,6 +97,8 @@ class Main
 		deleteDirectory(TEMP_DIR);
 
 		printlnColor('Frameworks have been organized in $OUTPUT_DIR!', AnsiColor.Green);
+
+		Sys.setCwd(oldCwd);
 	}
 
 	@:noCompletion
