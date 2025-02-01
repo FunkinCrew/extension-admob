@@ -14,16 +14,22 @@
 		<section unless="simulator">
 			<dependency path="project/admob-ios/frameworks/arm64/GoogleMobileAds.framework" />
 			<dependency path="project/admob-ios/frameworks/arm64/UserMessagingPlatform.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64/UnityAds.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64/UnityAdapter.framework" />
 		</section>
 
 		<section if="simulator">
 			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/GoogleMobileAds.framework" />
 			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UserMessagingPlatform.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAds.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAdapter.framework" />
 		</section>
 
 		<dependency name="JavaScriptCore.framework" />
 		<dependency name="AppTrackingTransparency.framework" />
 
 		<template path="templates" />
+
+		<config:ios linker-flags="-ObjC" />
 	</section>
 </extension>

@@ -15,7 +15,14 @@ android
 
 dependencies
 {
+	// Local project dependencies
 	implementation project(':deps:extension-api')
+
+	// Google Mobile Services (GMS) and User Messaging Platform (UMP)
 	implementation('com.google.android.gms:play-services-ads:+')
 	implementation('com.google.android.ump:user-messaging-platform:+')
+
+	// Unity Ads SDK and Mediation Adapter
+	implementation('com.unity3d.ads:unity-ads:+')
+	implementation('com.google.ads.mediation:unity:+')
 }

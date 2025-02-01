@@ -18,6 +18,7 @@ import com.google.android.gms.ads.interstitial.*;
 import com.google.android.gms.ads.rewarded.*;
 import com.google.android.gms.ads.*;
 import com.google.android.ump.*;
+import com.unity3d.ads.metadata.MetaData;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
 import java.security.MessageDigest;
@@ -42,19 +43,17 @@ public class Admob extends Extension
 	{
 		_callback = callback;
 
-		ConsentRequestParameters params = new ConsentRequestParameters.Builder();
+		ConsentRequestParameters.Builder params = new ConsentRequestParameters.Builder();
 
-		// ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(mainContext);
+		// ConsentDebugSettings.Builder debugSettings = new ConsentDebugSettings.Builder(mainContext);
 		// debugSettings.setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA);
 		// debugSettings.addTestDeviceHashedId("[TEST_DEVICE_ID]");
-		// debugSettings.build();
-		// params.setConsentDebugSettings(debugSettings);
+		// params.setConsentDebugSettings(debugSettings.build());
 
 		params.setTagForUnderAgeOfConsent(childDirected);
-		params.build();
 
 		_consentInformation = UserMessagingPlatform.getConsentInformation(mainContext);
-		_consentInformation.requestConsentInfoUpdate(mainActivity, params, new ConsentInformation.OnConsentInfoUpdateSuccessListener()
+		_consentInformation.requestConsentInfoUpdate(mainActivity, params.build(), new ConsentInformation.OnConsentInfoUpdateSuccessListener()
 		{
 			public void onConsentInfoUpdateSuccess()
 			{
@@ -154,6 +153,14 @@ public class Admob extends Extension
 			editor.putInt("gad_rdp", 1);
 			editor.commit();
 		}
+
+		MetaData gdprMetaData = new MetaData(mainActivity);
+		gdprMetaData.set("gdpr.consent", hasConsentForPurpose(0) == 1);
+		gdprMetaData.commit();
+
+		MetaData ccpaMetaData = new MetaData(mainActivity);
+		ccpaMetaData.set("privacy.consent", !mainContext.getSharedPreferences(mainContext.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "").startsWith("1Y"));
+		ccpaMetaData.commit();
 
 		MobileAds.setRequestConfiguration(configuration.build());
 
@@ -572,7 +579,7 @@ public class Admob extends Extension
 
 		int adWidthPixels = displayMetrics.widthPixels;
 
-		if (VERSION.SDK_INT >= 30)
+		if (Build.VERSION.SDK_INT >= 30)
 			adWidthPixels = mainActivity.getWindowManager().getCurrentWindowMetrics().getBounds().width();
 
 		return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(mainContext, (int) (adWidthPixels / displayMetrics.density));
