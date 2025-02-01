@@ -30,6 +30,13 @@
 
 		<template path="templates" />
 
+		<config:ios linker-flags="-weak-lswiftCompatibility50" />
+		<config:ios linker-flags="-weak-lswiftCompatibility51" />
+		<config:ios linker-flags="-weak-lswiftCompatibility56" />
+		<config:ios linker-flags="-weak-lswiftCompatibilityConcurrency" />
+		<config:ios linker-flags="-weak-lswiftCompatibilityDynamicReplacements" />
+		<config:ios linker-flags="-weak-lswiftCompatibilityPacks" />
+
 		<config:ios linker-flags="-ObjC" />
 	</section>
 </extension>
