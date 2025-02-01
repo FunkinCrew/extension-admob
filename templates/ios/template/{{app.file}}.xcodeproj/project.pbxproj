@@ -270,6 +270,8 @@
 		C01FCF4F08A954540054247B /* Debug */ = {/* Build configuration list for PBXProject "::APP_TITLE::" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = ("$(inherited)", "\"$(SDKROOT)/usr/lib/swift/$(PLATFORM_NAME)\"");
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = ::CURRENT_ARCHS::;
 				::if (OBJC_ARC)::
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -314,6 +316,8 @@
 		C01FCF5008A954540054247B /* Release */ = {/* Build configuration list for PBXProject "::APP_TITLE::" */
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = ("$(inherited)", "\"$(SDKROOT)/usr/lib/swift/$(PLATFORM_NAME)\"");
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = ::CURRENT_ARCHS::;
 				::if (OBJC_ARC)::
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
