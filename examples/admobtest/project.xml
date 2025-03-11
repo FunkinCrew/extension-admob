@@ -17,5 +17,6 @@
 
 	<haxeflag name="-dce" value="full" />
 
+	<config:android minimum-sdk-version="23" />
 	<config:android target-sdk-version="34" />
 </project>
