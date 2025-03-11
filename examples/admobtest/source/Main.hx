@@ -47,9 +47,7 @@ class Main extends lime.app.Application
 				Admob.showInterstitial();
 
 			case AdmobEvent.INTERSTITIAL_DISMISSED, AdmobEvent.INTERSTITIAL_FAILED_TO_LOAD, AdmobEvent.INTERSTITIAL_FAILED_TO_SHOW:
-				Admob.showBanner(ADAPTIVE_BANNER_ID);
-			// Admob.showBanner(BANNER_ID, AdmobBannerSize.BANNER, AdmobBannerAlign.TOP);
-
+				Admob.showBanner(BANNER_ID, AdmobBannerSize.BANNER, AdmobBannerAlign.TOP_LEFT);
 			case AdmobEvent.APP_OPEN_CLICKED, AdmobEvent.INTERSTITIAL_CLICKED, AdmobEvent.REWARDED_CLICKED, AdmobEvent.BANNER_CLICKED:
 				trace("DINHEIRO!");
 
