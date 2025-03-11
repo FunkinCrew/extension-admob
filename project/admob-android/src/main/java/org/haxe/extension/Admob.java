@@ -257,7 +257,28 @@ public class Admob extends Extension
 					}
 				});
 
-				_adContainer.setGravity(align);
+				switch (align)
+				{
+					case 0:
+						_adContainer.setGravity(Gravity.TOP | Gravity.START);
+						break;
+					case 1:
+						_adContainer.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+						break;
+					case 2:
+						_adContainer.setGravity(Gravity.TOP | Gravity.END);
+						break;
+					case 3:
+						_adContainer.setGravity(Gravity.BOTTOM | Gravity.START);
+						break;
+					case 4:
+						_adContainer.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
+						break;
+					case 5:
+						_adContainer.setGravity(Gravity.BOTTOM | Gravity.END);
+						break;
+				}
+
 				_adContainer.addView(_adView);
 
 				_adView.loadAd(new AdRequest.Builder().build());

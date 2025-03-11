@@ -107,7 +107,7 @@ class AdmobAndroid
 	 * @param size The banner size (default: adaptive).
 	 * @param align The banner alignment (default: bottom).
 	 */
-	public static function showBanner(id:String, size:Int = AdmobBannerSize.ADAPTIVE, align:Int = AdmobBannerAlign.BOTTOM):Void
+	public static function showBanner(id:String, size:Int, align:Int):Void
 	{
 		if (_showBanner != null)
 			_showBanner(id, size, align);
