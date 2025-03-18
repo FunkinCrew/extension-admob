@@ -360,11 +360,8 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 	if (enableRDP)
 		[NSUserDefaults.standardUserDefaults setBool:YES forKey:@"gad_rdp"];
 
-	[[NSString stringWithFormat:@"%zd.%zd.%zd",
-							GADMobileAds.sharedInstance.versionNumber.majorVersion,
-							GADMobileAds.sharedInstance.versionNumber.minorVersion,
-							GADMobileAds.sharedInstance.versionNumber.patchVersion] getCString:_message maxLength:sizeof(_message) encoding:NSUTF8StringEncoding];
-	
+	[[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] getCString:_message maxLength:sizeof(_message) encoding:NSUTF8StringEncoding];
+
 	UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
 	[gdprMetaData set:@"gdpr.consent" value:hasAdmobConsentForPurpose(0) == 1 ? @YES : @NO];
 	[gdprMetaData commit];
@@ -402,11 +399,13 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 					}
 				}
 
-				[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
-				{					
-					if (_admobCallback)
-						_admobCallback("INIT_OK", _message);
-				}];
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
+					{					
+						 if (_admobCallback)
+							 _admobCallback("INIT_OK", _message);
+					}];
+				});
 			}];
 		}
 		else
@@ -455,7 +454,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 				_admobCallback("CONSENT_FAIL", _message);
 			}
 
-			initMobileAds(testingAds, childDirected, enableRDP);
+			dispatch_async(dispatch_get_main_queue(), ^{
+                        	initMobileAds(testingAds, childDirected, enableRDP);
+			});
 		}
 		else
 		{
@@ -471,7 +472,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 							_admobCallback("CONSENT_FAIL", _message);
 						}
 
-						initMobileAds(testingAds, childDirected, enableRDP);
+						dispatch_async(dispatch_get_main_queue(), ^{
+							initMobileAds(testingAds, childDirected, enableRDP);
+						});
 					}
 					else
 					{
@@ -486,7 +489,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 								else if (_admobCallback)
 									_admobCallback("CONSENT_SUCCESS", "Consent form dismissed successfully.");
 
-								initMobileAds(testingAds, childDirected, enableRDP);
+								dispatch_async(dispatch_get_main_queue(), ^{
+									initMobileAds(testingAds, childDirected, enableRDP);
+								});
 							}];
 						});
 					}
@@ -497,7 +502,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 				if (_admobCallback)
 					_admobCallback("CONSENT_NOT_REQUIRED", "Consent form not required or available.");
 
-				initMobileAds(testingAds, childDirected, enableRDP);
+				dispatch_async(dispatch_get_main_queue(), ^{
+					initMobileAds(testingAds, childDirected, enableRDP);
+				});
 			}
 		}
 	}];
