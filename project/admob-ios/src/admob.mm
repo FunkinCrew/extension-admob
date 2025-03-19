@@ -5,7 +5,7 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <UserMessagingPlatform/UserMessagingPlatform.h>
 #import <UnityAds/UnityAds.h>
-#import <UnityAdapter/UnityAdapter.h>
+// #import <UnityAdapter/UnityAdapter.h>
 
 static AdmobCallback admobCallback = nullptr;
 static GADBannerView *bannerView = nil;
@@ -305,7 +305,7 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 {
 	if (testingAds)
 	{
-		GADMediationAdapterUnity.testMode = @YES;
+		// GADMediationAdapterUnity.testMode = @YES;
 
 		NSString *UDIDString = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
 		const char *cStr = [UDIDString UTF8String];
