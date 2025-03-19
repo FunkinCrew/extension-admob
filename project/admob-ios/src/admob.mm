@@ -15,7 +15,11 @@ static char currentMessage[128] = "";
 static void dispatchCallback(const char *event, const char *value)
 {
 	if (admobCallback)
-		admobCallback(event, value);
+	{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			admobCallback(event, value);
+		});
+	}
 }
 
 static void alignBanner(GADBannerView *bannerView, int align)
@@ -346,28 +350,28 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 		{
 			[ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status)
 			{
-				dispatch_async(dispatch_get_main_queue(), ^{
-					switch (status)
-					{
-					case ATTrackingManagerAuthorizationStatusNotDetermined:
-						dispatchCallback("ATT_STATUS", "NOT_DETERMINED");
-						break;
-					case ATTrackingManagerAuthorizationStatusRestricted:
-						dispatchCallback("ATT_STATUS", "RESTRICTED");
-						break;
-					case ATTrackingManagerAuthorizationStatusDenied:
-						dispatchCallback("ATT_STATUS", "DENIED");
-						break;
-					case ATTrackingManagerAuthorizationStatusAuthorized:
-						dispatchCallback("ATT_STATUS", "AUTHORIZED");
-						break;
-					}
-				});
-
-				[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
+				switch (status)
 				{
-					dispatchCallback("INIT_OK", currentMessage);
-				}];
+				case ATTrackingManagerAuthorizationStatusNotDetermined:
+					dispatchCallback("ATT_STATUS", "NOT_DETERMINED");
+					break;
+				case ATTrackingManagerAuthorizationStatusRestricted:
+					dispatchCallback("ATT_STATUS", "RESTRICTED");
+					break;
+				case ATTrackingManagerAuthorizationStatusDenied:
+					dispatchCallback("ATT_STATUS", "DENIED");
+					break;
+				case ATTrackingManagerAuthorizationStatusAuthorized:
+					dispatchCallback("ATT_STATUS", "AUTHORIZED");
+					break;
+				}
+
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
+					{
+						dispatchCallback("INIT_OK", currentMessage);
+					}];
+				});
 			}];
 		}
 		else
@@ -403,7 +407,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 
 			dispatchCallback("CONSENT_FAIL", currentMessage);
 
-			initMobileAds(testingAds, childDirected, enableRDP);
+			dispatch_async(dispatch_get_main_queue(), ^{
+            	initMobileAds(testingAds, childDirected, enableRDP);
+			});
 		}
 		else
 		{
@@ -417,14 +423,16 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 
 						dispatchCallback("CONSENT_FAIL", currentMessage);
 
-						initMobileAds(testingAds, childDirected, enableRDP);
+						dispatch_async(dispatch_get_main_queue(), ^{
+							initMobileAds(testingAds, childDirected, enableRDP);
+						});
 					}
 					else
 					{
 						dispatch_async(dispatch_get_main_queue(), ^{
 							[form presentFromViewController:UIApplication.sharedApplication.keyWindow.rootViewController completionHandler:^(NSError *_Nullable error)
 							{
-								if (loadError)
+								if (admobCallback && loadError)
 								{
 									[[NSString stringWithFormat:@"Consent Form Load Error: %@ (Code: %zd)", loadError.localizedDescription, loadError.code] getCString:currentMessage maxLength:sizeof(currentMessage) encoding:NSUTF8StringEncoding];
 
@@ -433,7 +441,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 								else
 									dispatchCallback("CONSENT_SUCCESS", "Consent form dismissed successfully.");
 
-								initMobileAds(testingAds, childDirected, enableRDP);
+								dispatch_async(dispatch_get_main_queue(), ^{
+									initMobileAds(testingAds, childDirected, enableRDP);
+								});
 							}];
 						});
 					}
@@ -443,7 +453,9 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 			{
 				dispatchCallback("CONSENT_NOT_REQUIRED", "Consent form not required or available.");
 
-				initMobileAds(testingAds, childDirected, enableRDP);
+				dispatch_async(dispatch_get_main_queue(), ^{
+					initMobileAds(testingAds, childDirected, enableRDP);
+				});
 			}
 		}
 	}];
