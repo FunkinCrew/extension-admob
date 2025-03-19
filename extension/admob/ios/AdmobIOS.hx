@@ -3,6 +3,7 @@ package extension.admob.ios;
 #if ios
 import extension.admob.AdmobBannerAlign;
 import extension.admob.AdmobBannerSize;
+import haxe.MainLoop;
 
 /**
  * A class to manage AdMob advertisements on iOS devices.
@@ -39,7 +40,10 @@ class AdmobIOS
 	@:noCompletion
 	private static function onAdmobStatus(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
 	{
-		dispatchEvent((event : String), (value : String));
+		MainLoop.runInMainThread(function():Void
+		{
+			dispatchEvent((event : String), (value : String));
+		});
 	}
 
 	/**
