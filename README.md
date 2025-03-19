@@ -32,7 +32,7 @@ To configure **extension-admob** for your project, follow these steps:
 1. **iOS Frameworks Installation**  
    To set up the required frameworks for iOS compilation, navigate to the directory where the library is installed and execute the following command:
    ```bash
-   cd setup && haxe build.hxml
+   chmod +x setup_admob_ios.sh && ./setup_admob_ios.sh
    ```
 
 2. **Add AdMob App IDs**  
