@@ -32,14 +32,14 @@ To configure **extension-admob** for your project, follow these steps:
 1. **iOS Frameworks Installation**  
    To set up the required frameworks for iOS compilation, navigate to the directory where the library is installed and execute the following command:
    ```bash
-   chmod +x setup_admob_ios.sh && ./setup_admob_ios.sh
+   cd setup && haxe build.hxml
    ```
 
 2. **Add AdMob App IDs**  
    Include your AdMob app IDs in your **project.xml**. Ensure you specify the correct IDs for both Android and iOS platforms.
    ```xml
-   <setenv name="ADMOB_APPID" value="ca-app-pub-XXXXX123457" if="android"/>
-   <setenv name="ADMOB_APPID" value="ca-app-pub-XXXXX123458" if="ios"/>
+   <setenv name="ADMOB_APPID" value="ca-app-pub-XXXXX123457" if="android" />
+   <setenv name="ADMOB_APPID" value="ca-app-pub-XXXXX123458" if="ios" />
    ```
 
 3. **GDPR Consent Management**  
@@ -50,10 +50,10 @@ To configure **extension-admob** for your project, follow these steps:
    ```haxe
    import extension.admob.*;
    ...
-   Admob.setCallback(function(event:String, message:String):Void
+   Admob.onEvent.add(function(event:String, message:String):Void
    {
       if (event == AdmobEvent.INIT_OK)
-        //you can load/show your ads here
+        // You can load/show your ads here
    });
    Admob.init();
    ```
@@ -101,7 +101,7 @@ To configure **extension-admob** for your project, follow these steps:
 
    - **Interstitial Ad**
      ```haxe
-     Admob.setCallback(function(event:String, message:String):Void
+     Admob.onEvent.add(function(event:String, message:String):Void
      {
        if (event == AdmobEvent.INTERSTITIAL_LOADED)
          Admob.showInterstitial();
@@ -111,7 +111,7 @@ To configure **extension-admob** for your project, follow these steps:
 
    - **Rewarded Ad**
      ```haxe
-     Admob.setCallback(function(event:String, message:String):Void
+     Admob.onEvent.add(function(event:String, message:String):Void
      {
        if (event == AdmobEvent.REWARDED_LOADED)
          Admob.showRewarded();
@@ -121,7 +121,7 @@ To configure **extension-admob** for your project, follow these steps:
 
    - **App Open Ad**
      ```haxe
-     Admob.setCallback(function(event:String, message:String):Void
+     Admob.onEvent.add(function(event:String, message:String):Void
      {
        if (event == AdmobEvent.APP_OPEN_LOADED)
          Admob.showAppOpen();

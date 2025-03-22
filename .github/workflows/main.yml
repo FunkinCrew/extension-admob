@@ -12,10 +12,6 @@ on:
 jobs:
   Android:
     runs-on: macos-15
-    strategy:
-      fail-fast: false
-      matrix:
-        example: [admobtest]
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -44,20 +40,16 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Build
-        run: cd examples/${{matrix.example}} && haxelib run lime build android -debug
+        run: cd example && haxelib run lime build android -debug
 
       - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
-          name: androidBuild-${{matrix.example}}
-          path: examples/${{matrix.example}}/export/android/bin/app/build/outputs/apk/debug
+          name: androidBuild
+          path: example/export/android/bin/app/build/outputs/apk/debug
           if-no-files-found: warn
   iOS:
     runs-on: macos-15
-    strategy:
-      fail-fast: false
-      matrix:
-        example: [admobtest]
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -82,11 +74,11 @@ jobs:
         run: cd $(haxelib libpath extension-admob) && cd setup && haxe build.hxml
 
       - name: Build
-        run: cd examples/${{matrix.example}} && haxelib run lime build ios -nosign -debug
+        run: cd example && haxelib run lime build ios -nosign -debug
 
       - name: Create IPA
         run: |
-          cd examples/${{matrix.example}}/export/ios/build/Debug-iphoneos
+          cd example/export/ios/build/Debug-iphoneos
           mkdir Payload
           mv *.app Payload
           zip -r Sample.ipa Payload
@@ -94,6 +86,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@main
         with:
-          name: iOSBuild-${{matrix.example}}
-          path: examples/${{matrix.example}}/export/ios/build/Debug-iphoneos/Sample.ipa
+          name: iOSBuild
+          path: example/export/ios/build/Debug-iphoneos/Sample.ipa
           if-no-files-found: warn

@@ -12,7 +12,6 @@
 		"google",
 		"admob",
 		"lime",
-		"nme",
 		"java",
 		"haxe",
 		"jni",
@@ -20,9 +19,9 @@
 		"android",
 		"ios"
 	],
-	"description": "A Haxe/Lime/NME extension for integrating Google AdMob on iOS and Android.",
+	"description": "A Haxe/Lime extension for integrating Google AdMob on iOS and Android.",
 	"version": "3.0.0",
-	"releasenote": "Updated to support both Lime and NME and lots of other cool features.",
+	"releasenote": "Updated to support Lime and lots of other cool features.",
 	"dependencies": {
 		"hxcpp": "",
 		"lime": ""

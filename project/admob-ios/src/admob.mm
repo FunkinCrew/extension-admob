@@ -31,22 +31,22 @@ static void alignBanner(GADBannerView *bannerView, int align)
 
 	switch (align)
 	{
-	case 0: // Top Left
+	case 0:
 		bannerView.center = CGPointMake(bannerWidth / 2, bannerHeight / 2);
 		break;
-	case 1: // Top Center
+	case 1:
 		bannerView.center = CGPointMake(screenBounds.size.width / 2, bannerHeight / 2);
 		break;
-	case 2: // Top Right
+	case 2:
 		bannerView.center = CGPointMake(screenBounds.size.width - bannerWidth / 2, bannerHeight / 2);
 		break;
-	case 3: // Bottom Left
+	case 3:
 		bannerView.center = CGPointMake(bannerWidth / 2, screenBounds.size.height - bannerHeight / 2);
 		break;
-	case 4: // Bottom Center
+	case 4:
 		bannerView.center = CGPointMake(screenBounds.size.width / 2, screenBounds.size.height - bannerHeight / 2);
 		break;
-	case 5: // Bottom Right
+	case 5:
 		bannerView.center = CGPointMake(screenBounds.size.width - bannerWidth / 2, screenBounds.size.height - bannerHeight / 2);
 		break;
 	}
@@ -477,10 +477,11 @@ void showAdmobBanner(const char *id, int size, int align)
 			adSize = GADAdSizeFluid;
 		default:
 			CGRect frame = rootVC.view.frame;
+
 			if (@available(iOS 11.0, *))
-				frame = UIEdgeInsetsInsetRect(rootVC.view.frame, rootVC.view.safeAreaInsets);
-			CGFloat viewWidth = frame.size.width;
-			adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(viewWidth);
+				frame = UIEdgeInsetsInsetRect(frame, rootVC.view.safeAreaInsets);
+
+			adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(frame.size.width);
 			
 			break;
 		}
@@ -488,11 +489,11 @@ void showAdmobBanner(const char *id, int size, int align)
 		bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
 		bannerView.adUnitID = [NSString stringWithUTF8String:id];
 		bannerView.rootViewController = rootVC;
+		bannerView.backgroundColor = UIColor.clearColor;
 
 		if (bannerDelegate == nil)
 			bannerDelegate = [[BannerViewDelegate alloc] init];
 
-		bannerView.backgroundColor = UIColor.clearColor;
 		bannerView.delegate = bannerDelegate;
 
 		[rootVC.view addSubview:bannerView];

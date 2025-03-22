@@ -60,7 +60,7 @@ class Main extends lime.app.Application
 
 	public override function onWindowCreate():Void
 	{
-		Admob.setCallback(onCallback);
+		Admob.onEvent.add(onCallback);
 		Admob.init(true); // It feels like in iOS, you still need to set test mode even with test ids for all the ads variants to work
 	}
 

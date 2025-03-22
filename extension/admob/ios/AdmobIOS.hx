@@ -3,19 +3,24 @@ package extension.admob.ios;
 #if ios
 import extension.admob.AdmobBannerAlign;
 import extension.admob.AdmobBannerSize;
+import extension.admob.AdmobEvent;
+import lime.app.Event;
+import lime.utils.Log;
 
 /**
  * A class to manage AdMob advertisements on iOS devices.
  */
-@:buildXml("<include name=\"${haxelib:extension-admob}/project/admob-ios/Build.xml\" />")
-@:headerInclude("admob.hpp")
+@:buildXml('<include name="${haxelib:extension - admob}/project/admob-ios/Build.xml" />')
+@:headerInclude('admob.hpp')
 class AdmobIOS
 {
-	@:noCompletion
-	private static var _callback:Null<String->String->Void> = null;
+	/**
+	 * Event triggered for status updates from AdMob.
+	 */
+	public static var onEvent:Event<AdmobEvent->String->Void> = new Event<AdmobEvent->String->Void>();
 
 	@:noCompletion
-	private static var _initialized:Bool = false;
+	private static var initialized:Bool = false;
 
 	/**
 	 * Initializes the AdMob extension.
@@ -26,35 +31,36 @@ class AdmobIOS
 	 */
 	public static function init(testingAds:Bool = false, childDirected:Bool = false, enableRDP:Bool = false):Void
 	{
-		if (!_initialized)
-		{
-			_initialized = true;
+		if (initialized)
+			return;
 
-			initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobStatus));
-		}
-		else
-			dispatchEvent(AdmobEvent.FAIL, "Admob extension has been already initialized");
+		initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobEvent));
+
+		initialized = true;
 	}
 
 	@:noCompletion
-	private static function onAdmobStatus(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
+	private static function onAdmobEvent(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
 	{
-		dispatchEvent((event : String), (value : String));
+		onEvent.dispatch((event : String), (value : String));
 	}
 
 	/**
 	 * Shows a banner ad.
 	 *
 	 * @param id The banner ad ID.
-	 * @param size The banner size (default: adaptive).
-	 * @param align The banner alignment (default: bottom).
+	 * @param size The banner size.
+	 * @param align The banner alignment.
 	 */
-	public static function showBanner(id:String, size:Int, align:Int):Void
+	public static function showBanner(id:String, size:AdmobBannerSize, align:AdmobBannerAlign):Void
 	{
-		if (_initialized)
-			showAdmobBanner(id, size, align);
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		showAdmobBanner(id, size, align);
 	}
 
 	/**
@@ -62,10 +68,13 @@ class AdmobIOS
 	 */
 	public static function hideBanner():Void
 	{
-		if (_initialized)
-			hideAdmobBanner();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		hideAdmobBanner();
 	}
 
 	/**
@@ -75,10 +84,13 @@ class AdmobIOS
 	 */
 	public static function loadInterstitial(id:String):Void
 	{
-		if (_initialized)
-			loadAdmobInterstitial(id);
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		loadAdmobInterstitial(id);
 	}
 
 	/**
@@ -86,10 +98,13 @@ class AdmobIOS
 	 */
 	public static function showInterstitial():Void
 	{
-		if (_initialized)
-			showAdmobInterstitial();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		showAdmobInterstitial();
 	}
 
 	/**
@@ -99,10 +114,13 @@ class AdmobIOS
 	 */
 	public static function loadRewarded(id:String):Void
 	{
-		if (_initialized)
-			loadAdmobRewarded(id);
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		loadAdmobRewarded(id);
 	}
 
 	/**
@@ -110,34 +128,43 @@ class AdmobIOS
 	 */
 	public static function showRewarded():Void
 	{
-		if (_initialized)
-			showAdmobRewarded();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		showAdmobRewarded();
 	}
 
 	/**
-	 * Loads a "app open" ad.
+	 * Loads a 'app open' ad.
 	 *
-	 * @param id The "app open" ad ID.
+	 * @param id The 'app open' ad ID.
 	 */
 	public static function loadAppOpen(id:String):Void
 	{
-		if (_initialized)
-			loadAdmobAppOpen(id);
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		loadAdmobAppOpen(id);
 	}
 
 	/**
-	 * Displays a loaded "app open" ad.
+	 * Displays a loaded 'app open' ad.
 	 */
 	public static function showAppOpen():Void
 	{
-		if (_initialized)
-			showAdmobAppOpen();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		showAdmobAppOpen();
 	}
 
 	/**
@@ -147,10 +174,13 @@ class AdmobIOS
 	 */
 	public static function setVolume(vol:Float):Void
 	{
-		if (_initialized)
-			setAdmobVolume(vol);
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		setAdmobVolume(vol);
 	}
 
 	/**
@@ -161,12 +191,13 @@ class AdmobIOS
 	 */
 	public static function hasConsentForPurpose(purpose:Int = 0):Int
 	{
-		if (_initialized)
-			return hasAdmobConsentForPurpose(purpose);
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return -1;
+		}
 
-		return -1;
+		return hasAdmobConsentForPurpose(purpose);
 	}
 
 	/**
@@ -176,12 +207,13 @@ class AdmobIOS
 	 */
 	public static function getConsent():String
 	{
-		if (_initialized)
-			return getAdmobConsent();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return '';
+		}
 
-		return "";
+		return getAdmobConsent();
 	}
 
 	/**
@@ -191,12 +223,13 @@ class AdmobIOS
 	 */
 	public static function isPrivacyOptionsRequired():Bool
 	{
-		if (_initialized)
-			return isAdmobPrivacyOptionsRequired();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return false;
+		}
 
-		return false;
+		return isAdmobPrivacyOptionsRequired();
 	}
 
 	/**
@@ -204,78 +237,56 @@ class AdmobIOS
 	 */
 	public static function showPrivacyOptionsForm():Void
 	{
-		if (_initialized)
-			showAdmobPrivacyOptionsForm();
-		else
-			dispatchFrustration();
+		if (!initialized)
+		{
+			Log.warn('Admob extension isn\'t initialized');
+			return;
+		}
+
+		showAdmobPrivacyOptionsForm();
 	}
 
-	/**
-	 * Add events' listener
-	 */
-	public static function setCallback(callback:String->String->Void):Void
-	{
-		_callback = callback;
-	}
-
-	/**
-	 * Dispatcjh and event, if there is a listener
-	 */
-	public static function dispatchEvent(event:String, data:String):Void
-	{
-		if (_callback != null)
-			_callback(event, data);
-	}
-
-	/**
-	 * I don't how to describe this
-	 */
-	private static function dispatchFrustration():Void
-	{
-		dispatchEvent(AdmobEvent.FAIL, "Admob extension is not initialized");
-	}
-
-	@:native("initAdmob")
+	@:native('initAdmob')
 	extern public static function initAdmob(testingAds:Bool, childDirected:Bool, enableRDP:Bool,
 		callback:cpp.Callable<(event:cpp.ConstCharStar, value:cpp.ConstCharStar) -> Void>):Void;
 
-	@:native("showAdmobBanner")
+	@:native('showAdmobBanner')
 	extern public static function showAdmobBanner(id:cpp.ConstCharStar, size:Int, align:Int):Void;
 
-	@:native("hideAdmobBanner")
+	@:native('hideAdmobBanner')
 	extern public static function hideAdmobBanner():Void;
 
-	@:native("loadAdmobInterstitial")
+	@:native('loadAdmobInterstitial')
 	extern public static function loadAdmobInterstitial(id:cpp.ConstCharStar):Void;
 
-	@:native("showAdmobInterstitial")
+	@:native('showAdmobInterstitial')
 	extern public static function showAdmobInterstitial():Void;
 
-	@:native("loadAdmobRewarded")
+	@:native('loadAdmobRewarded')
 	extern public static function loadAdmobRewarded(id:cpp.ConstCharStar):Void;
 
-	@:native("showAdmobRewarded")
+	@:native('showAdmobRewarded')
 	extern public static function showAdmobRewarded():Void;
 
-	@:native("loadAdmobAppOpen")
+	@:native('loadAdmobAppOpen')
 	extern public static function loadAdmobAppOpen(id:cpp.ConstCharStar):Void;
 
-	@:native("showAdmobAppOpen")
+	@:native('showAdmobAppOpen')
 	extern public static function showAdmobAppOpen():Void;
 
-	@:native("setAdmobVolume")
+	@:native('setAdmobVolume')
 	extern public static function setAdmobVolume(vol:Single):Void;
 
-	@:native("hasAdmobConsentForPurpose")
+	@:native('hasAdmobConsentForPurpose')
 	extern public static function hasAdmobConsentForPurpose(purpose:Int):Int;
 
-	@:native("getAdmobConsent")
+	@:native('getAdmobConsent')
 	extern public static function getAdmobConsent():cpp.ConstCharStar;
 
-	@:native("isAdmobPrivacyOptionsRequired")
+	@:native('isAdmobPrivacyOptionsRequired')
 	extern public static function isAdmobPrivacyOptionsRequired():Bool;
 
-	@:native("showAdmobPrivacyOptionsForm")
+	@:native('showAdmobPrivacyOptionsForm')
 	extern public static function showAdmobPrivacyOptionsForm():Void;
 }
 #end
