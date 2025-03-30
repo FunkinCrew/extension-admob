@@ -8,6 +8,8 @@
 
 	<meta title="Extension-Admob Test" package="org.haxe.extensions.admob" version="1.0.0" company="Home-made Extensions Inc." />
 
+	<architecture name="arm64" exclude="armv7" if="android" />
+
 	<app main="Main" path="export" file="EATest" />
 
 	<source path="source" />
@@ -16,6 +18,9 @@
 	<haxelib name="extension-admob" />
 
 	<haxeflag name="-dce" value="full" />
+
+	<config:android gradle-version="8.9" />
+	<config:android gradle-plugin="8.7.3" />
 
 	<config:android minimum-sdk-version="23" />
 	<config:android target-sdk-version="34" />
