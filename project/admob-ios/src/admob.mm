@@ -51,6 +51,9 @@ static void alignBanner(GADBannerView *bannerView, int align)
 	case 5:
 		bannerView.center = CGPointMake(screenBounds.size.width - bannerWidth / 2, screenBounds.size.height - bannerHeight / 2);
 		break;
+	case 6:
+		bannerView.center = CGPointMake(screenBounds.size.width / 2, screenBounds.size.height / 2);
+		break;
 	}
 }
 

@@ -285,6 +285,10 @@ public class Admob extends Extension
 						params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 						params.addRule(RelativeLayout.ALIGN_PARENT_END);
 						break;
+					case 6:
+						params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+						params.addRule(RelativeLayout.CENTER_VERTICAL);
+						break;
 				}
 
 				((RelativeLayout) mainView).addView(adView, params);
