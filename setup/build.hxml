@@ -1,4 +1,4 @@
---interp
--cp ./
+-cp source
 -D analyzer-optimize
 -main Main
+-neko ../run.n
