@@ -112,7 +112,13 @@ class Main
 					Sys.exit(result);
 				}
 				else
+				{
 					Sys.println(ANSIUtil.apply('Successfully unzipped "$key".', [Green]));
+
+					FileUtil.deletePath(key);
+
+					Sys.println(ANSIUtil.apply('Removing "$key" archive.', [Green]));
+				}
 			}
 			else
 			{
@@ -147,7 +153,7 @@ class Main
 
 		FileUtil.deletePath(TEMP_DIR);
 
-		Sys.println(ANSIUtil.apply('Frameworks have been organized in $OUTPUT_DIR!', [Green]));
+		Sys.println(ANSIUtil.apply('Frameworks have been organized in "$OUTPUT_DIR"!', [Green]));
 	}
 
 	@:noCompletion
@@ -193,12 +199,14 @@ class Main
 					final frameworkName:String = Path.withoutDirectory(frameworkDir);
 					final destPath:String = Path.join([destDir, frameworkName]);
 
-					Sys.println(ANSIUtil.apply('Copying $frameworkName to $destDir', [Green]));
+					Sys.println(ANSIUtil.apply('Copying "$frameworkName" to "$destDir"...', [Blue]));
 
 					FileUtil.copyDirectory(frameworkDir, destPath);
+
+					Sys.println(ANSIUtil.apply('Successfully copied "$frameworkName" to "$destDir".', [Green]));
 				}
 				else
-					Sys.println(ANSIUtil.apply('No .framework file found in $archDir', [Blue]));
+					Sys.println(ANSIUtil.apply('No ".framework" file found in "$archDir".', [Blue]));
 			}
 		}
 	}
