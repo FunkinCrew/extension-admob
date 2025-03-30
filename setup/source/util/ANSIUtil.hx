@@ -91,13 +91,39 @@ class ANSIUtil
 		{
 			final term:String = Sys.getEnv('TERM');
 
-			if (term == 'dumb')
+			if (term != 'dumb')
 			{
-				codesSupported = false;
-			}
-			else
-			{
-				if (codesSupported != true && term != null) codesSupported = REGEX_TERM_256.match(term) || REGEX_TERM_TYPES.match(term);
+				if (Sys.getEnv('CI') != null)
+				{
+					final ciEnvNames:Array<String> = [
+						"GITHUB_ACTIONS",
+						"GITEA_ACTIONS",
+						"TRAVIS",
+						"CIRCLECI",
+						"APPVEYOR",
+						"GITLAB_CI",
+						"BUILDKITE",
+						"DRONE"
+					];
+
+					for (ci in ciEnvNames)
+					{
+						if (Sys.getEnv(ci) != null)
+						{
+							codesSupported = true;
+							break;
+						}
+					}
+
+					if (codesSupported != true && Sys.getEnv("CI_NAME") == "codeship")
+						codesSupported = true;
+				}
+
+				if (codesSupported != true && Sys.getEnv("TEAMCITY_VERSION") != null)
+					codesSupported = ~/^9\.(0*[1-9]\d*)\.|\d{2,}\./.match(Sys.getEnv("TEAMCITY_VERSION"));
+
+				if (codesSupported != true && term != null)
+					codesSupported = REGEX_TERM_256.match(term) || REGEX_TERM_TYPES.match(term);
 
 				if (codesSupported != true)
 				{
@@ -109,6 +135,8 @@ class ANSIUtil
 						|| Sys.getEnv('WT_SESSION') != null;
 				}
 			}
+			else
+				codesSupported = false;
 		}
 
 		return codesSupported == true ? output : REGEX_ANSI_CODES.replace(output, '');
