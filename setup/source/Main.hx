@@ -117,7 +117,7 @@ class Main
 
 					FileUtil.deletePath(key);
 
-					Sys.println(ANSIUtil.apply('Removing "$key" archive.', [Yellow]));
+					Sys.println(ANSIUtil.apply('Removed "$key" archive.', [Yellow]));
 				}
 			}
 			else
