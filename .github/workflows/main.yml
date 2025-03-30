@@ -70,7 +70,10 @@ jobs:
       - name: List Installed Haxe Libraries
         run: haxelib list
 
-      - name: Setup Admob iOS frameworks
+      - name: Rebuild tool
+        run: haxelib run extension-admob rebuild
+  
+      - name: Setup Frameworks
         run: haxelib run extension-admob setup
 
       - name: Build

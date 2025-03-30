@@ -58,6 +58,9 @@ enum abstract ANSICode(String) from String to String
 class ANSIUtil
 {
 	@:noCompletion
+	private static final REGEX_TEAMCITY_VERSION:EReg = ~/^9\.(0*[1-9]\d*)\.|\d{2,}\./;
+
+	@:noCompletion
 	private static final REGEX_TERM_256:EReg = ~/(?i)-256(color)?$/;
 
 	@:noCompletion
@@ -89,35 +92,6 @@ class ANSIUtil
 	{
 		if (codesSupported == null)
 		{
-			if (Sys.getEnv('CI') != null)
-			{
-				final ciEnvNames:Array<String> = [
-					"GITHUB_ACTIONS",
-					"GITEA_ACTIONS",
-					"TRAVIS",
-					"CIRCLECI",
-					"APPVEYOR",
-					"GITLAB_CI",
-					"BUILDKITE",
-					"DRONE"
-				];
-
-				for (ci in ciEnvNames)
-				{
-					if (Sys.getEnv(ci) != null)
-					{
-						codesSupported = true;
-						break;
-					}
-				}
-
-				if (codesSupported != true && Sys.getEnv("CI_NAME") == "codeship")
-					codesSupported = true;
-			}
-
-			if (codesSupported != true && Sys.getEnv("TEAMCITY_VERSION") != null)
-				codesSupported = ~/^9\.(0*[1-9]\d*)\.|\d{2,}\./.match(Sys.getEnv("TEAMCITY_VERSION"));
-
 			final term:String = Sys.getEnv('TERM');
 
 			if (term == 'dumb')
@@ -126,6 +100,35 @@ class ANSIUtil
 			{
 				if (codesSupported != true && term != null)
 					codesSupported = REGEX_TERM_256.match(term) || REGEX_TERM_TYPES.match(term);
+
+				if (Sys.getEnv('CI') != null)
+				{
+					final ciEnvNames:Array<String> = [
+						"GITHUB_ACTIONS",
+						"GITEA_ACTIONS",
+						"TRAVIS",
+						"CIRCLECI",
+						"APPVEYOR",
+						"GITLAB_CI",
+						"BUILDKITE",
+						"DRONE"
+					];
+
+					for (ci in ciEnvNames)
+					{
+						if (Sys.getEnv(ci) != null)
+						{
+							codesSupported = true;
+							break;
+						}
+					}
+
+					if (codesSupported != true && Sys.getEnv("CI_NAME") == "codeship")
+						codesSupported = true;
+				}
+
+				if (codesSupported != true && Sys.getEnv("TEAMCITY_VERSION") != null)
+					codesSupported = REGEX_TEAMCITY_VERSION.match(Sys.getEnv("TEAMCITY_VERSION"));
 
 				if (codesSupported != true)
 				{
