@@ -71,7 +71,7 @@ jobs:
         run: haxelib list
 
       - name: Setup Admob iOS frameworks
-        run: cd $(haxelib libpath extension-admob) && cd setup && haxe build.hxml
+        run: haxelib run extension-admob setup
 
       - name: Build
         run: cd example && haxelib run lime build ios -nosign -debug
