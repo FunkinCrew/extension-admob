@@ -11,8 +11,8 @@ class Main
 	@:noCompletion
 	private static final URLS:Map<String, String> = [
 		'googlemobileadssdkios.zip' => 'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
-		'UnityAds.zip' => 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.14.1/UnityAds.zip',
-		'UnityAdapter-4.14.1.1.zip' => 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.14.1.1.zip'
+		'UnityAds.zip' => 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.14.2/UnityAds.zip',
+		'UnityAdapter-4.14.2.0.zip' => 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.14.2.0.zip'
 	];
 
 	@:noCompletion
