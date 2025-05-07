@@ -37,6 +37,68 @@ public class Admob extends Extension
 	private static ConsentInformation consentInformation;
 	private static HaxeObject haxeObject;
 
+	public static void configureConsentMetadata(final boolean gdprConsent, final boolean ccpaConsent)
+	{
+		MetaData gdprMetaData = new MetaData(mainActivity);
+		gdprMetaData.set("gdpr.consent", gdprConsent);
+		gdprMetaData.commit();
+
+		MetaData ccpaMetaData = new MetaData(mainActivity);
+		ccpaMetaData.set("privacy.consent", ccpaConsent);
+		ccpaMetaData.commit();
+	}
+
+	private static void initMobileAds(final boolean testingAds, final boolean childDirected, final boolean enableRDP)
+	{
+		RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
+
+		if (testingAds)
+		{
+			List<String> testDeviceIds = new ArrayList<>();
+
+			if (Build.FINGERPRINT.startsWith("google/sdk_gphone") || Build.FINGERPRINT.contains("generic") || Build.FINGERPRINT.contains("emulator") || Build.MODEL.contains("Emulator") || Build.MODEL.contains("Android SDK built for x86") || Build.MANUFACTURER.contains("Google") || Build.PRODUCT.contains("sdk_gphone") || Build.BRAND.startsWith("generic") || Build.DEVICE.startsWith("generic"))
+				testDeviceIds.add(AdRequest.DEVICE_ID_EMULATOR);
+
+			try
+			{
+				StringBuilder hexString = new StringBuilder();
+
+				for (byte b : MessageDigest.getInstance("MD5").digest(Settings.Secure.getString(mainActivity.getContentResolver(), Settings.Secure.ANDROID_ID).getBytes()))
+					hexString.append(String.format("%02x", b));
+
+				testDeviceIds.add(hexString.toString().toUpperCase());
+			}
+			catch (NoSuchAlgorithmException e)
+			{
+				e.printStackTrace();
+			}
+
+			configuration.setTestDeviceIds(testDeviceIds);
+		}
+
+		if (childDirected)
+			configuration.setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE);
+
+		if (enableRDP)
+		{
+			SharedPreferences.Editor editor = mainActivity.getPreferences(Context.MODE_PRIVATE).edit();
+			editor.putInt("gad_rdp", 1);
+			editor.commit();
+		}
+
+		MobileAds.setRequestConfiguration(configuration.build());
+
+		MobileAds.initialize(mainContext, new OnInitializationCompleteListener()
+		{
+			@Override
+			public void onInitializationComplete(InitializationStatus initializationStatus)
+			{
+				if (haxeObject != null) 
+					haxeObject.call("onEvent", new Object[]{ "INIT_OK", MobileAds.getVersion().toString() });
+			}
+		});
+	}
+
 	public static void init(final boolean testingAds, final boolean childDirected, final boolean enableRDP, HaxeObject callback)
 	{
 		haxeObject = callback;
@@ -106,65 +168,6 @@ public class Admob extends Extension
 					haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", requestError.getMessage() });
 
 				initMobileAds(testingAds, childDirected, enableRDP);
-			}
-		});
-	}
-
-	public static void initMobileAds(final boolean testingAds, final boolean childDirected, final boolean enableRDP)
-	{
-		RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
-
-		if (testingAds)
-		{
-			List<String> testDeviceIds = new ArrayList<>();
-
-			if (Build.FINGERPRINT.startsWith("google/sdk_gphone") || Build.FINGERPRINT.contains("generic") || Build.FINGERPRINT.contains("emulator") || Build.MODEL.contains("Emulator") || Build.MODEL.contains("Android SDK built for x86") || Build.MANUFACTURER.contains("Google") || Build.PRODUCT.contains("sdk_gphone") || Build.BRAND.startsWith("generic") || Build.DEVICE.startsWith("generic"))
-				testDeviceIds.add(AdRequest.DEVICE_ID_EMULATOR);
-
-			try
-			{
-				StringBuilder hexString = new StringBuilder();
-
-				for (byte b : MessageDigest.getInstance("MD5").digest(Settings.Secure.getString(mainActivity.getContentResolver(), Settings.Secure.ANDROID_ID).getBytes()))
-					hexString.append(String.format("%02x", b));
-
-				testDeviceIds.add(hexString.toString().toUpperCase());
-			}
-			catch (NoSuchAlgorithmException e)
-			{
-				e.printStackTrace();
-			}
-
-			configuration.setTestDeviceIds(testDeviceIds);
-		}
-
-		if (childDirected)
-			configuration.setTagForChildDirectedTreatment(RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE);
-
-		if (enableRDP)
-		{
-			SharedPreferences.Editor editor = mainActivity.getPreferences(Context.MODE_PRIVATE).edit();
-			editor.putInt("gad_rdp", 1);
-			editor.commit();
-		}
-
-		MetaData gdprMetaData = new MetaData(mainActivity);
-		gdprMetaData.set("gdpr.consent", hasConsentForPurpose(0) == 1);
-		gdprMetaData.commit();
-
-		MetaData ccpaMetaData = new MetaData(mainActivity);
-		ccpaMetaData.set("privacy.consent", !mainContext.getSharedPreferences(mainContext.getPackageName() + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "").startsWith("1Y"));
-		ccpaMetaData.commit();
-
-		MobileAds.setRequestConfiguration(configuration.build());
-
-		MobileAds.initialize(mainContext, new OnInitializationCompleteListener()
-		{
-			@Override
-			public void onInitializationComplete(InitializationStatus initializationStatus)
-			{
-				if (haxeObject != null) 
-					haxeObject.call("onEvent", new Object[]{ "INIT_OK", MobileAds.getVersion().toString() });
 			}
 		});
 	}
@@ -567,13 +570,9 @@ public class Admob extends Extension
 			MobileAds.setAppMuted(true);
 	}
 
-	/**
-	 * @see https://support.google.com/admob/answer/9760862
-	 * @see https://iabeurope.eu/iab-europe-transparency-consent-framework-policies/#A_Purposes
-	 */
-	public static int hasConsentForPurpose(final int purpose)
+	public static int getTCFConsentForPurpose(int purpose)
 	{
-		String purposeConsents = getConsent();
+		String purposeConsents = getTCFPurposeConsent();
 
 		if (purposeConsents.length() > purpose)
 			return Character.getNumericValue(purposeConsents.charAt(purpose));
@@ -581,9 +580,14 @@ public class Admob extends Extension
 		return -1;
 	}
 
-	public static String getConsent()
+	public static String getTCFPurposeConsent()
 	{
 		return mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABTCF_PurposeConsents", "");
+	}
+
+	public static String getIABUSPrivacy()
+	{
+		return mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "");
 	}
 
 	public static boolean isPrivacyOptionsRequired()

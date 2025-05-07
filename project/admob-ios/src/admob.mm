@@ -28,6 +28,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		return;
 
 	CGRect screenBounds = UIScreen.mainScreen.bounds;
+
 	CGFloat bannerWidth = bannerView.bounds.size.width;
 	CGFloat bannerHeight = bannerView.bounds.size.height;
 
@@ -133,6 +134,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		else
 		{
 			self._ad = ad;
+
 			self._ad.fullScreenContentDelegate = self;
 
 			dispatchCallback("INTERSTITIAL_LOADED", "");
@@ -197,6 +199,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		else
 		{
 			self._ad = ad;
+
 			self._ad.fullScreenContentDelegate = self;
 
 			dispatchCallback("REWARDED_LOADED", "");
@@ -308,6 +311,17 @@ static InterstitialDelegate *interstitialDelegate = nil;
 static RewardedDelegate *rewardedDelegate = nil;
 static AppOpenAdDelegate *appOpenDelegate = nil;
 
+void Admob_ConfigureConsentMetadata(bool gdprConsent, bool ccpaConsent)
+{
+	UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
+	[gdprMetaData set:@"gdpr.consent" value:gdprConsent ? @YES : @NO];
+	[gdprMetaData commit];
+
+	UADSMetaData *ccpaMetaData = [[UADSMetaData alloc] init];
+	[ccpaMetaData set:@"privacy.consent" value:ccpaConsent ? @YES : @NO];
+	[ccpaMetaData commit];
+}
+
 static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -336,20 +350,9 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 
 		[[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] getCString:currentMessage maxLength:sizeof(currentMessage) encoding:NSUTF8StringEncoding];
 
-
- 		UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
- 		[gdprMetaData set:@"gdpr.consent" value:hasAdmobConsentForPurpose(0) == 1 ? @YES : @NO];
- 		[gdprMetaData commit];
- 
- 		NSString *iabUSPrivacyString = [[NSUserDefaults standardUserDefaults] stringForKey:@"IABUSPrivacy_String"];
- 
- 		UADSMetaData *ccpaMetaData = [[UADSMetaData alloc] init];
- 		[ccpaMetaData set:@"privacy.consent" value:@(!(iabUSPrivacyString && [iabUSPrivacyString hasPrefix:@"1Y"]))];
- 		[ccpaMetaData commit];
-
 		if (@available(iOS 14.0, *))
 		{
-			int purpose = hasAdmobConsentForPurpose(0);
+			int purpose = Admob_GetTCFConsentForPurpose(0);
 
 			if (purpose == 1 || purpose == -1)
 			{
@@ -397,7 +400,7 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 	});
 }
 
-void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallback callback)
+void Admob_Init(bool testingAds, bool childDirected, bool enableRDP, AdmobCallback callback)
 {
 	admobCallback = callback;
 
@@ -413,7 +416,7 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 
 			dispatchCallback("CONSENT_FAIL", currentMessage);
 
-            initMobileAds(testingAds, childDirected, enableRDP);
+			initMobileAds(testingAds, childDirected, enableRDP);
 		}
 		else
 		{
@@ -459,7 +462,7 @@ void initAdmob(bool testingAds, bool childDirected, bool enableRDP, AdmobCallbac
 	}];
 }
 
-void showAdmobBanner(const char *id, int size, int align)
+void Admob_ShowBanner(const char *id, int size, int align)
 {
 	if (bannerView != nil)
 	{
@@ -516,18 +519,20 @@ void showAdmobBanner(const char *id, int size, int align)
 
 		[rootVC.view addSubview:bannerView];
 
-		alignBanner(bannerView, align);
-
-		[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification)
 		{
-			[BannerHelper handleOrientationChange];
-		}];
+			alignBanner(bannerView, align);
+
+			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification)
+			{
+				[BannerHelper handleOrientationChange];
+			}];
+		}
 
 		[bannerView loadRequest:[GADRequest request]];
 	});
 }
 
-void hideAdmobBanner()
+void Admob_HideBanner()
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (bannerView != nil)
@@ -538,7 +543,7 @@ void hideAdmobBanner()
 	});
 }
 
-void loadAdmobInterstitial(const char *id)
+void Admob_LoadInterstitial(const char *id)
 {
 	if (!interstitialDelegate)
 		interstitialDelegate = [[InterstitialDelegate alloc] init];
@@ -546,7 +551,7 @@ void loadAdmobInterstitial(const char *id)
 	[interstitialDelegate loadWithAdUnitID:id];
 }
 
-void showAdmobInterstitial()
+void Admob_ShowInterstitial()
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (interstitialDelegate)
@@ -556,7 +561,7 @@ void showAdmobInterstitial()
 	});
 }
 
-void loadAdmobRewarded(const char *id)
+void Admob_LoadRewarded(const char *id)
 {
 	if (!rewardedDelegate)
 		rewardedDelegate = [[RewardedDelegate alloc] init];
@@ -564,7 +569,7 @@ void loadAdmobRewarded(const char *id)
 	[rewardedDelegate loadWithAdUnitID:id];
 }
 
-void showAdmobRewarded()
+void Admob_ShowRewarded()
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (rewardedDelegate)
@@ -574,7 +579,7 @@ void showAdmobRewarded()
 	});
 }
 
-void loadAdmobAppOpen(const char *id)
+void Admob_LoadAppOpen(const char *id)
 {
 	if (!appOpenDelegate)
 		appOpenDelegate = [[AppOpenAdDelegate alloc] init];
@@ -582,7 +587,7 @@ void loadAdmobAppOpen(const char *id)
 	[appOpenDelegate loadWithAdUnitID:id];
 }
 
-void showAdmobAppOpen()
+void Admob_ShowAppOpen()
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (appOpenDelegate)
@@ -592,7 +597,7 @@ void showAdmobAppOpen()
 	});
 }
 
-void setAdmobVolume(float vol)
+void Admob_SetVolume(float vol)
 {
 	if (vol > 0)
 	{
@@ -603,7 +608,7 @@ void setAdmobVolume(float vol)
 		GADMobileAds.sharedInstance.applicationMuted = true;
 }
 
-int hasAdmobConsentForPurpose(int purpose)
+int Admob_GetTCFConsentForPurpose(int purpose)
 {
 	NSString *purposeConsents = [NSUserDefaults.standardUserDefaults stringForKey:@"IABTCF_PurposeConsents"];
 
@@ -616,26 +621,32 @@ int hasAdmobConsentForPurpose(int purpose)
 	return [[purposeConsents substringWithRange:NSMakeRange(purpose, 1)] integerValue];
 }
 
-const char *getAdmobConsent()
+char* Admob_GetTCFPurposeConsent(void)
 {
 	NSString *purposeConsents = [NSUserDefaults.standardUserDefaults stringForKey:@"IABTCF_PurposeConsents"];
 
 	if (purposeConsents.length > 0)
-	{
-		[purposeConsents getCString:currentMessage maxLength:sizeof(currentMessage) encoding:NSUTF8StringEncoding];
+		return strdup([purposeConsents UTF8String]);
 
-		return currentMessage;
-	}
-
-	return "";
+	return nullptr;
 }
 
-bool isAdmobPrivacyOptionsRequired()
+char* Admob_GetIABUSPrivacy(void)
+{
+	NSString *usPrivacyString = [NSUserDefaults.standardUserDefaults stringForKey:@"IABUSPrivacy_String"];
+
+	if (usPrivacyString.length > 0)
+		return strdup([usPrivacyString UTF8String]);
+
+	return nullptr;
+}
+
+bool Admob_IsPrivacyOptionsRequired()
 {
 	return UMPConsentInformation.sharedInstance.privacyOptionsRequirementStatus == UMPPrivacyOptionsRequirementStatusRequired;
 }
 
-void showAdmobPrivacyOptionsForm()
+void Admob_ShowPrivacyOptionsForm()
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[UMPConsentForm presentPrivacyOptionsFormFromViewController:UIApplication.sharedApplication.keyWindow.rootViewController completionHandler:^(NSError *_Nullable formError)

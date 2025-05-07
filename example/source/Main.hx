@@ -20,48 +20,58 @@ class Main extends lime.app.Application
 	private static final BANNER_ID:String = "/21775744923/example/fixed-size-banner";
 	#end
 
-	public function onCallback(event:String, message:String)
+	public function new():Void
 	{
-		switch (event)
+		super();
+
+		Admob.onEvent.add(function(event:AdmobEvent, message:String):Void
 		{
-			case AdmobEvent.INIT_OK:
-				Admob.setVolume(0.5);
-				trace("isPrivacyOptionsRequired", Admob.isPrivacyOptionsRequired());
-				trace("getConsent", Admob.getConsent());
-				trace("hasConsentForPurpose", Admob.hasConsentForPurpose(0));
-				Admob.loadAppOpen(APP_OPEN_ID);
+			switch (event)
+			{
+				case AdmobEvent.INIT_OK:
+					// Admob.setVolume(0.5);
 
-			case AdmobEvent.APP_OPEN_LOADED:
-				Admob.showAppOpen();
+					trace("isPrivacyOptionsRequired", Admob.isPrivacyOptionsRequired());
 
-			case AdmobEvent.APP_OPEN_DISMISSED, AdmobEvent.APP_OPEN_FAILED_TO_LOAD, AdmobEvent.APP_OPEN_FAILED_TO_SHOW:
-				Admob.loadRewarded(REWARDED_ID);
+					trace("getTCFConsentForPurpose", Admob.getTCFConsentForPurpose(0));
+					trace("getTCFPurposeConsent", Admob.getTCFPurposeConsent());
+					trace("getIABUSPrivacy", Admob.getIABUSPrivacy());
 
-			case AdmobEvent.REWARDED_LOADED:
-				Admob.showRewarded();
+					Admob.loadAppOpen(APP_OPEN_ID);
+				case AdmobEvent.APP_OPEN_LOADED:
+					Admob.showAppOpen();
 
-			case AdmobEvent.REWARDED_DISMISSED, AdmobEvent.REWARDED_FAILED_TO_LOAD, AdmobEvent.REWARDED_FAILED_TO_SHOW:
-				Admob.loadInterstitial(INTERSTITIAL_ID);
+				case AdmobEvent.APP_OPEN_DISMISSED, AdmobEvent.APP_OPEN_FAILED_TO_LOAD, AdmobEvent.APP_OPEN_FAILED_TO_SHOW:
+					Admob.loadRewarded(REWARDED_ID);
 
-			case AdmobEvent.INTERSTITIAL_LOADED:
-				Admob.showInterstitial();
+				case AdmobEvent.REWARDED_LOADED:
+					Admob.showRewarded();
 
-			case AdmobEvent.INTERSTITIAL_DISMISSED, AdmobEvent.INTERSTITIAL_FAILED_TO_LOAD, AdmobEvent.INTERSTITIAL_FAILED_TO_SHOW:
-				Admob.showBanner(BANNER_ID, AdmobBannerSize.BANNER, AdmobBannerAlign.CENTER);
-			case AdmobEvent.APP_OPEN_CLICKED, AdmobEvent.INTERSTITIAL_CLICKED, AdmobEvent.REWARDED_CLICKED, AdmobEvent.BANNER_CLICKED:
-				trace("DINHEIRO!");
+				case AdmobEvent.REWARDED_DISMISSED, AdmobEvent.REWARDED_FAILED_TO_LOAD, AdmobEvent.REWARDED_FAILED_TO_SHOW:
+					Admob.loadInterstitial(INTERSTITIAL_ID);
 
-			case AdmobEvent.REWARDED_EARNED:
-				trace("REWARD EARNED");
-		}
+				case AdmobEvent.INTERSTITIAL_LOADED:
+					Admob.showInterstitial();
 
-		trace(event, message);
+				case AdmobEvent.INTERSTITIAL_DISMISSED, AdmobEvent.INTERSTITIAL_FAILED_TO_LOAD, AdmobEvent.INTERSTITIAL_FAILED_TO_SHOW:
+					Admob.showBanner(BANNER_ID, AdmobBannerSize.BANNER, AdmobBannerAlign.CENTER);
+				case AdmobEvent.APP_OPEN_CLICKED, AdmobEvent.INTERSTITIAL_CLICKED, AdmobEvent.REWARDED_CLICKED, AdmobEvent.BANNER_CLICKED:
+					trace("DINHEIRO!");
+
+				case AdmobEvent.REWARDED_EARNED:
+					trace("REWARD EARNED");
+				default:
+			}
+
+			trace(event, message);
+		});
 	}
 
 	public override function onWindowCreate():Void
 	{
-		Admob.onEvent.add(onCallback);
-		Admob.init(true); // It feels like in iOS, you still need to set test mode even with test ids for all the ads variants to work
+		Admob.configureConsentMetadata(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getIABUSPrivacy(), '1Y'));
+
+		Admob.init(true);
 	}
 
 	public override function render(context:lime.graphics.RenderContext):Void

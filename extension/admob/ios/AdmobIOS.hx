@@ -19,8 +19,16 @@ class AdmobIOS
 	 */
 	public static var onEvent:Event<AdmobEvent->String->Void> = new Event<AdmobEvent->String->Void>();
 
-	@:noCompletion
-	private static var initialized:Bool = false;
+	/**
+	 * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
+	 * 
+	 * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
+	 * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
+	 */
+	public static function configureConsentMetadata(gdprConsent:Bool, ccpaConsent:Bool):Void
+	{
+		configureConsentMetadataAdmob(gdprConsent, ccpaConsent);
+	}
 
 	/**
 	 * Initializes the AdMob extension.
@@ -31,12 +39,7 @@ class AdmobIOS
 	 */
 	public static function init(testingAds:Bool = false, childDirected:Bool = false, enableRDP:Bool = false):Void
 	{
-		if (initialized)
-			return;
-
 		initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobEvent));
-
-		initialized = true;
 	}
 
 	@:noCompletion
@@ -54,12 +57,6 @@ class AdmobIOS
 	 */
 	public static function showBanner(id:String, size:AdmobBannerSize, align:AdmobBannerAlign):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		showAdmobBanner(id, size, align);
 	}
 
@@ -68,12 +65,6 @@ class AdmobIOS
 	 */
 	public static function hideBanner():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		hideAdmobBanner();
 	}
 
@@ -84,12 +75,6 @@ class AdmobIOS
 	 */
 	public static function loadInterstitial(id:String):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		loadAdmobInterstitial(id);
 	}
 
@@ -98,12 +83,6 @@ class AdmobIOS
 	 */
 	public static function showInterstitial():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		showAdmobInterstitial();
 	}
 
@@ -114,12 +93,6 @@ class AdmobIOS
 	 */
 	public static function loadRewarded(id:String):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		loadAdmobRewarded(id);
 	}
 
@@ -128,12 +101,6 @@ class AdmobIOS
 	 */
 	public static function showRewarded():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		showAdmobRewarded();
 	}
 
@@ -144,12 +111,6 @@ class AdmobIOS
 	 */
 	public static function loadAppOpen(id:String):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		loadAdmobAppOpen(id);
 	}
 
@@ -158,12 +119,6 @@ class AdmobIOS
 	 */
 	public static function showAppOpen():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		showAdmobAppOpen();
 	}
 
@@ -174,46 +129,60 @@ class AdmobIOS
 	 */
 	public static function setVolume(vol:Float):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		setAdmobVolume(vol);
 	}
 
 	/**
-	 * Checks if consent for a specific purpose has been granted.
+	 * Retrieves the user's consent status for a specific IAB TCF purpose.
 	 *
-	 * @param purpose The purpose ID (default: 0).
-	 * @return `1` for consent granted, `0` for not granted, `-1` for unknown.
+	 * @param purpose The index of the purpose (0-based, as per the TCF specification).
+	 * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
 	 */
-	public static function hasConsentForPurpose(purpose:Int = 0):Int
+	public static function getTCFConsentForPurpose(purpose:Int = 0):Int
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return -1;
-		}
-
-		return hasAdmobConsentForPurpose(purpose);
+		return getTCFConsentForPurposeAdmob(purpose);
 	}
 
 	/**
-	 * Retrieves the current user consent status.
+	 * Retrieves the raw IAB TCF PurposeConsents string.
 	 *
-	 * @return A string representing the consent status.
+	 * @return A string representing the TCF PurposeConsents, or an empty string if unavailable.
 	 */
-	public static function getConsent():String
+	public static function getTCFPurposeConsent():String
 	{
-		if (!initialized)
+		final cString:cpp.CastCharStar = getTCFPurposeConsentAdmob();
+
+		if (cString != null)
 		{
-			Log.warn('Admob extension isn\'t initialized');
-			return '';
+			final haxeString:String = new String(cString);
+
+			cpp.Stdlib.nativeFree(untyped cString);
+
+			return haxeString;
 		}
 
-		return getAdmobConsent();
+		return '';
+	}
+
+	/**
+	 * Retrieves the IAB US Privacy String (for CCPA compliance).
+	 *
+	 * @return A string representing the IAB US Privacy string, or an empty string if unavailable.
+	 */
+	public static function getIABUSPrivacy():String
+	{
+		final cString:cpp.CastCharStar = getIABUSPrivacyAdmob();
+
+		if (cString != null)
+		{
+			final haxeString:String = new String(cString);
+
+			cpp.Stdlib.nativeFree(untyped cString);
+
+			return haxeString;
+		}
+
+		return '';
 	}
 
 	/**
@@ -223,12 +192,6 @@ class AdmobIOS
 	 */
 	public static function isPrivacyOptionsRequired():Bool
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return false;
-		}
-
 		return isAdmobPrivacyOptionsRequired();
 	}
 
@@ -237,56 +200,72 @@ class AdmobIOS
 	 */
 	public static function showPrivacyOptionsForm():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		showAdmobPrivacyOptionsForm();
 	}
 
-	@:native('initAdmob')
-	extern public static function initAdmob(testingAds:Bool, childDirected:Bool, enableRDP:Bool,
+	@:native('Admob_ConfigureConsentMetadata')
+	@:noCompletion
+	extern private static function configureConsentMetadataAdmob(gdprConsent:Bool, ccpaConsent:Bool):Void;
+
+	@:native('Admob_Init')
+	@:noCompletion
+	extern private static function initAdmob(testingAds:Bool, childDirected:Bool, enableRDP:Bool,
 		callback:cpp.Callable<(event:cpp.ConstCharStar, value:cpp.ConstCharStar) -> Void>):Void;
 
-	@:native('showAdmobBanner')
-	extern public static function showAdmobBanner(id:cpp.ConstCharStar, size:Int, align:Int):Void;
+	@:native('Admob_ShowBanner')
+	@:noCompletion
+	extern private static function showBannerAdmob(adUnitId:cpp.ConstCharStar, size:Int, align:Int):Void;
 
-	@:native('hideAdmobBanner')
-	extern public static function hideAdmobBanner():Void;
+	@:native('Admob_HideBanner')
+	@:noCompletion
+	extern private static function hideBannerAdmob():Void;
 
-	@:native('loadAdmobInterstitial')
-	extern public static function loadAdmobInterstitial(id:cpp.ConstCharStar):Void;
+	@:native('Admob_LoadInterstitial')
+	@:noCompletion
+	extern private static function loadInterstitialAdmob(adUnitId:cpp.ConstCharStar):Void;
 
-	@:native('showAdmobInterstitial')
-	extern public static function showAdmobInterstitial():Void;
+	@:native('Admob_ShowInterstitial')
+	@:noCompletion
+	extern private static function showInterstitialAdmob():Void;
 
-	@:native('loadAdmobRewarded')
-	extern public static function loadAdmobRewarded(id:cpp.ConstCharStar):Void;
+	@:native('Admob_LoadRewarded')
+	@:noCompletion
+	extern private static function loadRewardedAdmob(adUnitId:cpp.ConstCharStar):Void;
 
-	@:native('showAdmobRewarded')
-	extern public static function showAdmobRewarded():Void;
+	@:native('Admob_ShowRewarded')
+	@:noCompletion
+	extern private static function showRewardedAdmob():Void;
 
-	@:native('loadAdmobAppOpen')
-	extern public static function loadAdmobAppOpen(id:cpp.ConstCharStar):Void;
+	@:native('Admob_LoadAppOpen')
+	@:noCompletion
+	extern private static function loadAppOpenAdmob(adUnitId:cpp.ConstCharStar):Void;
 
-	@:native('showAdmobAppOpen')
-	extern public static function showAdmobAppOpen():Void;
+	@:native('Admob_ShowAppOpen')
+	@:noCompletion
+	extern private static function showAppOpenAdmob():Void;
 
-	@:native('setAdmobVolume')
-	extern public static function setAdmobVolume(vol:Single):Void;
+	@:native('Admob_SetVolume')
+	@:noCompletion
+	extern private static function setVolumeAdmob(volume:Single):Void;
 
-	@:native('hasAdmobConsentForPurpose')
-	extern public static function hasAdmobConsentForPurpose(purpose:Int):Int;
+	@:native('Admob_GetTCFConsentForPurpose')
+	@:noCompletion
+	extern private static function getTCFConsentForPurposeAdmob(purpose:Int):Int;
 
-	@:native('getAdmobConsent')
-	extern public static function getAdmobConsent():cpp.ConstCharStar;
+	@:native('Admob_GetTCFPurposeConsent')
+	@:noCompletion
+	extern private static function getTCFPurposeConsentAdmob():cpp.CastCharStar;
 
-	@:native('isAdmobPrivacyOptionsRequired')
-	extern public static function isAdmobPrivacyOptionsRequired():Bool;
+	@:native('Admob_GetIABUSPrivacy')
+	@:noCompletion
+	extern private static function getIABUSPrivacyAdmob():cpp.CastCharStar;
 
-	@:native('showAdmobPrivacyOptionsForm')
-	extern public static function showAdmobPrivacyOptionsForm():Void;
+	@:native('Admob_IsPrivacyOptionsRequired')
+	@:noCompletion
+	extern private static function isPrivacyOptionsRequiredAdmob():Bool;
+
+	@:native('Admob_ShowPrivacyOptionsForm')
+	@:noCompletion
+	extern private static function showPrivacyOptionsFormAdmob():Void;
 }
 #end

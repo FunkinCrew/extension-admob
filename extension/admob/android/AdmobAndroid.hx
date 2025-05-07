@@ -18,8 +18,19 @@ class AdmobAndroid
 	 */
 	public static var onEvent:Event<AdmobEvent->String->Void> = new Event<AdmobEvent->String->Void>();
 
-	@:noCompletion
-	private static var initialized:Bool = false;
+	/**
+	 * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
+	 * 
+	 * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
+	 * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
+	 */
+	public static function configureConsentMetadata(gdprConsent:Bool, ccpaConsent:Bool):Void
+	{
+		final configureConsentMetadataJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'configureConsentMetadata', '(ZZ)V');
+
+		if (configureConsentMetadataJNI != null)
+			configureConsentMetadataJNI(gdprConsent, ccpaConsent);
+	}
 
 	/**
 	 * Initializes the AdMob extension.
@@ -30,17 +41,10 @@ class AdmobAndroid
 	 */
 	public static function init(testingAds:Bool = false, childDirected:Bool = false, enableRDP:Bool = false):Void
 	{
-		if (initialized)
-			return;
-
 		final initJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'init', '(ZZZLorg/haxe/lime/HaxeObject;)V');
 
 		if (initJNI != null)
-		{
 			initJNI(testingAds, childDirected, enableRDP, new CallBackHandler());
-
-			initialized = true;
-		}
 	}
 
 	/**
@@ -52,12 +56,6 @@ class AdmobAndroid
 	 */
 	public static function showBanner(id:String, size:AdmobBannerSize, align:AdmobBannerAlign):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final showBannerJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showBanner', '(Ljava/lang/String;II)V');
 
 		if (showBannerJNI != null)
@@ -69,12 +67,6 @@ class AdmobAndroid
 	 */
 	public static function hideBanner():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final hideBannerJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'hideBanner', '()V');
 
 		if (hideBannerJNI != null)
@@ -89,12 +81,6 @@ class AdmobAndroid
 	 */
 	public static function loadInterstitial(id:String, immersiveModeEnabled:Bool = true):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final loadInterstitialJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'loadInterstitial', '(Ljava/lang/String;Z)V');
 
 		if (loadInterstitialJNI != null)
@@ -106,12 +92,6 @@ class AdmobAndroid
 	 */
 	public static function showInterstitial():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final showInterstitialJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showInterstitial', '()V');
 
 		if (showInterstitialJNI != null)
@@ -126,12 +106,6 @@ class AdmobAndroid
 	 */
 	public static function loadRewarded(id:String, immersiveModeEnabled:Bool = true):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final loadRewardedJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'loadRewarded', '(Ljava/lang/String;Z)V');
 
 		if (loadRewardedJNI != null)
@@ -143,12 +117,6 @@ class AdmobAndroid
 	 */
 	public static function showRewarded():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final showRewardedJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showRewarded', '()V');
 
 		if (showRewardedJNI != null)
@@ -163,12 +131,6 @@ class AdmobAndroid
 	 */
 	public static function loadAppOpen(id:String, immersiveModeEnabled:Bool = true):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final loadAppOpenJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'loadAppOpen', '(Ljava/lang/String;Z)V');
 
 		if (loadAppOpenJNI != null)
@@ -180,12 +142,6 @@ class AdmobAndroid
 	 */
 	public static function showAppOpen():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final showAppOpenJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showAppOpen', '()V');
 
 		if (showAppOpenJNI != null)
@@ -199,12 +155,6 @@ class AdmobAndroid
 	 */
 	public static function setVolume(vol:Float):Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final setVolumeJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'setVolume', '(F)V');
 
 		if (setVolumeJNI != null)
@@ -212,41 +162,40 @@ class AdmobAndroid
 	}
 
 	/**
-	 * Checks if consent for a specific purpose has been granted.
+	 * Retrieves the user's consent status for a specific IAB TCF purpose.
 	 *
-	 * @param purpose The purpose ID.
-	 * 
-	 * @return `1` for consent granted, `0` for not granted, `-1` for unknown.
+	 * @param purpose The index of the purpose (0-based, as per the TCF specification).
+	 * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
 	 */
-	public static function hasConsentForPurpose(purpose:Int):Int
+	 public static function getTCFConsentForPurpose(purpose:Int = 0):Int
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return -1;
-		}
+		final getTCFConsentForPurposeJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
 
-		final hasConsentJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'hasConsentForPurpose', '(I)I');
-
-		return hasConsentJNI != null ? hasConsentJNI(purpose) : -1;
+		return getTCFConsentForPurposeJNI != null ? getTCFConsentForPurposeJNI(purpose) : -1;
 	}
 
 	/**
-	 * Retrieves the current user consent status.
+	 * Retrieves the raw IAB TCF PurposeConsents string.
 	 *
-	 * @return A string representing the consent status.
+	 * @return A string representing the TCF PurposeConsents, or an empty string if unavailable.
 	 */
-	public static function getConsent():String
+	public static function getTCFPurposeConsent():String
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return '';
-		}
+		final getTCFPurposeConsentJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getTCFPurposeConsent', '()Ljava/lang/String;');
 
-		final getConsentJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getConsent', '()Ljava/lang/String;');
+		return getTCFPurposeConsentJNI != null ? getTCFPurposeConsentJNI() : '';
+	}
 
-		return getConsentJNI != null ? getConsentJNI() : '';
+	/**
+	 * Retrieves the IAB US Privacy String (for CCPA compliance).
+	 *
+	 * @return A string representing the IAB US Privacy string, or an empty string if unavailable.
+	 */
+	public static function getIABUSPrivacy():String
+	{
+		final getIABUSPrivacyJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getIABUSPrivacy', '()Ljava/lang/String;');
+
+		return getIABUSPrivacyJNI != null ? getIABUSPrivacyJNI() : '';
 	}
 
 	/**
@@ -256,12 +205,6 @@ class AdmobAndroid
 	 */
 	public static function isPrivacyOptionsRequired():Bool
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return false;
-		}
-
 		final isPrivacyOptionsRequiredJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'isPrivacyOptionsRequired', '()Z');
 
 		return isPrivacyOptionsRequiredJNI != null ? isPrivacyOptionsRequiredJNI() : false;
@@ -272,12 +215,6 @@ class AdmobAndroid
 	 */
 	public static function showPrivacyOptionsForm():Void
 	{
-		if (!initialized)
-		{
-			Log.warn('Admob extension isn\'t initialized');
-			return;
-		}
-
 		final showPrivacyOptionsFormJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showPrivacyOptionsForm', '()V');
 
 		if (showPrivacyOptionsFormJNI != null)

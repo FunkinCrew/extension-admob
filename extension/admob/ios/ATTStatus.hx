@@ -2,6 +2,7 @@ package extension.admob.ios;
 
 /**
  * Enum representing the different statuses for App Tracking Transparency (ATT) in iOS.
+ * 
  * These statuses indicate the user's permission for tracking within apps, as per the App Tracking Transparency framework introduced in iOS 14.
  *
  * @see https://stackoverflow.com/questions/63499520/app-tracking-transparency-how-does-effect-apps-showing-ads-idfa-ios14/63522856#63522856

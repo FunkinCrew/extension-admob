@@ -76,7 +76,7 @@ To configure **extension-admob** for your project, follow these steps:
 6. **Verify User Consent**  
 	Check if user has consented to personalized ads:
 	```haxe
-	if (Admob.getConsent() == AdmobConsent.FULL)
+	if (Admob.getTCFPurposeConsent() == AdmobConsent.FULL)
 		trace("User consented to personalized ads.");
 	else
 		trace("User did not consent to personalized ads.");
@@ -85,7 +85,7 @@ To configure **extension-admob** for your project, follow these steps:
 7. **Check Consent for Specific Purposes**  
 	Verify if user has consented to individual purposes, such as purpose 0:
 	```haxe
-	if (Admob.hasConsentForPurpose(0) == 1)
+	if (Admob.getTCFConsentForPurpose(0) == 1)
 		trace("User has consented to purpose 0.");
 	else
 		trace("User has not consented to purpose 0.");
