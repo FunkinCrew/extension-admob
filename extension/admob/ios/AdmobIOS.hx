@@ -57,7 +57,7 @@ class AdmobIOS
 	 */
 	public static function showBanner(id:String, size:AdmobBannerSize, align:AdmobBannerAlign):Void
 	{
-		showAdmobBanner(id, size, align);
+		showBannerAdmob(id, size, align);
 	}
 
 	/**
@@ -65,7 +65,7 @@ class AdmobIOS
 	 */
 	public static function hideBanner():Void
 	{
-		hideAdmobBanner();
+		hideBannerAdmob();
 	}
 
 	/**
@@ -75,7 +75,7 @@ class AdmobIOS
 	 */
 	public static function loadInterstitial(id:String):Void
 	{
-		loadAdmobInterstitial(id);
+		loadInterstitialAdmob(id);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class AdmobIOS
 	 */
 	public static function showInterstitial():Void
 	{
-		showAdmobInterstitial();
+		showInterstitialAdmob();
 	}
 
 	/**
@@ -93,7 +93,7 @@ class AdmobIOS
 	 */
 	public static function loadRewarded(id:String):Void
 	{
-		loadAdmobRewarded(id);
+		loadRewardedAdmob(id);
 	}
 
 	/**
@@ -101,7 +101,7 @@ class AdmobIOS
 	 */
 	public static function showRewarded():Void
 	{
-		showAdmobRewarded();
+		showRewardedAdmob();
 	}
 
 	/**
@@ -111,7 +111,7 @@ class AdmobIOS
 	 */
 	public static function loadAppOpen(id:String):Void
 	{
-		loadAdmobAppOpen(id);
+		loadAppOpenAdmob(id);
 	}
 
 	/**
@@ -119,7 +119,7 @@ class AdmobIOS
 	 */
 	public static function showAppOpen():Void
 	{
-		showAdmobAppOpen();
+		showAppOpenAdmob();
 	}
 
 	/**
@@ -129,7 +129,7 @@ class AdmobIOS
 	 */
 	public static function setVolume(vol:Float):Void
 	{
-		setAdmobVolume(vol);
+		setVolumeAdmob(vol);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class AdmobIOS
 
 		if (cString != null)
 		{
-			final haxeString:String = new String(cString);
+			final haxeString:String = new String(untyped cString);
 
 			cpp.Stdlib.nativeFree(untyped cString);
 
@@ -175,7 +175,7 @@ class AdmobIOS
 
 		if (cString != null)
 		{
-			final haxeString:String = new String(cString);
+			final haxeString:String = new String(untyped cString);
 
 			cpp.Stdlib.nativeFree(untyped cString);
 
@@ -192,7 +192,7 @@ class AdmobIOS
 	 */
 	public static function isPrivacyOptionsRequired():Bool
 	{
-		return isAdmobPrivacyOptionsRequired();
+		return isPrivacyOptionsRequiredAdmob();
 	}
 
 	/**
@@ -200,7 +200,7 @@ class AdmobIOS
 	 */
 	public static function showPrivacyOptionsForm():Void
 	{
-		showAdmobPrivacyOptionsForm();
+		showPrivacyOptionsFormAdmob();
 	}
 
 	@:native('Admob_ConfigureConsentMetadata')
