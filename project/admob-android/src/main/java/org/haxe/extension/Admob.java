@@ -132,7 +132,7 @@ public class Admob extends Extension
 											if (formError == null && haxeObject != null)
 												haxeObject.call("onEvent", new Object[]{ "CONSENT_SUCCESS", "Consent form dismissed successfully." });
 											else if (haxeObject != null)
-												haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", formError.getMessage() });
+												haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", String.format("Error Code: %d, Description: %s", formError.getErrorCode(), formError.getMessage()) });
 
 											initMobileAds(testingAds, childDirected, enableRDP);
 										}
@@ -146,7 +146,7 @@ public class Admob extends Extension
 						public void onConsentFormLoadFailure(FormError loadError)
 						{
 							if (haxeObject != null)
-								haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", loadError.getMessage() });
+								haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", String.format("Error Code: %d, Description: %s", loadError.getErrorCode(), loadError.getMessage()) });
 
 							initMobileAds(testingAds, childDirected, enableRDP);
 						}
@@ -165,7 +165,7 @@ public class Admob extends Extension
 			public void onConsentInfoUpdateFailure(FormError requestError)
 			{
 				if (haxeObject != null)
-					haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", requestError.getMessage() });
+					haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", String.format("Error Code: %d, Description: %s", requestError.getErrorCode(), requestError.getMessage()) });
 
 				initMobileAds(testingAds, childDirected, enableRDP);
 			}
@@ -235,7 +235,7 @@ public class Admob extends Extension
 					public void onAdFailedToLoad(LoadAdError adError)
 					{
 						if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[] { "BANNER_FAILED_TO_LOAD", adError.toString() });
+							haxeObject.call("onEvent", new Object[] { "BANNER_FAILED_TO_LOAD", String.format("Error Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
 					}
 
 					@Override
@@ -352,7 +352,7 @@ public class Admob extends Extension
 							public void onAdFailedToShowFullScreenContent(AdError adError)
 							{
 								if (haxeObject != null)
-									haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_SHOW", adError.toString() });
+									haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_SHOW", String.format("Error Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
 							}
 
 							@Override
@@ -373,7 +373,7 @@ public class Admob extends Extension
 					public void onAdFailedToLoad(LoadAdError loadAdError)
 					{
 						if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_LOAD", loadAdError.getMessage() });
+							haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_LOAD", String.format("Error Code: %d, Description: %s", loadAdError.getCode(), loadAdError.getMessage()) });
 
 						adInterstitial = null;
 					}
@@ -434,7 +434,7 @@ public class Admob extends Extension
 							public void onAdFailedToShowFullScreenContent(AdError adError)
 							{
 								if (haxeObject != null)
-									haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_SHOW", adError.toString() });
+									haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_SHOW", String.format("Error Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
 							}
 
 							@Override
@@ -454,7 +454,7 @@ public class Admob extends Extension
 					public void onAdFailedToLoad(LoadAdError loadAdError)
 					{
 						if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_LOAD", loadAdError.getMessage() });
+							haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_LOAD", String.format("Error Code: %d, Description: %s", loadAdError.getCode(), loadAdError.getMessage()) });
 
 						adRewarded = null;
 					}
@@ -521,7 +521,7 @@ public class Admob extends Extension
 							public void onAdFailedToShowFullScreenContent(AdError adError)
 							{
 								if (haxeObject != null)
-									haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_SHOW", adError.toString() });
+									haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_SHOW", String.format("Error Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
 							}
 
 							@Override
@@ -542,7 +542,7 @@ public class Admob extends Extension
 					public void onAdFailedToLoad(LoadAdError loadAdError)
 					{
 						if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_LOAD", loadAdError.getMessage() });
+							haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_LOAD", String.format("Error Code: %d, Description: %s", loadAdError.getCode(), loadAdError.getMessage()) });
 
 						adAppOpen = null;
 					}
@@ -585,7 +585,7 @@ public class Admob extends Extension
 		return mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABTCF_PurposeConsents", "");
 	}
 
-	public static String getIABUSPrivacy()
+	public static String getUSPrivacy()
 	{
 		return mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "");
 	}
@@ -607,7 +607,7 @@ public class Admob extends Extension
 					public void onConsentFormDismissed(FormError formError)
 					{
 						if (formError != null && haxeObject != null)
-							haxeObject.call("onEvent", new Object[] { "CONSENT_FAIL", String.format("%s: %s", formError.getErrorCode(), formError.getMessage())});
+							haxeObject.call("onEvent", new Object[] { "CONSENT_FAIL", String.format("Error Code: %d, Description: %s", formError.getErrorCode(), formError.getMessage()) });
 					}
 				});
 			}

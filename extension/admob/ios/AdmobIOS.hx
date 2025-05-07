@@ -133,7 +133,7 @@ class AdmobIOS
 	}
 
 	/**
-	 * Retrieves the user's consent status for a specific IAB TCF purpose.
+	 * Retrieves the user's consent status for a specific IAB Transparency and Consent Framework (TCF) purpose.
 	 *
 	 * @param purpose The index of the purpose (0-based, as per the TCF specification).
 	 * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
@@ -144,7 +144,7 @@ class AdmobIOS
 	}
 
 	/**
-	 * Retrieves the raw IAB TCF PurposeConsents string.
+	 * Retrieves the IAB Transparency and Consent Framework (TCF) PurposeConsents string.
 	 *
 	 * @return A string representing the TCF PurposeConsents, or an empty string if unavailable.
 	 */
@@ -165,13 +165,13 @@ class AdmobIOS
 	}
 
 	/**
-	 * Retrieves the IAB US Privacy String (for CCPA compliance).
+	 * Retrieves the IAB US Privacy String.
 	 *
 	 * @return A string representing the IAB US Privacy string, or an empty string if unavailable.
 	 */
-	public static function getIABUSPrivacy():String
+	public static function getUSPrivacy():String
 	{
-		final cString:cpp.CastCharStar = getIABUSPrivacyAdmob();
+		final cString:cpp.CastCharStar = getUSPrivacyAdmob();
 
 		if (cString != null)
 		{
@@ -256,9 +256,9 @@ class AdmobIOS
 	@:noCompletion
 	extern private static function getTCFPurposeConsentAdmob():cpp.CastCharStar;
 
-	@:native('Admob_GetIABUSPrivacy')
+	@:native('Admob_GetUSPrivacy')
 	@:noCompletion
-	extern private static function getIABUSPrivacyAdmob():cpp.CastCharStar;
+	extern private static function getUSPrivacyAdmob():cpp.CastCharStar;
 
 	@:native('Admob_IsPrivacyOptionsRequired')
 	@:noCompletion

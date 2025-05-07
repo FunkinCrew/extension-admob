@@ -29,48 +29,53 @@ class Main extends lime.app.Application
 			switch (event)
 			{
 				case AdmobEvent.INIT_OK:
-					// Admob.setVolume(0.5);
-
-					trace("isPrivacyOptionsRequired", Admob.isPrivacyOptionsRequired());
-
-					trace("getTCFConsentForPurpose", Admob.getTCFConsentForPurpose(0));
-					trace("getTCFPurposeConsent", Admob.getTCFPurposeConsent());
-					trace("getIABUSPrivacy", Admob.getIABUSPrivacy());
+					trace("Admob initialized successfully.");
+	
+					trace("Privacy options required: " + Admob.isPrivacyOptionsRequired());
+					trace("IAB TCF purpose consent: " + Admob.getTCFPurposeConsent());
+					trace("IAB US Privacy: " + Admob.getUSPrivacy());
 
 					Admob.loadAppOpen(APP_OPEN_ID);
 				case AdmobEvent.APP_OPEN_LOADED:
+					trace("App open ad loaded successfully.");
+
 					Admob.showAppOpen();
+				case AdmobEvent.APP_OPEN_DISMISSED | AdmobEvent.APP_OPEN_FAILED_TO_LOAD | AdmobEvent.APP_OPEN_FAILED_TO_SHOW:
+					trace("App open ad dismissed or failed to load/show.");
 
-				case AdmobEvent.APP_OPEN_DISMISSED, AdmobEvent.APP_OPEN_FAILED_TO_LOAD, AdmobEvent.APP_OPEN_FAILED_TO_SHOW:
 					Admob.loadRewarded(REWARDED_ID);
-
 				case AdmobEvent.REWARDED_LOADED:
+					trace("Rewarded ad loaded successfully.");
+
 					Admob.showRewarded();
+				case AdmobEvent.REWARDED_DISMISSED | AdmobEvent.REWARDED_FAILED_TO_LOAD | AdmobEvent.REWARDED_FAILED_TO_SHOW:
+					trace("Rewarded ad dismissed or failed to load/show.");
 
-				case AdmobEvent.REWARDED_DISMISSED, AdmobEvent.REWARDED_FAILED_TO_LOAD, AdmobEvent.REWARDED_FAILED_TO_SHOW:
 					Admob.loadInterstitial(INTERSTITIAL_ID);
-
 				case AdmobEvent.INTERSTITIAL_LOADED:
+					trace("Interstitial ad loaded successfully.");
+
 					Admob.showInterstitial();
+				case AdmobEvent.INTERSTITIAL_DISMISSED | AdmobEvent.INTERSTITIAL_FAILED_TO_LOAD | AdmobEvent.INTERSTITIAL_FAILED_TO_SHOW:
+					trace("Interstitial ad dismissed or failed to load/show.");
 
-				case AdmobEvent.INTERSTITIAL_DISMISSED, AdmobEvent.INTERSTITIAL_FAILED_TO_LOAD, AdmobEvent.INTERSTITIAL_FAILED_TO_SHOW:
 					Admob.showBanner(BANNER_ID, AdmobBannerSize.BANNER, AdmobBannerAlign.CENTER);
-				case AdmobEvent.APP_OPEN_CLICKED, AdmobEvent.INTERSTITIAL_CLICKED, AdmobEvent.REWARDED_CLICKED, AdmobEvent.BANNER_CLICKED:
-					trace("DINHEIRO!");
-
+				case AdmobEvent.APP_OPEN_CLICKED | AdmobEvent.INTERSTITIAL_CLICKED | AdmobEvent.REWARDED_CLICKED | AdmobEvent.BANNER_CLICKED:
+					trace("Ad clicked! Triggering reward or action.");
 				case AdmobEvent.REWARDED_EARNED:
-					trace("REWARD EARNED");
+					trace("Reward earned from rewarded ad.");
 				default:
+					trace("Unhandled Admob event: " + event);
 			}
-
-			trace(event, message);
 		});
 	}
 
 	public override function onWindowCreate():Void
 	{
-		Admob.configureConsentMetadata(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getIABUSPrivacy(), '1Y'));
+		// Ensure privacy and consent information is configured properly.
+		Admob.configureConsentMetadata(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
+		// Initialize Admob with required settings.
 		Admob.init(true);
 	}
 
@@ -93,6 +98,7 @@ class Main extends lime.app.Application
 				context.webgl.clearColor(0.75, 1, 0, 1);
 				context.webgl.clear(context.webgl.COLOR_BUFFER_BIT);
 			default:
+				// Handle any default case if needed
 		}
 	}
 }

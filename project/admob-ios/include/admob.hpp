@@ -78,7 +78,7 @@ void Admob_ShowAppOpen(void);
 void Admob_SetVolume(float volume);
 
 /**
- * Retrieves the user's consent status for a specific IAB TCF purpose.
+ * Retrieves the user's consent status for a specific IAB Transparency and Consent Framework (TCF) purpose.
  *
  * @param purpose The index of the purpose (0-based, as per TCF spec).
  * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
@@ -86,18 +86,18 @@ void Admob_SetVolume(float volume);
 int Admob_GetTCFConsentForPurpose(int purpose);
 
 /**
- * Retrieves the raw IAB TCF PurposeConsents string.
+ * Retrieves the IAB Transparency and Consent Framework (TCF) PurposeConsents string.
  *
  * @return A dynamically allocated string representing the TCF PurposeConsents (or an empty string if unavailable).
  */
 char* Admob_GetTCFPurposeConsent(void);
 
 /**
- * Retrieves the IAB US Privacy String (CCPA compliance).
+ * Retrieves the IAB US Privacy String.
  *
  * @return A dynamically allocated string representing the IAB US Privacy string (or an empty string if unavailable).
  */
-char* Admob_GetIABUSPrivacy(void);
+char* Admob_GetUSPrivacy(void);
 
 /**
  * Checks if privacy options are required to be shown to the user.

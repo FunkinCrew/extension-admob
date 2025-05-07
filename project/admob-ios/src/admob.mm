@@ -732,7 +732,7 @@ char* Admob_GetTCFPurposeConsent(void)
 	return nullptr;
 }
 
-char* Admob_GetIABUSPrivacy(void)
+char* Admob_GetUSPrivacy(void)
 {
 	NSString *usPrivacyString = [NSUserDefaults.standardUserDefaults stringForKey:@"IABUSPrivacy_String"];
 
