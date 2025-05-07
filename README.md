@@ -73,25 +73,7 @@ To configure **extension-admob** for your project, follow these steps:
 	Admob.showPrivacyOptionsForm();
 	```
 
-6. **Verify User Consent**  
-	Check if user has consented to personalized ads:
-	```haxe
-	if (Admob.getTCFPurposeConsent() == AdmobConsent.FULL)
-		trace("User consented to personalized ads.");
-	else
-		trace("User did not consent to personalized ads.");
-	```
-
-7. **Check Consent for Specific Purposes**  
-	Verify if user has consented to individual purposes, such as purpose 0:
-	```haxe
-	if (Admob.getTCFConsentForPurpose(0) == 1)
-		trace("User has consented to purpose 0.");
-	else
-		trace("User has not consented to purpose 0.");
-	```
-
-9. **Load and Show Ads**  
+6. **Load and Show Ads**  
 	Add the following snippets to display ads in your app:
 
 	- **Banner Ad**

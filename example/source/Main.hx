@@ -33,7 +33,7 @@ class Main extends lime.app.Application
 	
 					trace("Privacy options required: " + Admob.isPrivacyOptionsRequired());
 					trace("IAB TCF purpose consent: " + Admob.getTCFPurposeConsent());
-					trace("IAB US Privacy: " + Admob.getUSPrivacy());
+					trace("IAB US privacy: " + Admob.getUSPrivacy());
 
 					Admob.loadAppOpen(APP_OPEN_ID);
 				case AdmobEvent.APP_OPEN_LOADED:
@@ -65,7 +65,7 @@ class Main extends lime.app.Application
 				case AdmobEvent.REWARDED_EARNED:
 					trace("Reward earned from rewarded ad.");
 				default:
-					trace("Unhandled Admob event: " + event);
+					trace("Unhandled Admob event: " + event + ":" + message);
 			}
 		});
 	}
