@@ -30,7 +30,7 @@ To install **extension-admob**, follow these steps:
 To configure **extension-admob** for your project, follow these steps:
 
 1. **iOS Frameworks Installation**  
-	To set up the required frameworks for iOS compilation, navigate to the directory where the library is installed and execute the following command:
+	To set up the required frameworks for iOS compilation execute the following command:
 	```bash
 	haxelib run extension-admob setup
 	```
