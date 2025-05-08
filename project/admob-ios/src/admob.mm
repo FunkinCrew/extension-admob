@@ -26,33 +26,34 @@ static void alignBanner(GADBannerView *bannerView, int align)
 	if (!bannerView)
 		return;
 
-	CGRect screenBounds = UIScreen.mainScreen.bounds;
-
-	CGFloat bannerWidth = bannerView.bounds.size.width;
-	CGFloat bannerHeight = bannerView.bounds.size.height;
-
 	switch (align)
 	{
 	case 0:
-		bannerView.center = CGPointMake(bannerWidth / 2, bannerHeight / 2);
+		bannerView.center = CGPointMake(bannerView.bounds.size.width / 2, bannerView.bounds.size.height / 2);
 		break;
 	case 1:
-		bannerView.center = CGPointMake(screenBounds.size.width / 2, bannerHeight / 2);
+		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, bannerView.bounds.size.height / 2);
 		break;
 	case 2:
-		bannerView.center = CGPointMake(screenBounds.size.width - bannerWidth / 2, bannerHeight / 2);
+		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width - bannerView.bounds.size.width / 2, bannerView.bounds.size.height / 2);
 		break;
 	case 3:
-		bannerView.center = CGPointMake(bannerWidth / 2, screenBounds.size.height - bannerHeight / 2);
+		bannerView.center = CGPointMake(bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2);
 		break;
 	case 4:
-		bannerView.center = CGPointMake(screenBounds.size.width / 2, screenBounds.size.height - bannerHeight / 2);
+		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2);
 		break;
 	case 5:
-		bannerView.center = CGPointMake(screenBounds.size.width - bannerWidth / 2, screenBounds.size.height - bannerHeight / 2);
+		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width - bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2);
 		break;
 	case 6:
-		bannerView.center = CGPointMake(screenBounds.size.width / 2, screenBounds.size.height / 2);
+		bannerView.center = CGPointMake(bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height - bannerView.bounds.size.height / 2);
+		break;
+	case 7:
+		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height - bannerView.bounds.size.height / 2);
+		break;
+	case 8:
+		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width - bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height - bannerView.bounds.size.height / 2);
 		break;
 	}
 }
@@ -609,6 +610,7 @@ void Admob_ShowBanner(const char *id, int size, int align)
 		}
 
 		bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
+
 		bannerView.adUnitID = [NSString stringWithUTF8String:id];
 		bannerView.rootViewController = rootVC;
 		bannerView.backgroundColor = UIColor.clearColor;
