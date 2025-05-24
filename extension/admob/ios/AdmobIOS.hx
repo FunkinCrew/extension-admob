@@ -5,6 +5,7 @@ import extension.admob.AdmobBannerAlign;
 import extension.admob.AdmobBannerSize;
 import extension.admob.AdmobEvent;
 import lime.app.Event;
+import lime.media.AudioManager;
 import lime.utils.Log;
 
 /**
@@ -45,7 +46,18 @@ class AdmobIOS
 	@:noCompletion
 	private static function onAdmobEvent(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
 	{
-		onEvent.dispatch((event : String), (value : String));
+		final nativeEvent:String = (event : String);
+		final nativeValue:String = (value : String);
+
+		switch (nativeEvent)
+		{
+			case 'AVM_WILL_PLAY_AUDIO':
+				AudioManager.suspend();
+			case 'AVM_DID_STOP_PLAYING_AUDIO':
+				AudioManager.resume();
+			default:
+				onEvent.dispatch(nativeEvent, nativeValue);
+		}
 	}
 
 	/**
