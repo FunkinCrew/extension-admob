@@ -362,10 +362,28 @@ static void alignBanner(GADBannerView *bannerView, int align)
 
 @end
 
+@interface AudioVideoManagerDelegate : NSObject <GADAudioVideoManagerDelegate>
+@end
+
+@implementation AudioVideoManagerDelegate
+
+- (void)audioVideoManagerWillPlayAudio:(GADAudioVideoManager *)audioVideoManager
+{
+	dispatchCallback("AVM_WILL_PLAY_AUDIO", "");
+}
+
+- (void)audioVideoManagerDidStopPlayingAudio:(GADAudioVideoManager *)audioVideoManager
+{
+	dispatchCallback("AVM_DID_STOP_PLAYING_AUDIO", "");
+}
+
+@end
+
 static BannerViewDelegate *bannerDelegate = nil;
 static InterstitialDelegate *interstitialDelegate = nil;
 static RewardedDelegate *rewardedDelegate = nil;
 static AppOpenAdDelegate *appOpenDelegate = nil;
+static AudioVideoManagerDelegate *avmDelegate = nil;
 
 void Admob_ConfigureConsentMetadata(bool gdprConsent, bool ccpaConsent)
 {
@@ -431,6 +449,13 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 					dispatch_async(dispatch_get_main_queue(), ^{
 						[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
 						{
+							if (!avmDelegate)
+								avmDelegate = [[AudioVideoManagerDelegate alloc] init];
+
+							GADMobileAds.sharedInstance.audioVideoManager.delegate = avmDelegate;
+
+							GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
+
 							if (admobCallback)
 							{
 								char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
@@ -449,6 +474,13 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 			{
 				[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
 				{
+					if (!avmDelegate)
+						avmDelegate = [[AudioVideoManagerDelegate alloc] init];
+
+					GADMobileAds.sharedInstance.audioVideoManager.delegate = avmDelegate;
+
+					GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
+
 					if (admobCallback)
 					{
 						char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
@@ -466,6 +498,13 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 		{
 			[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
 			{
+				if (!avmDelegate)
+					avmDelegate = [[AudioVideoManagerDelegate alloc] init];
+
+				GADMobileAds.sharedInstance.audioVideoManager.delegate = avmDelegate;
+
+				GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
+
 				if (admobCallback)
 				{
 					char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
