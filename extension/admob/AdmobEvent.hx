@@ -234,6 +234,26 @@ class AdmobEvent
 	}
 
 	/**
+	 * Returns a string representation of the `AdmobEvent`, including any associated data.
+	 */
+	@:keep
+	public function toString():String
+	{
+		final parts:Array<String> = ['AdmobEvent<$name>'];
+
+		if (errorCode != null || errorDescription != null)
+			parts.push('error(code=$errorCode, description=$errorDescription)');
+
+		if (rewardType != null || rewardAmount != null)
+			parts.push('reward(type=$rewardType, amount=$rewardAmount)');
+
+		if (value != null)
+			parts.push('value=$value');
+
+		return parts.join(', ');
+	}
+
+	/**
 	 * Creates a new `AdmobEvent` instance from the given event name and value.
 	 * 
 	 * @param name The name of the event.
