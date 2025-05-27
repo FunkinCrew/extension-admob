@@ -11,6 +11,7 @@ import lime.utils.Log;
 /**
  * A class to manage AdMob advertisements on iOS devices.
  */
+@:access(extension.admob.AdmobEvent)
 @:buildXml('<include name="${haxelib:extension-admob}/project/admob-ios/Build.xml" />')
 @:headerInclude('admob.hpp')
 class AdmobIOS
@@ -18,7 +19,7 @@ class AdmobIOS
 	/**
 	 * Event triggered for status updates from AdMob.
 	 */
-	public static var onEvent:Event<AdmobEvent->String->Void> = new Event<AdmobEvent->String->Void>();
+	public static var onEvent:Event<AdmobEvent->Void> = new Event<AdmobEvent->Void>();
 
 	/**
 	 * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
@@ -33,7 +34,7 @@ class AdmobIOS
 
 	/**
 	 * Initializes the AdMob extension.
-	 *
+	 * 
 	 * @param testingAds Whether to use testing ads.
 	 * @param childDirected Whether the ads should comply with child-directed policies.
 	 * @param enableRDP Whether to enable restricted data processing (RDP).
@@ -46,23 +47,13 @@ class AdmobIOS
 	@:noCompletion
 	private static function onAdmobEvent(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
 	{
-		final nativeEvent:String = (event : String);
-		final nativeValue:String = (value : String);
-
-		switch (nativeEvent)
-		{
-			case 'AVM_WILL_PLAY_AUDIO':
-				AudioManager.suspend();
-			case 'AVM_DID_STOP_PLAYING_AUDIO':
-				AudioManager.resume();
-			default:
-				onEvent.dispatch(nativeEvent, nativeValue);
-		}
+		if (onEvent != null)
+			onEvent.dispatch(AdmobEvent.fromEvent((event : String), (value : String)));
 	}
 
 	/**
 	 * Shows a banner ad.
-	 *
+	 * 
 	 * @param id The banner ad ID.
 	 * @param size The banner size.
 	 * @param align The banner alignment.

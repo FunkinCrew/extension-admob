@@ -24,13 +24,13 @@ class Main extends lime.app.Application
 	{
 		super();
 
-		Admob.onEvent.add(function(event:AdmobEvent, message:String):Void
+		Admob.onEvent.add(function(event:AdmobEvent):Void
 		{
-			switch (event)
+			switch (event.name)
 			{
 				case AdmobEvent.INIT_OK:
 					trace("Admob initialized successfully.");
-	
+
 					trace("Privacy options required: " + Admob.isPrivacyOptionsRequired());
 					trace("IAB TCF purpose consent: " + Admob.getTCFPurposeConsent());
 					trace("IAB US privacy: " + Admob.getUSPrivacy());
@@ -63,9 +63,9 @@ class Main extends lime.app.Application
 				case AdmobEvent.APP_OPEN_CLICKED | AdmobEvent.INTERSTITIAL_CLICKED | AdmobEvent.REWARDED_CLICKED | AdmobEvent.BANNER_CLICKED:
 					trace("Ad clicked! Triggering reward or action.");
 				case AdmobEvent.REWARDED_EARNED:
-					trace("Reward earned from rewarded ad.");
+					trace("Reward earned from rewarded ad: " + event.rewardAmount + ":" + event.rewardType);
 				default:
-					trace("Unhandled Admob event: " + event + ":" + message);
+					trace("Unhandled Admob event: " + event.name);
 			}
 		});
 	}

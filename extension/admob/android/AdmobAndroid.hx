@@ -6,7 +6,6 @@ import extension.admob.AdmobBannerSize;
 import extension.admob.AdmobEvent;
 import extension.admob.android.util.JNICache;
 import lime.app.Event;
-import lime.utils.Log;
 
 /**
  * A class to manage AdMob advertisements on Android devices.
@@ -16,7 +15,7 @@ class AdmobAndroid
 	/**
 	 * Event triggered for status updates from AdMob.
 	 */
-	public static var onEvent:Event<AdmobEvent->String->Void> = new Event<AdmobEvent->String->Void>();
+	public static var onEvent:Event<AdmobEvent->Void> = new Event<AdmobEvent->Void>();
 
 	/**
 	 * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
@@ -167,7 +166,7 @@ class AdmobAndroid
 	 * @param purpose The index of the purpose (0-based, as per the TCF specification).
 	 * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
 	 */
-	 public static function getTCFConsentForPurpose(purpose:Int = 0):Int
+	public static function getTCFConsentForPurpose(purpose:Int = 0):Int
 	{
 		final getTCFConsentForPurposeJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
 
@@ -225,6 +224,7 @@ class AdmobAndroid
 /**
  * Internal callback handler for AdMob events.
  */
+@:access(extension.admob.AdmobEvent)
 @:noCompletion
 private class CallBackHandler #if (lime >= "8.0.0") implements lime.system.JNI.JNISafety #end
 {
@@ -234,10 +234,10 @@ private class CallBackHandler #if (lime >= "8.0.0") implements lime.system.JNI.J
 	#if (lime >= "8.0.0")
 	@:runOnMainThread
 	#end
-	public function onEvent(status:String, data:String):Void
+	public function onEvent(event:String, value:String):Void
 	{
 		if (AdmobAndroid.onEvent != null)
-			AdmobAndroid.onEvent.dispatch(status, data);
+			AdmobAndroid.onEvent.dispatch(AdmobEvent.fromEvent(event, value));
 	}
 }
 #end

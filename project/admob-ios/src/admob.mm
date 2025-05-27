@@ -88,7 +88,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 {
 	if (admobCallback)
 	{
-		char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+		char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			admobCallback("BANNER_FAILED_TO_LOAD", value);
@@ -136,7 +136,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		{
 			if (admobCallback)
 			{
-				char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+				char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 				dispatch_async(dispatch_get_main_queue(), ^{
 					admobCallback("INTERSTITIAL_FAILED_TO_LOAD", value);
@@ -182,7 +182,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 {
 	if (admobCallback)
 	{
-		char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+		char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			admobCallback("INTERSTITIAL_FAILED_TO_SHOW", value);
@@ -215,7 +215,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		{
 			if (admobCallback)
 			{
-				char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+				char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 				dispatch_async(dispatch_get_main_queue(), ^{
 					admobCallback("REWARDED_FAILED_TO_LOAD", value);
@@ -242,7 +242,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		[self._ad presentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController] userDidEarnRewardHandler:^{
 			if (admobCallback)
 			{
-				char *value = strdup([[NSString stringWithFormat:@"%@:%d", self._ad.adReward.type, self._ad.adReward.amount.intValue] UTF8String]);
+				char *value = strdup([[NSString stringWithFormat:@"Type: %@, Amount: %d", self._ad.adReward.type, self._ad.adReward.amount.intValue] UTF8String]);
 
 				dispatch_async(dispatch_get_main_queue(), ^{
 					admobCallback("REWARDED_EARNED", value);
@@ -272,7 +272,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 {
 	if (admobCallback)
 	{
-		char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+		char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			admobCallback("REWARDED_FAILED_TO_SHOW", value);
@@ -305,7 +305,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 		{
 			if (admobCallback)
 			{
-				char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+				char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 				dispatch_async(dispatch_get_main_queue(), ^{
 					admobCallback("APP_OPEN_FAILED_TO_LOAD", value);
@@ -350,7 +350,7 @@ static void alignBanner(GADBannerView *bannerView, int align)
 {
 	if (admobCallback)
 	{
-		char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+		char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 		dispatch_async(dispatch_get_main_queue(), ^{
 			admobCallback("APP_OPEN_FAILED_TO_SHOW", value);
@@ -534,7 +534,7 @@ void Admob_Init(bool testingAds, bool childDirected, bool enableRDP, AdmobCallba
 		{
 			if (admobCallback)
 			{
-				char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+				char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
 
 				dispatch_async(dispatch_get_main_queue(), ^{
 					admobCallback("CONSENT_FAIL", value);
@@ -555,7 +555,7 @@ void Admob_Init(bool testingAds, bool childDirected, bool enableRDP, AdmobCallba
 					{
 						if (admobCallback)
 						{
-							char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", loadError.code, loadError.localizedDescription] UTF8String]);
+							char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", loadError.code, loadError.localizedDescription] UTF8String]);
 
 							dispatch_async(dispatch_get_main_queue(), ^{
 								admobCallback("CONSENT_FAIL", value);
@@ -575,7 +575,7 @@ void Admob_Init(bool testingAds, bool childDirected, bool enableRDP, AdmobCallba
 								{
 									if (admobCallback)
 									{
-										char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", loadError.code, loadError.localizedDescription] UTF8String]);
+										char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", loadError.code, loadError.localizedDescription] UTF8String]);
 
 										dispatch_async(dispatch_get_main_queue(), ^{
 											admobCallback("CONSENT_FAIL", value);
@@ -795,7 +795,7 @@ void Admob_ShowPrivacyOptionsForm()
 		{
 			if (formError && admobCallback)
 			{
-				char *value = strdup([[NSString stringWithFormat:@"Error Code: %zd, Description: %@", formError.code, formError.localizedDescription] UTF8String]);
+				char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", formError.code, formError.localizedDescription] UTF8String]);
 
 				dispatch_async(dispatch_get_main_queue(), ^{
 					admobCallback("CONSENT_FAIL", value);
