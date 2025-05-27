@@ -28,161 +28,161 @@ class AdmobEvent
 	 * 
 	 * Ads can be requested after this event.
 	 */
-	public static inline final INIT_OK = 'INIT_OK';
+	public static inline final INIT_OK:String = 'INIT_OK';
 
 	/**
 	 * Event triggered when there is an issue with the GDPR consent form.
 	 * 
 	 * AdMob is initialized anyway, but its usage is at your own risk.
 	 */
-	public static inline final CONSENT_FAIL = 'CONSENT_FAIL';
+	public static inline final CONSENT_FAIL:String = 'CONSENT_FAIL';
 
 	/**
 	 * Event triggered when the GDPR consent form is successfully completed.
 	 */
-	public static inline final CONSENT_SUCCESS = 'CONSENT_SUCCESS';
+	public static inline final CONSENT_SUCCESS:String = 'CONSENT_SUCCESS';
 
 	/**
 	 * Event triggered when GDPR consent is not required for the user.
 	 */
-	public static inline final CONSENT_NOT_REQUIRED = 'CONSENT_NOT_REQUIRED';
+	public static inline final CONSENT_NOT_REQUIRED:String = 'CONSENT_NOT_REQUIRED';
 
 	#if ios
 	/**
 	 * Event triggered for the App Tracking Transparency (ATT) status on iOS.
 	 */
-	public static inline final ATT_STATUS = 'ATT_STATUS';
+	public static inline final ATT_STATUS:String = 'ATT_STATUS';
 
 	/**
 	 * Event constant indicating that the AVM (Audio Video Manager) is about to play audio.
 	 */
-	public static inline final AVM_WILL_PLAY_AUDIO = 'AVM_WILL_PLAY_AUDIO';
+	public static inline final AVM_WILL_PLAY_AUDIO:String = 'AVM_WILL_PLAY_AUDIO';
 
 	/**
 	 * Event constant indicating that the AVM (Audio Video Manager) has stopped playing audio.
 	 */
-	public static inline final AVM_DID_STOP_PLAYING_AUDIO = 'AVM_DID_STOP_PLAYING_AUDIO';
+	public static inline final AVM_DID_STOP_PLAYING_AUDIO:String = 'AVM_DID_STOP_PLAYING_AUDIO';
 	#end
 
 	/**
 	 * Event triggered when a banner ad is successfully loaded.
 	 */
-	public static inline final BANNER_LOADED = 'BANNER_LOADED';
+	public static inline final BANNER_LOADED:String = 'BANNER_LOADED';
 
 	/**
 	 * Event triggered when a banner ad fails to load.
 	 */
-	public static inline final BANNER_FAILED_TO_LOAD = 'BANNER_FAILED_TO_LOAD';
+	public static inline final BANNER_FAILED_TO_LOAD:String = 'BANNER_FAILED_TO_LOAD';
 
 	/**
 	 * Event triggered when a banner ad is opened.
 	 */
-	public static inline final BANNER_OPENED = 'BANNER_OPENED';
+	public static inline final BANNER_OPENED:String = 'BANNER_OPENED';
 
 	/**
 	 * Event triggered when a banner ad is clicked.
 	 */
-	public static inline final BANNER_CLICKED = 'BANNER_CLICKED';
+	public static inline final BANNER_CLICKED:String = 'BANNER_CLICKED';
 
 	/**
 	 * Event triggered when a banner ad is closed.
 	 */
-	public static inline final BANNER_CLOSED = 'BANNER_CLOSED';
+	public static inline final BANNER_CLOSED:String = 'BANNER_CLOSED';
 
 	/**
 	 * Event triggered when an interstitial ad is successfully loaded.
 	 */
-	public static inline final INTERSTITIAL_LOADED = 'INTERSTITIAL_LOADED';
+	public static inline final INTERSTITIAL_LOADED:String = 'INTERSTITIAL_LOADED';
 
 	/**
 	 * Event triggered when an interstitial ad fails to load.
 	 */
-	public static inline final INTERSTITIAL_FAILED_TO_LOAD = 'INTERSTITIAL_FAILED_TO_LOAD';
+	public static inline final INTERSTITIAL_FAILED_TO_LOAD:String = 'INTERSTITIAL_FAILED_TO_LOAD';
 
 	/**
 	 * Event triggered when an interstitial ad fails to show.
 	 */
-	public static inline final INTERSTITIAL_FAILED_TO_SHOW = 'INTERSTITIAL_FAILED_TO_SHOW';
+	public static inline final INTERSTITIAL_FAILED_TO_SHOW:String = 'INTERSTITIAL_FAILED_TO_SHOW';
 
 	/**
 	 * Event triggered when an interstitial ad is shown.
 	 */
-	public static inline final INTERSTITIAL_SHOWED = 'INTERSTITIAL_SHOWED';
+	public static inline final INTERSTITIAL_SHOWED:String = 'INTERSTITIAL_SHOWED';
 
 	/**
 	 * Event triggered when an interstitial ad is clicked.
 	 */
-	public static inline final INTERSTITIAL_CLICKED = 'INTERSTITIAL_CLICKED';
+	public static inline final INTERSTITIAL_CLICKED:String = 'INTERSTITIAL_CLICKED';
 
 	/**
 	 * Event triggered when an interstitial ad is dismissed.
 	 */
-	public static inline final INTERSTITIAL_DISMISSED = 'INTERSTITIAL_DISMISSED';
+	public static inline final INTERSTITIAL_DISMISSED:String = 'INTERSTITIAL_DISMISSED';
 
 	/**
 	 * Event triggered when a rewarded ad is successfully loaded.
 	 */
-	public static inline final REWARDED_LOADED = 'REWARDED_LOADED';
+	public static inline final REWARDED_LOADED:String = 'REWARDED_LOADED';
 
 	/**
 	 * Event triggered when a rewarded ad fails to load.
 	 */
-	public static inline final REWARDED_FAILED_TO_LOAD = 'REWARDED_FAILED_TO_LOAD';
+	public static inline final REWARDED_FAILED_TO_LOAD:String = 'REWARDED_FAILED_TO_LOAD';
 
 	/**
 	 * Event triggered when a rewarded ad fails to show.
 	 */
-	public static inline final REWARDED_FAILED_TO_SHOW = 'REWARDED_FAILED_TO_SHOW';
+	public static inline final REWARDED_FAILED_TO_SHOW:String = 'REWARDED_FAILED_TO_SHOW';
 
 	/**
 	 * Event triggered when a rewarded ad is shown.
 	 */
-	public static inline final REWARDED_SHOWED = 'REWARDED_SHOWED';
+	public static inline final REWARDED_SHOWED:String = 'REWARDED_SHOWED';
 
 	/**
 	 * Event triggered when a reward is earned from a rewarded ad.
 	 */
-	public static inline final REWARDED_EARNED = 'REWARDED_EARNED';
+	public static inline final REWARDED_EARNED:String = 'REWARDED_EARNED';
 
 	/**
 	 * Event triggered when a rewarded ad is clicked.
 	 */
-	public static inline final REWARDED_CLICKED = 'REWARDED_CLICKED';
+	public static inline final REWARDED_CLICKED:String = 'REWARDED_CLICKED';
 
 	/**
 	 * Event triggered when a rewarded ad is dismissed.
 	 */
-	public static inline final REWARDED_DISMISSED = 'REWARDED_DISMISSED';
+	public static inline final REWARDED_DISMISSED:String = 'REWARDED_DISMISSED';
 
 	/**
 	 * Event triggered when an app open ad is successfully loaded.
 	 */
-	public static inline final APP_OPEN_LOADED = 'APP_OPEN_LOADED';
+	public static inline final APP_OPEN_LOADED:String = 'APP_OPEN_LOADED';
 
 	/**
 	 * Event triggered when an app open ad fails to load.
 	 */
-	public static inline final APP_OPEN_FAILED_TO_LOAD = 'APP_OPEN_FAILED_TO_LOAD';
+	public static inline final APP_OPEN_FAILED_TO_LOAD:String = 'APP_OPEN_FAILED_TO_LOAD';
 
 	/**
 	 * Event triggered when an app open ad fails to show.
 	 */
-	public static inline final APP_OPEN_FAILED_TO_SHOW = 'APP_OPEN_FAILED_TO_SHOW';
+	public static inline final APP_OPEN_FAILED_TO_SHOW:String = 'APP_OPEN_FAILED_TO_SHOW';
 
 	/**
 	 * Event triggered when an app open ad is shown.
 	 */
-	public static inline final APP_OPEN_SHOWED = 'APP_OPEN_SHOWED';
+	public static inline final APP_OPEN_SHOWED:String = 'APP_OPEN_SHOWED';
 
 	/**
 	 * Event triggered when an app open ad is clicked.
 	 */
-	public static inline final APP_OPEN_CLICKED = 'APP_OPEN_CLICKED';
+	public static inline final APP_OPEN_CLICKED:String = 'APP_OPEN_CLICKED';
 
 	/**
 	 * Event triggered when an app open ad is dismissed.
 	 */
-	public static inline final APP_OPEN_DISMISSED = 'APP_OPEN_DISMISSED';
+	public static inline final APP_OPEN_DISMISSED:String = 'APP_OPEN_DISMISSED';
 
 	/**
 	 * The name of the AdMob event.
