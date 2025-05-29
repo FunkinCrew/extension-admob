@@ -185,6 +185,11 @@ class AdmobEvent
 	public static inline final APP_OPEN_DISMISSED:String = 'APP_OPEN_DISMISSED';
 
 	/**
+	 * Event triggered when the Ad Inspector is closed.
+	 */
+	public static inline final AD_INSPECTOR_CLOSED:String = 'AD_INSPECTOR_CLOSED';
+
+	/**
 	 * The name of the AdMob event.
 	 */
 	public var name:String;

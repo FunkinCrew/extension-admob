@@ -36,39 +36,23 @@ class Main extends lime.app.Application
 					trace("IAB US privacy: " + Admob.getUSPrivacy());
 
 					Admob.openAdInspector();
-
-					// Admob.loadAppOpen(APP_OPEN_ID);
-				/*case AdmobEvent.APP_OPEN_LOADED:
-					trace("App open ad loaded successfully.");
-
+				case AdmobEvent.AD_INSPECTOR_CLOSED:
+					Admob.loadAppOpen(APP_OPEN_ID);
+				case AdmobEvent.APP_OPEN_LOADED:
 					Admob.showAppOpen();
 				case AdmobEvent.APP_OPEN_DISMISSED | AdmobEvent.APP_OPEN_FAILED_TO_LOAD | AdmobEvent.APP_OPEN_FAILED_TO_SHOW:
-					trace("App open ad dismissed or failed to load/show.");
-
 					Admob.loadRewarded(REWARDED_ID);
 				case AdmobEvent.REWARDED_LOADED:
-					trace("Rewarded ad loaded successfully.");
-
 					Admob.showRewarded();
 				case AdmobEvent.REWARDED_DISMISSED | AdmobEvent.REWARDED_FAILED_TO_LOAD | AdmobEvent.REWARDED_FAILED_TO_SHOW:
-					trace("Rewarded ad dismissed or failed to load/show.");
-
 					Admob.loadInterstitial(INTERSTITIAL_ID);
 				case AdmobEvent.INTERSTITIAL_LOADED:
-					trace("Interstitial ad loaded successfully.");
-
 					Admob.showInterstitial();
 				case AdmobEvent.INTERSTITIAL_DISMISSED | AdmobEvent.INTERSTITIAL_FAILED_TO_LOAD | AdmobEvent.INTERSTITIAL_FAILED_TO_SHOW:
-					trace("Interstitial ad dismissed or failed to load/show.");
-
 					Admob.showBanner(BANNER_ID, AdmobBannerSize.BANNER, AdmobBannerAlign.CENTER);
-				case AdmobEvent.APP_OPEN_CLICKED | AdmobEvent.INTERSTITIAL_CLICKED | AdmobEvent.REWARDED_CLICKED | AdmobEvent.BANNER_CLICKED:
-					trace("Ad clicked! Triggering reward or action.");
-				case AdmobEvent.REWARDED_EARNED:
-					trace("Reward earned from rewarded ad: " + event.rewardAmount + ":" + event.rewardType);*/
-				default:
-					trace("Unhandled Admob event: " + event.name);
 			}
+
+			trace(event.toString());
 		});
 	}
 
