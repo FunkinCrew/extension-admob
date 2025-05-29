@@ -206,6 +206,14 @@ class AdmobIOS
 		showPrivacyOptionsFormAdmob();
 	}
 
+	/**
+	 * Displays the ad inspector.
+	 */
+	public static function openAdInspector():Void
+	{
+		openAdInspectorAdmob();
+	}
+
 	@:native('Admob_ConfigureConsentMetadata')
 	@:noCompletion
 	extern private static function configureConsentMetadataAdmob(gdprConsent:Bool, ccpaConsent:Bool):Void;
@@ -270,5 +278,9 @@ class AdmobIOS
 	@:native('Admob_ShowPrivacyOptionsForm')
 	@:noCompletion
 	extern private static function showPrivacyOptionsFormAdmob():Void;
+
+	@:native('Admob_OpenAdInspector')
+	@:noCompletion
+	extern private static function openAdInspectorAdmob():Void;
 }
 #end

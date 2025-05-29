@@ -219,6 +219,17 @@ class AdmobAndroid
 		if (showPrivacyOptionsFormJNI != null)
 			showPrivacyOptionsFormJNI();
 	}
+
+	/**
+	 * Displays the ad inspector.
+	 */
+	public static function openAdInspector():Void
+	{
+		final openAdInspectorJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'openAdInspector', '()V');
+
+		if (openAdInspectorJNI != null)
+			openAdInspectorJNI();
+	}
 }
 
 /**

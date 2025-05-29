@@ -622,6 +622,26 @@ public class Admob extends Extension
 		});
 	}
 
+	public static void openAdInspector()
+	{
+		mainActivity.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				MobileAds.openAdInspector(mainContext, new OnAdInspectorClosedListener()
+				{
+					public void onAdInspectorClosed(AdInspectorError adInspectorError)
+					{
+						if (adInspectorError != null && haxeObject != null)
+							haxeObject.call("onEvent", new Object[]{ "AD_INSPECTOR_CLOSED", String.format("Code: %d, Description: %s", adInspectorError.getCode(), adInspectorError.getMessage()) });
+						else if (haxeObject != null)
+							haxeObject.call("onEvent", new Object[]{ "AD_INSPECTOR_CLOSED", "" });
+					}
+				});
+			}
+		});
+	}
+
 	@Override
 	public void onPause()
 	{

@@ -806,3 +806,24 @@ void Admob_ShowPrivacyOptionsForm()
 		}];
 	});
 }
+
+void Admob_OpenAdInspector()
+{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[GADMobileAds sharedInstance] presentAdInspectorFromViewController:UIApplication.sharedApplication.keyWindow.rootViewController completionHandler:^(NSError *error)
+		{
+			if (error && admobCallback)
+			{
+				char *value = strdup([[NSString stringWithFormat:@"Code: %zd, Description: %@", error.code, error.localizedDescription] UTF8String]);
+
+				dispatch_async(dispatch_get_main_queue(), ^{
+					admobCallback("AD_INSPECTOR_CLOSED", value);
+
+					free(value);
+				});
+			}
+			else if (admobCallback)
+				dispatchCallback("AD_INSPECTOR_CLOSED", "");
+		}];
+	});
+}

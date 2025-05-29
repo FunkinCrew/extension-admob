@@ -110,3 +110,8 @@ bool Admob_IsPrivacyOptionsRequired(void);
  * Presents the AdMob privacy options form to the user.
  */
 void Admob_ShowPrivacyOptionsForm(void);
+
+/**
+ * Opens the Ad Inspector interface for debugging and testing ads.
+ */
+void Admob_OpenAdInspector(void);
