@@ -4,8 +4,8 @@ package extension.admob.android;
 import extension.admob.AdmobBannerAlign;
 import extension.admob.AdmobBannerSize;
 import extension.admob.AdmobEvent;
-import extension.admob.android.util.JNICache;
 import lime.app.Event;
+import lime.system.JNI;
 
 /**
  * A class to manage AdMob advertisements on Android devices.
@@ -18,6 +18,12 @@ class AdmobAndroid
 	public static var onEvent:Event<AdmobEvent->Void> = new Event<AdmobEvent->Void>();
 
 	/**
+	 * Cache for storing created static JNI method references.
+	 */
+	@:noCompletion
+	private static var staticMethodsCache:Map<String, Dynamic> = [];
+
+	/**
 	 * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
 	 * 
 	 * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
@@ -25,7 +31,7 @@ class AdmobAndroid
 	 */
 	public static function configureConsentMetadata(gdprConsent:Bool, ccpaConsent:Bool):Void
 	{
-		final configureConsentMetadataJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'configureConsentMetadata', '(ZZ)V');
+		final configureConsentMetadataJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureConsentMetadata', '(ZZ)V');
 
 		if (configureConsentMetadataJNI != null)
 			configureConsentMetadataJNI(gdprConsent, ccpaConsent);
@@ -40,7 +46,7 @@ class AdmobAndroid
 	 */
 	public static function init(testingAds:Bool = false, childDirected:Bool = false, enableRDP:Bool = false):Void
 	{
-		final initJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'init', '(ZZZLorg/haxe/lime/HaxeObject;)V');
+		final initJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'init', '(ZZZLorg/haxe/lime/HaxeObject;)V');
 
 		if (initJNI != null)
 			initJNI(testingAds, childDirected, enableRDP, new CallBackHandler());
@@ -55,7 +61,7 @@ class AdmobAndroid
 	 */
 	public static function showBanner(id:String, size:AdmobBannerSize, align:AdmobBannerAlign):Void
 	{
-		final showBannerJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showBanner', '(Ljava/lang/String;II)V');
+		final showBannerJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showBanner', '(Ljava/lang/String;II)V');
 
 		if (showBannerJNI != null)
 			showBannerJNI(id, size, align);
@@ -66,7 +72,7 @@ class AdmobAndroid
 	 */
 	public static function hideBanner():Void
 	{
-		final hideBannerJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'hideBanner', '()V');
+		final hideBannerJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'hideBanner', '()V');
 
 		if (hideBannerJNI != null)
 			hideBannerJNI();
@@ -80,7 +86,7 @@ class AdmobAndroid
 	 */
 	public static function loadInterstitial(id:String, immersiveModeEnabled:Bool = true):Void
 	{
-		final loadInterstitialJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'loadInterstitial', '(Ljava/lang/String;Z)V');
+		final loadInterstitialJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadInterstitial', '(Ljava/lang/String;Z)V');
 
 		if (loadInterstitialJNI != null)
 			loadInterstitialJNI(id, immersiveModeEnabled);
@@ -91,7 +97,7 @@ class AdmobAndroid
 	 */
 	public static function showInterstitial():Void
 	{
-		final showInterstitialJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showInterstitial', '()V');
+		final showInterstitialJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showInterstitial', '()V');
 
 		if (showInterstitialJNI != null)
 			showInterstitialJNI();
@@ -105,7 +111,7 @@ class AdmobAndroid
 	 */
 	public static function loadRewarded(id:String, immersiveModeEnabled:Bool = true):Void
 	{
-		final loadRewardedJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'loadRewarded', '(Ljava/lang/String;Z)V');
+		final loadRewardedJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadRewarded', '(Ljava/lang/String;Z)V');
 
 		if (loadRewardedJNI != null)
 			loadRewardedJNI(id, immersiveModeEnabled);
@@ -116,7 +122,7 @@ class AdmobAndroid
 	 */
 	public static function showRewarded():Void
 	{
-		final showRewardedJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showRewarded', '()V');
+		final showRewardedJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showRewarded', '()V');
 
 		if (showRewardedJNI != null)
 			showRewardedJNI();
@@ -130,7 +136,7 @@ class AdmobAndroid
 	 */
 	public static function loadAppOpen(id:String, immersiveModeEnabled:Bool = true):Void
 	{
-		final loadAppOpenJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'loadAppOpen', '(Ljava/lang/String;Z)V');
+		final loadAppOpenJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadAppOpen', '(Ljava/lang/String;Z)V');
 
 		if (loadAppOpenJNI != null)
 			loadAppOpenJNI(id, immersiveModeEnabled);
@@ -141,7 +147,7 @@ class AdmobAndroid
 	 */
 	public static function showAppOpen():Void
 	{
-		final showAppOpenJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showAppOpen', '()V');
+		final showAppOpenJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showAppOpen', '()V');
 
 		if (showAppOpenJNI != null)
 			showAppOpenJNI();
@@ -154,7 +160,7 @@ class AdmobAndroid
 	 */
 	public static function setVolume(vol:Float):Void
 	{
-		final setVolumeJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'setVolume', '(F)V');
+		final setVolumeJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'setVolume', '(F)V');
 
 		if (setVolumeJNI != null)
 			setVolumeJNI(vol);
@@ -168,7 +174,7 @@ class AdmobAndroid
 	 */
 	public static function getTCFConsentForPurpose(purpose:Int = 0):Int
 	{
-		final getTCFConsentForPurposeJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
+		final getTCFConsentForPurposeJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
 
 		return getTCFConsentForPurposeJNI != null ? getTCFConsentForPurposeJNI(purpose) : -1;
 	}
@@ -180,7 +186,7 @@ class AdmobAndroid
 	 */
 	public static function getTCFPurposeConsent():String
 	{
-		final getTCFPurposeConsentJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getTCFPurposeConsent', '()Ljava/lang/String;');
+		final getTCFPurposeConsentJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFPurposeConsent', '()Ljava/lang/String;');
 
 		return getTCFPurposeConsentJNI != null ? getTCFPurposeConsentJNI() : '';
 	}
@@ -192,7 +198,7 @@ class AdmobAndroid
 	 */
 	public static function getUSPrivacy():String
 	{
-		final getUSPrivacyJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'getUSPrivacy', '()Ljava/lang/String;');
+		final getUSPrivacyJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getUSPrivacy', '()Ljava/lang/String;');
 
 		return getUSPrivacyJNI != null ? getUSPrivacyJNI() : '';
 	}
@@ -204,7 +210,7 @@ class AdmobAndroid
 	 */
 	public static function isPrivacyOptionsRequired():Bool
 	{
-		final isPrivacyOptionsRequiredJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'isPrivacyOptionsRequired', '()Z');
+		final isPrivacyOptionsRequiredJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isPrivacyOptionsRequired', '()Z');
 
 		return isPrivacyOptionsRequiredJNI != null ? isPrivacyOptionsRequiredJNI() : false;
 	}
@@ -214,7 +220,7 @@ class AdmobAndroid
 	 */
 	public static function showPrivacyOptionsForm():Void
 	{
-		final showPrivacyOptionsFormJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'showPrivacyOptionsForm', '()V');
+		final showPrivacyOptionsFormJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showPrivacyOptionsForm', '()V');
 
 		if (showPrivacyOptionsFormJNI != null)
 			showPrivacyOptionsFormJNI();
@@ -225,10 +231,34 @@ class AdmobAndroid
 	 */
 	public static function openAdInspector():Void
 	{
-		final openAdInspectorJNI:Null<Dynamic> = JNICache.createStaticMethod('org/haxe/extension/Admob', 'openAdInspector', '()V');
+		final openAdInspectorJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'openAdInspector', '()V');
 
 		if (openAdInspectorJNI != null)
 			openAdInspectorJNI();
+	}
+
+	/**
+	 * Retrieves or creates a cached static method reference.
+	 * @param className The name of the Java class containing the method.
+	 * @param methodName The name of the method to call.
+	 * @param signature The JNI method signature string (e.g., "()V", "(Ljava/lang/String;)V").
+	 * @param cache Whether to cache the result (default true).
+	 * @return A dynamic reference to the static method, or null if it couldn't be created.
+	 */
+	@:noCompletion
+	private static function createJNIStaticMethod(className:String, methodName:String, signature:String, cache:Bool = true):Null<Dynamic>
+	{
+		@:privateAccess
+		className = JNI.transformClassName(className);
+
+		final key:String = '$className::$methodName::$signature';
+
+		if (cache && !staticMethodsCache.exists(key))
+			staticMethodsCache.set(key, JNI.createStaticMethod(className, methodName, signature));
+		else if (!cache)
+			return JNI.createStaticMethod(className, methodName, signature);
+
+		return staticMethodsCache.get(key);
 	}
 }
 
