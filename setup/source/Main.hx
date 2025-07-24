@@ -49,9 +49,6 @@ class Main
 			Sys.println(ANSIUtil.apply('No command to run.', [Red]));
 			Sys.exit(1);
 		}
-
-		if (last != null)
-			Sys.setCwd(last);
 	}
 
 	@:noCompletion
