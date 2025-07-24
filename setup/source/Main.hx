@@ -11,8 +11,8 @@ class Main
 	@:noCompletion
 	private static final URLS:Map<String, String> = [
 		'googlemobileadssdkios.zip' => 'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
-		'UnityAds.zip' => 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.15.1/UnityAds.zip',
-		'UnityAdapter-4.15.1.0.zip' => 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.15.1.0.zip'
+		'UnityAds.zip' => 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.0/UnityAds.zip',
+		'UnityAdapter-4.16.0.0.zip' => 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.15.1.0.zip'
 	];
 
 	@:noCompletion
@@ -23,18 +23,13 @@ class Main
 
 	public static function main():Void
 	{
-		final args:Array<String> = Sys.args();
-		final last:Null<String> = args.pop();
-		final command:Null<String> = args.shift();
-		final path:Null<String> = libPath('extension-admob');
+		final path:String = Sys.getCwd();
 
-		if (path == null)
-		{
-			Sys.println(ANSIUtil.apply('Unable to find "extension-admob" path.', [Red]));
-			Sys.exit(1);
-		}
-		else
-			Sys.setCwd(path);
+		final args:Array<String> = Sys.args();
+
+		final last:Null<String> = args.pop();
+
+		final command:Null<String> = args.shift();
 
 		if (command != null)
 		{
@@ -174,12 +169,6 @@ class Main
 		}
 		else
 			Sys.println(ANSIUtil.apply('Successfully rebuilt "extension-admob" runner.', [Green]));
-	}
-
-	@:noCompletion
-	private static function libPath(lib:String):Null<String>
-	{
-		return new sys.io.Process('haxelib', ['libpath', lib]).stdout.readLine();
 	}
 
 	@:noCompletion
