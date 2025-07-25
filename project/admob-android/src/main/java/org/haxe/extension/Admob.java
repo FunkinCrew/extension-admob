@@ -260,6 +260,8 @@ public class Admob extends Extension
 					}
 				});
 
+				adView.loadAd(new AdRequest.Builder().build());
+
 				RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
 				switch (align)
@@ -303,8 +305,6 @@ public class Admob extends Extension
 				}
 
 				((RelativeLayout) mainView).addView(adView, params);
-
-				adView.loadAd(new AdRequest.Builder().build());
 			}
 		});
 	}

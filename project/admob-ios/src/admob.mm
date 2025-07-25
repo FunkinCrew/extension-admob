@@ -21,59 +21,6 @@ static void dispatchCallback(const char *event, const char *value)
 	}
 }
 
-static void alignBanner(GADBannerView *bannerView, int align)
-{
-	if (!bannerView)
-		return;
-
-	switch (align)
-	{
-	case 0:
-		bannerView.center = CGPointMake(bannerView.bounds.size.width / 2, bannerView.bounds.size.height / 2);
-		break;
-	case 1:
-		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, bannerView.bounds.size.height / 2);
-		break;
-	case 2:
-		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width - bannerView.bounds.size.width / 2, bannerView.bounds.size.height / 2);
-		break;
-	case 3:
-		bannerView.center = CGPointMake(bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2);
-		break;
-	case 4:
-		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2);
-		break;
-	case 5:
-		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width - bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height / 2);
-		break;
-	case 6:
-		bannerView.center = CGPointMake(bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height - bannerView.bounds.size.height / 2);
-		break;
-	case 7:
-		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height - bannerView.bounds.size.height / 2);
-		break;
-	case 8:
-		bannerView.center = CGPointMake(UIScreen.mainScreen.bounds.size.width - bannerView.bounds.size.width / 2, UIScreen.mainScreen.bounds.size.height - bannerView.bounds.size.height / 2);
-		break;
-	}
-}
-
-@interface BannerHelper : NSObject
-+ (void)handleOrientationChange;
-@end
-
-@implementation BannerHelper
-+ (void)handleOrientationChange
-{
-	if (bannerView)
-	{
-		dispatch_async(dispatch_get_main_queue(), ^{
-  			alignBanner(bannerView, currentAlign);
-		});
-	}
-}
-@end
-
 @interface BannerViewDelegate : NSObject <GADBannerViewDelegate>
 @end
 
@@ -649,8 +596,8 @@ void Admob_ShowBanner(const char *id, int size, int align)
 		}
 
 		bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
-
 		bannerView.adUnitID = [NSString stringWithUTF8String:id];
+		bannerView.translatesAutoresizingMaskIntoConstraints = NO;
 		bannerView.rootViewController = rootVC;
 		bannerView.backgroundColor = UIColor.clearColor;
 
@@ -659,18 +606,67 @@ void Admob_ShowBanner(const char *id, int size, int align)
 
 		bannerView.delegate = bannerDelegate;
 
-		[rootVC.view addSubview:bannerView];
-
+		switch (align)
 		{
-			alignBanner(bannerView, align);
-
-			[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification)
-			{
-				[BannerHelper handleOrientationChange];
-			}];
+		case 0:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.topAnchor constraintEqualToAnchor:rootVC.view.topAnchor],
+				[bannerView.leadingAnchor constraintEqualToAnchor:rootVC.view.leadingAnchor]
+			]];
+			break;
+		case 1:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.topAnchor constraintEqualToAnchor:rootVC.view.topAnchor],
+				[bannerView.centerXAnchor constraintEqualToAnchor:rootVC.view.centerXAnchor]
+			]];
+			break;
+		case 2:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.topAnchor constraintEqualToAnchor:rootVC.view.topAnchor],
+				[bannerView.trailingAnchor constraintEqualToAnchor:rootVC.view.trailingAnchor]
+			]];
+			break;
+		case 3:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.centerYAnchor constraintEqualToAnchor:rootVC.view.centerYAnchor],
+				[bannerView.leadingAnchor constraintEqualToAnchor:rootVC.view.leadingAnchor]
+			]];
+			break;
+		case 4:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.centerXAnchor constraintEqualToAnchor:rootVC.view.centerXAnchor],
+				[bannerView.centerYAnchor constraintEqualToAnchor:rootVC.view.centerYAnchor]
+			]];
+			break;
+		case 5:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.centerYAnchor constraintEqualToAnchor:rootVC.view.centerYAnchor],
+				[bannerView.trailingAnchor constraintEqualToAnchor:rootVC.view.trailingAnchor]
+			]];
+			break;
+		case 6:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.bottomAnchor constraintEqualToAnchor:rootVC.view.bottomAnchor],
+				[bannerView.leadingAnchor constraintEqualToAnchor:rootVC.view.leadingAnchor]
+			]];
+			break;
+		case 7:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.bottomAnchor constraintEqualToAnchor:rootVC.view.bottomAnchor],
+				[bannerView.centerXAnchor constraintEqualToAnchor:rootVC.view.centerXAnchor]
+			]];
+			break;
+		case 8:
+			[NSLayoutConstraint activateConstraints:@[
+				[bannerView.bottomAnchor constraintEqualToAnchor:rootVC.view.bottomAnchor],
+				[bannerView.trailingAnchor constraintEqualToAnchor:rootVC.view.trailingAnchor]
+			]];
+			break;
 		}
 
 		[bannerView loadRequest:[GADRequest request]];
+
+		[rootVC.view addSubview:bannerView];
 	});
 }
 
