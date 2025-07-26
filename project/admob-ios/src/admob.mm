@@ -561,7 +561,7 @@ void Admob_ShowBanner(const char *id, int size, int align)
 	currentAlign = align;
 
 	dispatch_async(dispatch_get_main_queue(), ^{
-		UIViewController *rootVC = UIApplication.sharedApplication.keyWindow.rootViewController;
+		UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
 
 		GADAdSize adSize;
 
@@ -585,10 +585,10 @@ void Admob_ShowBanner(const char *id, int size, int align)
 		case 6:
 			adSize = GADAdSizeFluid;
 		default:
-			CGRect frame = rootVC.view.frame;
+			CGRect frame = keyWindow.rootViewController.view.frame;
 
 			if (@available(iOS 11.0, *))
-				frame = UIEdgeInsetsInsetRect(frame, rootVC.view.safeAreaInsets);
+				frame = UIEdgeInsetsInsetRect(frame, keyWindow.rootViewController.view.safeAreaInsets);
 
 			adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(frame.size.width);
 			
@@ -598,7 +598,7 @@ void Admob_ShowBanner(const char *id, int size, int align)
 		bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
 		bannerView.adUnitID = [NSString stringWithUTF8String:id];
 		bannerView.translatesAutoresizingMaskIntoConstraints = NO;
-		bannerView.rootViewController = rootVC;
+		bannerView.rootViewController = keyWindow.rootViewController;
 		bannerView.backgroundColor = UIColor.clearColor;
 
 		if (bannerDelegate == nil)
@@ -610,63 +610,63 @@ void Admob_ShowBanner(const char *id, int size, int align)
 		{
 		case 0:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.topAnchor constraintEqualToAnchor:rootVC.view.topAnchor],
-				[bannerView.leadingAnchor constraintEqualToAnchor:rootVC.view.leadingAnchor]
+				[bannerView.topAnchor constraintEqualToAnchor:keyWindow.topAnchor],
+				[bannerView.leadingAnchor constraintEqualToAnchor:keyWindow.leadingAnchor]
 			]];
 			break;
 		case 1:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.topAnchor constraintEqualToAnchor:rootVC.view.topAnchor],
-				[bannerView.centerXAnchor constraintEqualToAnchor:rootVC.view.centerXAnchor]
+				[bannerView.topAnchor constraintEqualToAnchor:keyWindow.topAnchor],
+				[bannerView.centerXAnchor constraintEqualToAnchor:keyWindow.centerXAnchor]
 			]];
 			break;
 		case 2:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.topAnchor constraintEqualToAnchor:rootVC.view.topAnchor],
-				[bannerView.trailingAnchor constraintEqualToAnchor:rootVC.view.trailingAnchor]
+				[bannerView.topAnchor constraintEqualToAnchor:keyWindow.topAnchor],
+				[bannerView.trailingAnchor constraintEqualToAnchor:keyWindow.trailingAnchor]
 			]];
 			break;
 		case 3:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.centerYAnchor constraintEqualToAnchor:rootVC.view.centerYAnchor],
-				[bannerView.leadingAnchor constraintEqualToAnchor:rootVC.view.leadingAnchor]
+				[bannerView.centerYAnchor constraintEqualToAnchor:keyWindow.centerYAnchor],
+				[bannerView.leadingAnchor constraintEqualToAnchor:keyWindow.leadingAnchor]
 			]];
 			break;
 		case 4:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.centerXAnchor constraintEqualToAnchor:rootVC.view.centerXAnchor],
-				[bannerView.centerYAnchor constraintEqualToAnchor:rootVC.view.centerYAnchor]
+				[bannerView.centerXAnchor constraintEqualToAnchor:keyWindow.centerXAnchor],
+				[bannerView.centerYAnchor constraintEqualToAnchor:keyWindow.centerYAnchor]
 			]];
 			break;
 		case 5:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.centerYAnchor constraintEqualToAnchor:rootVC.view.centerYAnchor],
-				[bannerView.trailingAnchor constraintEqualToAnchor:rootVC.view.trailingAnchor]
+				[bannerView.centerYAnchor constraintEqualToAnchor:keyWindow.centerYAnchor],
+				[bannerView.trailingAnchor constraintEqualToAnchor:keyWindow.trailingAnchor]
 			]];
 			break;
 		case 6:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.bottomAnchor constraintEqualToAnchor:rootVC.view.bottomAnchor],
-				[bannerView.leadingAnchor constraintEqualToAnchor:rootVC.view.leadingAnchor]
+				[bannerView.bottomAnchor constraintEqualToAnchor:keyWindow.bottomAnchor],
+				[bannerView.leadingAnchor constraintEqualToAnchor:keyWindow.leadingAnchor]
 			]];
 			break;
 		case 7:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.bottomAnchor constraintEqualToAnchor:rootVC.view.bottomAnchor],
-				[bannerView.centerXAnchor constraintEqualToAnchor:rootVC.view.centerXAnchor]
+				[bannerView.bottomAnchor constraintEqualToAnchor:keyWindow.bottomAnchor],
+				[bannerView.centerXAnchor constraintEqualToAnchor:keyWindow.centerXAnchor]
 			]];
 			break;
 		case 8:
 			[NSLayoutConstraint activateConstraints:@[
-				[bannerView.bottomAnchor constraintEqualToAnchor:rootVC.view.bottomAnchor],
-				[bannerView.trailingAnchor constraintEqualToAnchor:rootVC.view.trailingAnchor]
+				[bannerView.bottomAnchor constraintEqualToAnchor:keyWindow.bottomAnchor],
+				[bannerView.trailingAnchor constraintEqualToAnchor:keyWindow.trailingAnchor]
 			]];
 			break;
 		}
 
 		[bannerView loadRequest:[GADRequest request]];
 
-		[rootVC.view addSubview:bannerView];
+		[keyWindow.rootViewController.view addSubview:bannerView];
 	});
 }
 
