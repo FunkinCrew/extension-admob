@@ -9,10 +9,10 @@ import util.ProcessUtil;
 class Main
 {
 	@:noCompletion
-	private static final URLS:Map<String, String> = [
-		'googlemobileadssdkios.zip' => 'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
-		'UnityAds.zip' => 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.0/UnityAds.zip',
-		'UnityAdapter-4.16.0.0.zip' => 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.15.1.0.zip'
+	private static final URLS:Array<String> = [
+		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
+		'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.1/UnityAds.zip',
+		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.1.0.zip'
 	];
 
 	@:noCompletion
@@ -60,31 +60,33 @@ class Main
 		FileUtil.deletePath(TEMP_DIR);
 		FileUtil.createDirectory(TEMP_DIR);
 
-		for (key => value in URLS)
+		for (url in URLS)
 		{
+			final filename:String = Path.withoutDirectory(url);
+
 			if (ProcessUtil.commandExists('curl'))
 			{
-				Sys.println(ANSIUtil.apply('Downloading "$key" from "$value"...', [Blue]));
+				Sys.println(ANSIUtil.apply('Downloading "$filename" from "$url"...', [Blue]));
 
-				final result:Int = ProcessUtil.runCommand('curl', ['-s', '-L', '-o', key, value]);
+				final result:Int = ProcessUtil.runCommand('curl', ['-s', '-L', '-o', filename, url]);
 
 				if (result != 0)
 				{
-					Sys.println(ANSIUtil.apply('Failed to download "$key".', [Red]));
+					Sys.println(ANSIUtil.apply('Failed to download "$filename".', [Red]));
 
-					FileUtil.deletePath(key);
+					FileUtil.deletePath(filename);
 					FileUtil.deletePath(TEMP_DIR);
 
 					Sys.exit(result);
 				}
 				else
-					Sys.println(ANSIUtil.apply('Successfully downloaded "$key".', [Green]));
+					Sys.println(ANSIUtil.apply('Successfully downloaded "$filename".', [Green]));
 			}
 			else
 			{
 				Sys.println(ANSIUtil.apply('Command not found "curl".', [Red]));
 
-				FileUtil.deletePath(key);
+				FileUtil.deletePath(filename);
 				FileUtil.deletePath(TEMP_DIR);
 
 				Sys.exit(1);
@@ -92,33 +94,33 @@ class Main
 
 			if (ProcessUtil.commandExists('unzip'))
 			{
-				Sys.println(ANSIUtil.apply('Unzipping "$key" to "$TEMP_DIR"...', [Blue]));
+				Sys.println(ANSIUtil.apply('Unzipping "$filename" to "$TEMP_DIR"...', [Blue]));
 
-				final result:Int = ProcessUtil.runCommand('unzip', ['-q', key, '-d', TEMP_DIR]);
+				final result:Int = ProcessUtil.runCommand('unzip', ['-q', filename, '-d', TEMP_DIR]);
 
 				if (result != 0)
 				{
-					Sys.println(ANSIUtil.apply('Failed to unzip "$key".', [Red]));
+					Sys.println(ANSIUtil.apply('Failed to unzip "$filename".', [Red]));
 
-					FileUtil.deletePath(key);
+					FileUtil.deletePath(filename);
 					FileUtil.deletePath(TEMP_DIR);
 
 					Sys.exit(result);
 				}
 				else
 				{
-					Sys.println(ANSIUtil.apply('Successfully unzipped "$key".', [Green]));
+					Sys.println(ANSIUtil.apply('Successfully unzipped "$filename".', [Green]));
 
-					FileUtil.deletePath(key);
+					FileUtil.deletePath(filename);
 
-					Sys.println(ANSIUtil.apply('Removed "$key" archive.', [Yellow]));
+					Sys.println(ANSIUtil.apply('Removed "$filename" archive.', [Yellow]));
 				}
 			}
 			else
 			{
 				Sys.println(ANSIUtil.apply('Command not found "unzip".', [Red]));
 
-				FileUtil.deletePath(key);
+				FileUtil.deletePath(filename);
 				FileUtil.deletePath(TEMP_DIR);
 
 				Sys.exit(1);
