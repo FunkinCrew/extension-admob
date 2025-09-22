@@ -16,6 +16,14 @@ class AdmobEvent
 	private static var FAILED_EVENT_REGEX:EReg = ~/Code: (\d+), Description: (.+)/;
 
 	/**
+	 * Regular expression used to match AdMob failurepreload event messages.
+	 * Captures the preload ID as the first group, the error code as the second group, and the description as the third group.
+	 * Example matched string: "Preload ID: abc123, Code: 3, Description: Network error"
+	 */
+	@:noCompletion
+	private static var PRELOAD_EVENT_REGEX:EReg = ~/Preload ID: (.+?), Code: (\d+), Description: (.+)/;
+
+	/**
 	 * Regular expression used to match reward event string.
 	 * Captures the reward type as a word and the amount as a number.
 	 * Example match: "Type: coins, Amount: 100"
@@ -136,6 +144,23 @@ class AdmobEvent
 	 */
 	public static inline final INTERSTITIAL_DISMISSED:String = 'INTERSTITIAL_DISMISSED';
 
+	#if android
+	/**
+	 * Event dispatched when a rewarded ad has been successfully preloaded.
+	 */
+	public static inline final REWARDED_PRELOADER_PRELOADED:String = "REWARDED_PRELOADER_PRELOADED";
+
+	/**
+	 * Event dispatched when the rewarded ad preloader has exhausted its available ads.
+	 */
+	public static inline final REWARDED_PRELOADER_EXHAUSTED:String = "REWARDED_PRELOADER_EXHAUSTED";
+
+	/**
+	 * Event dispatched when the rewarded ad preloader fails to preload an ad.
+	 */
+	public static inline final REWARDED_PRELOADER_FAILED_TO_PRELOAD:String = "REWARDED_PRELOADER_FAILED_TO_PRELOAD";
+	#end
+
 	/**
 	 * Event triggered when a rewarded ad is successfully loaded.
 	 */
@@ -170,6 +195,23 @@ class AdmobEvent
 	 * Event triggered when a rewarded ad is dismissed.
 	 */
 	public static inline final REWARDED_DISMISSED:String = 'REWARDED_DISMISSED';
+
+	#if android
+	/**
+	 * Event dispatched when an app open ad has been successfully preloaded.
+	 */
+	public static inline final APP_OPEN_PRELOADER_PRELOADED:String = "APP_OPEN_PRELOADER_PRELOADED";
+
+	/**
+	 * Event dispatched when the app open ad preloader has exhausted its available ads.
+	 */
+	public static inline final APP_OPEN_PRELOADER_EXHAUSTED:String = "APP_OPEN_PRELOADER_EXHAUSTED";
+
+	/**
+	 * Event dispatched when the app open ad preloader fails to preload an ad.
+	 */
+	public static inline final APP_OPEN_PRELOADER_FAILED_TO_PRELOAD:String = "APP_OPEN_PRELOADER_FAILED_TO_PRELOAD";
+	#end
 
 	/**
 	 * Event triggered when an app open ad is successfully loaded.
@@ -222,6 +264,11 @@ class AdmobEvent
 	public var errorDescription:Null<String>;
 
 	/**
+	 * Identifier for the preloaded ad, if any.
+	 */
+	public var preloadID:Null<String>;
+
+	/**
 	 * The reward type associated with the event, if any.
 	 */
 	public var rewardType:Null<String>;
@@ -246,6 +293,12 @@ class AdmobEvent
 			this.errorCode = Std.parseInt(FAILED_EVENT_REGEX.matched(1));
 			this.errorDescription = FAILED_EVENT_REGEX.matched(2);
 		}
+		else if (PRELOAD_EVENT_REGEX.match(value))
+		{
+			this.preloadID = FAILED_EVENT_REGEX.matched(1);
+			this.errorCode = Std.parseInt(FAILED_EVENT_REGEX.matched(2));
+			this.errorDescription = FAILED_EVENT_REGEX.matched(3);
+		}
 		else if (REWARD_EVENT_REGEX.match(value))
 		{
 			this.rewardType = REWARD_EVENT_REGEX.matched(1);
@@ -262,6 +315,9 @@ class AdmobEvent
 	public function toString():String
 	{
 		final parts:Array<String> = ['AdmobEvent<$name>'];
+
+	    if (preloadID != null)
+        	parts.push('preloadID=$preloadID');
 
 		if (errorCode != null || errorDescription != null)
 			parts.push('error(code=$errorCode, description=$errorDescription)');

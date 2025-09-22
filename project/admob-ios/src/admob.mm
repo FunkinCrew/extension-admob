@@ -550,7 +550,7 @@ void Admob_Init(bool testingAds, bool childDirected, bool enableRDP, AdmobCallba
 	}];
 }
 
-void Admob_ShowBanner(const char *id, int size, int align)
+void Admob_ShowBanner(const char *adUnitID, int size, int align)
 {
 	if (bannerView != nil)
 	{
@@ -596,7 +596,7 @@ void Admob_ShowBanner(const char *id, int size, int align)
 		}
 
 		bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
-		bannerView.adUnitID = [NSString stringWithUTF8String:id];
+		bannerView.adUnitID = [NSString stringWithUTF8String:adUnitID];
 		bannerView.translatesAutoresizingMaskIntoConstraints = NO;
 		bannerView.rootViewController = keyWindow.rootViewController;
 		bannerView.backgroundColor = UIColor.clearColor;
@@ -681,12 +681,12 @@ void Admob_HideBanner()
 	});
 }
 
-void Admob_LoadInterstitial(const char *id)
+void Admob_LoadInterstitial(const char *adUnitID)
 {
 	if (!interstitialDelegate)
 		interstitialDelegate = [[InterstitialDelegate alloc] init];
 
-	[interstitialDelegate loadWithAdUnitID:id];
+	[interstitialDelegate loadWithAdUnitID:adUnitID];
 }
 
 void Admob_ShowInterstitial()
@@ -699,12 +699,12 @@ void Admob_ShowInterstitial()
 	});
 }
 
-void Admob_LoadRewarded(const char *id)
+void Admob_LoadRewarded(const char *adUnitID)
 {
 	if (!rewardedDelegate)
 		rewardedDelegate = [[RewardedDelegate alloc] init];
 
-	[rewardedDelegate loadWithAdUnitID:id];
+	[rewardedDelegate loadWithAdUnitID:adUnitID];
 }
 
 void Admob_ShowRewarded()
@@ -717,12 +717,12 @@ void Admob_ShowRewarded()
 	});
 }
 
-void Admob_LoadAppOpen(const char *id)
+void Admob_LoadAppOpen(const char *adUnitID)
 {
 	if (!appOpenDelegate)
 		appOpenDelegate = [[AppOpenAdDelegate alloc] init];
 
-	[appOpenDelegate loadWithAdUnitID:id];
+	[appOpenDelegate loadWithAdUnitID:adUnitID];
 }
 
 void Admob_ShowAppOpen()

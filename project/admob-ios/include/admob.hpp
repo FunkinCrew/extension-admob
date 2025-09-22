@@ -23,11 +23,11 @@ void Admob_Init(bool testingAds, bool childDirected, bool enableRDP, AdmobCallba
 /**
  * Displays a banner ad with the specified ad unit ID, size, and alignment.
  * 
- * @param adUnitId The AdMob banner ad unit ID.
+ * @param adUnitID The ad unit ID.
  * @param size The size of the banner (implementation-specific).
  * @param align The alignment of the banner on screen (implementation-specific).
  */
-void Admob_ShowBanner(const char* adUnitId, int size, int align);
+void Admob_ShowBanner(const char* adUnitID, int size, int align);
 
 /**
  * Hides the currently displayed banner ad.
@@ -37,9 +37,9 @@ void Admob_HideBanner(void);
 /**
  * Loads an interstitial ad with the given ad unit ID.
  * 
- * @param adUnitId The AdMob interstitial ad unit ID.
+ * @param adUnitID The ad unit ID.
  */
-void Admob_LoadInterstitial(const char* adUnitId);
+void Admob_LoadInterstitial(const char* adUnitID);
 
 /**
  * Displays a loaded interstitial ad.
@@ -49,9 +49,9 @@ void Admob_ShowInterstitial(void);
 /**
  * Loads a rewarded ad with the specified ad unit ID.
  * 
- * @param adUnitId The AdMob rewarded ad unit ID.
+ * @param adUnitID The ad unit ID.
  */
-void Admob_LoadRewarded(const char* adUnitId);
+void Admob_LoadRewarded(const char* adUnitID);
 
 /**
  * Displays a loaded rewarded ad.
@@ -61,9 +61,9 @@ void Admob_ShowRewarded(void);
 /**
  * Loads an app open ad with the given ad unit ID.
  * 
- * @param adUnitId The AdMob app open ad unit ID.
+ * @param adUnitID The ad unit ID.
  */
-void Admob_LoadAppOpen(const char* adUnitId);
+void Admob_LoadAppOpen(const char* adUnitID);
 
 /**
  * Displays a loaded app open ad.

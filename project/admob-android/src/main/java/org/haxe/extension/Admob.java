@@ -95,7 +95,7 @@ public class Admob extends Extension
 			public void onInitializationComplete(InitializationStatus initializationStatus)
 			{
 				if (haxeObject != null) 
-					haxeObject.call("onEvent", new Object[]{ "INIT_OK", MobileAds.getVersion().toString() });
+					haxeObject.call("onEvent", new Object[] { "INIT_OK", MobileAds.getVersion().toString() });
 			}
 		});
 	}
@@ -131,9 +131,9 @@ public class Admob extends Extension
 										public void onConsentFormDismissed(FormError formError)
 										{
 											if (formError == null && haxeObject != null)
-												haxeObject.call("onEvent", new Object[]{ "CONSENT_SUCCESS", "Consent form dismissed successfully." });
+												haxeObject.call("onEvent", new Object[] { "CONSENT_SUCCESS", "Consent form dismissed successfully." });
 											else if (haxeObject != null)
-												haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", String.format("Code: %d, Description: %s", formError.getErrorCode(), formError.getMessage()) });
+												haxeObject.call("onEvent", new Object[] { "CONSENT_FAIL", String.format("Code: %d, Description: %s", formError.getErrorCode(), formError.getMessage()) });
 
 											initMobileAds(testingAds, childDirected, enableRDP);
 										}
@@ -147,7 +147,7 @@ public class Admob extends Extension
 						public void onConsentFormLoadFailure(FormError loadError)
 						{
 							if (haxeObject != null)
-								haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", String.format("Code: %d, Description: %s", loadError.getErrorCode(), loadError.getMessage()) });
+								haxeObject.call("onEvent", new Object[] { "CONSENT_FAIL", String.format("Code: %d, Description: %s", loadError.getErrorCode(), loadError.getMessage()) });
 
 							initMobileAds(testingAds, childDirected, enableRDP);
 						}
@@ -156,7 +156,7 @@ public class Admob extends Extension
 				else
 				{
 					if (haxeObject != null)
-						haxeObject.call("onEvent", new Object[]{ "CONSENT_NOT_REQUIRED", "Consent form not required or available." });
+						haxeObject.call("onEvent", new Object[] { "CONSENT_NOT_REQUIRED", "Consent form not required or available." });
 
 					initMobileAds(testingAds, childDirected, enableRDP);
 				}
@@ -166,14 +166,14 @@ public class Admob extends Extension
 			public void onConsentInfoUpdateFailure(FormError requestError)
 			{
 				if (haxeObject != null)
-					haxeObject.call("onEvent", new Object[]{ "CONSENT_FAIL", String.format("Code: %d, Description: %s", requestError.getErrorCode(), requestError.getMessage()) });
+					haxeObject.call("onEvent", new Object[] { "CONSENT_FAIL", String.format("Code: %d, Description: %s", requestError.getErrorCode(), requestError.getMessage()) });
 
 				initMobileAds(testingAds, childDirected, enableRDP);
 			}
 		});
 	}
 
-	public static void showBanner(final String id, final int size, final int align)
+	public static void showBanner(final String adUnitID, final int size, final int align)
 	{
 		if (adView != null)
 		{
@@ -189,7 +189,7 @@ public class Admob extends Extension
 			{
 				adView = new AdView(mainActivity);
 
-				adView.setAdUnitId(id);
+				adView.setAdUnitId(adUnitID);
 
 				switch (size)
 				{
@@ -328,26 +328,26 @@ public class Admob extends Extension
 		}
 	}
 
-	public static void startInterstitialPreloader(final String preloadId, final String adUnitId, final int bufferSize)
+	public static void startInterstitialPreloader(final String preloadID, final String adUnitID, final int bufferSize)
 	{
-		InterstitialAdPreloader.start(preloadId, new PreloadConfiguration.Builder(adUnitId).setBufferSize(bufferSize).build(), new PreloadCallbackV2()
+		InterstitialAdPreloader.start(preloadID, new PreloadConfiguration.Builder(adUnitID).setBufferSize(bufferSize).build(), new PreloadCallbackV2()
 		{
 			@Override
-			public void onAdPreloaded(String preloadId, ResponseInfo responseInfo)
+			public void onAdPreloaded(String preloadID, ResponseInfo responseInfo)
 			{
 				if (haxeObject != null)
-					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_PRELOADED", preloadId });
+					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_PRELOADED", preloadID });
 			}
 
 			@Override
-			public void onAdsExhausted(String preloadId)
+			public void onAdsExhausted(String preloadID)
 			{
 				if (haxeObject != null)
-					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_EXHAUSTED", preloadId });
+					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_EXHAUSTED", preloadID });
 			}
 
 			@Override
-			public void onAdFailedToPreload(String preloadId, AdError adError)
+			public void onAdFailedToPreload(String preloadID, AdError adError)
 			{
 				if (haxeObject != null)
 					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD", String.format("Preload ID: %s, Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
@@ -355,9 +355,9 @@ public class Admob extends Extension
 		});
 	}
 
-	public static boolean destroyInterstitialPreloader(final String preloadId)
+	public static boolean destroyInterstitialPreloader(final String preloadID)
 	{
-		return InterstitialAdPreloader.destroy(preloadId);
+		return InterstitialAdPreloader.destroy(preloadID);
 	}
 
 	public static void destroyAllInterstitialPreloaders()
@@ -365,23 +365,23 @@ public class Admob extends Extension
 		InterstitialAdPreloader.destroyAll();
 	}
 
-	public static int getNumInterstitialAdsAvailable(final String preloadId)
+	public static int getNumInterstitialAdsAvailable(final String preloadID)
 	{
-		return InterstitialAdPreloader.getNumAdsAvailable(preloadId);
+		return InterstitialAdPreloader.getNumAdsAvailable(preloadID);
 	}
 
-	public static boolean isInterstitialAdAvailable(final String preloadId)
+	public static boolean isInterstitialAdAvailable(final String preloadID)
 	{
-		return InterstitialAdPreloader.isAdAvailable(preloadId);
+		return InterstitialAdPreloader.isAdAvailable(preloadID);
 	}
 
-	public static void loadAdInterstitialFromPoll(final String preloadId, final boolean immersiveModeEnabled)
+	public static void loadInterstitialFromPreloader(final String preloadID, final boolean immersiveModeEnabled)
 	{
 		mainActivity.runOnUiThread(new Runnable()
 		{
 			public void run()
 			{
-				adInterstitial = InterstitialAdPreloader.pollAd(preloadId);
+				adInterstitial = InterstitialAdPreloader.pollAd(preloadID);
 
 				if (adInterstitial != null)
 				{
@@ -425,19 +425,19 @@ public class Admob extends Extension
 				else
 				{
 					if (haxeObject != null)
-						haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_LOAD", "No preloaded interstitial available in the pool" });
+						haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_LOAD", "No preloaded interstitial ads available in the pool" });
 				}
 			}
 		});
 	}
 
-	public static void loadInterstitial(final String id, final boolean immersiveModeEnabled)
+	public static void loadInterstitial(final String adUnitID, final boolean immersiveModeEnabled)
 	{
 		mainActivity.runOnUiThread(new Runnable()
 		{
 			public void run()
 			{
-				InterstitialAd.load(mainContext, id, new AdRequest.Builder().build(), new InterstitialAdLoadCallback()
+				InterstitialAd.load(mainContext, adUnitID, new AdRequest.Builder().build(), new InterstitialAdLoadCallback()
 				{
 					@Override
 					public void onAdLoaded(InterstitialAd interstitialAd)
@@ -513,13 +513,115 @@ public class Admob extends Extension
 		}
 	}
 
-	public static void loadRewarded(final String id, final boolean immersiveModeEnabled)
+	public static void startRewardedPreloader(final String preloadID, final String adUnitID, final int bufferSize)
+	{
+		RewardedAdPreloader.start(preloadID, new PreloadConfiguration.Builder(adUnitID).setBufferSize(bufferSize).build(), new PreloadCallbackV2()
+		{
+			@Override
+			public void onAdPreloaded(String preloadID, ResponseInfo responseInfo)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "REWARDED_PRELOADER_PRELOADED", preloadID });
+			}
+
+			@Override
+			public void onAdsExhausted(String preloadID)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "REWARDED_PRELOADER_EXHAUSTED", preloadID });
+			}
+
+			@Override
+			public void onAdFailedToPreload(String preloadID, AdError adError)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "REWARDED_PRELOADER_FAILED_TO_PRELOAD", String.format("Preload ID: %s, Code: %d, Description: %s", preloadID, adError.getCode(), adError.getMessage()) });
+			}
+		});
+	}
+
+	public static boolean destroyRewardedPreloader(final String preloadID)
+	{
+		return RewardedAdPreloader.destroy(preloadID);
+	}
+
+	public static void destroyAllRewardedPreloaders()
+	{
+		RewardedAdPreloader.destroyAll();
+	}
+
+	public static int getNumRewardedAdsAvailable(final String preloadID)
+	{
+		return RewardedAdPreloader.getNumAdsAvailable(preloadID);
+	}
+
+	public static boolean isRewardedAdAvailable(final String preloadID)
+	{
+		return RewardedAdPreloader.isAdAvailable(preloadID);
+	}
+
+	public static void loadRewardedFromPreloader(final String preloadID, final boolean immersiveModeEnabled)
 	{
 		mainActivity.runOnUiThread(new Runnable()
 		{
 			public void run()
 			{
-				RewardedAd.load(mainContext, id, new AdRequest.Builder().build(), new RewardedAdLoadCallback()
+				adRewarded = RewardedAdPreloader.pollAd(preloadID);
+
+				if (adRewarded != null)
+				{
+					adRewarded.setImmersiveMode(immersiveModeEnabled);
+					adRewarded.setFullScreenContentCallback(new FullScreenContentCallback()
+					{
+						@Override
+						public void onAdClicked()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "REWARDED_CLICKED", "" });
+						}
+
+						@Override
+						public void onAdDismissedFullScreenContent()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "REWARDED_DISMISSED", "" });
+						}
+
+						@Override
+						public void onAdFailedToShowFullScreenContent(AdError adError)
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_SHOW", String.format("Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
+						}
+
+						@Override
+						public void onAdShowedFullScreenContent()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "REWARDED_SHOWED", "" });
+
+							adRewarded = null;
+						}
+					});
+
+					haxeObject.call("onEvent", new Object[] { "REWARDED_LOADED", "" });
+				}
+				else
+				{
+					if (haxeObject != null)
+						haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_LOAD", "No preloaded rewarded ads available in the pool" });
+				}
+			}
+		});
+	}
+
+	public static void loadRewarded(final String adUnitID, final boolean immersiveModeEnabled)
+	{
+		mainActivity.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				RewardedAd.load(mainContext, adUnitID, new AdRequest.Builder().build(), new RewardedAdLoadCallback()
 				{
 					@Override
 					public void onAdLoaded(RewardedAd rewardedAd)
@@ -534,7 +636,7 @@ public class Admob extends Extension
 								if (haxeObject != null)
 									haxeObject.call("onEvent", new Object[] { "REWARDED_CLICKED", "" });
 							}
-							
+
 							@Override
 							public void onAdDismissedFullScreenContent()
 							{
@@ -599,14 +701,117 @@ public class Admob extends Extension
 			haxeObject.call("onEvent", new Object[] { "REWARDED_FAILED_TO_SHOW", "You need to load rewarded ad first!" });
 	}
 
-	public static void loadAppOpen(final String id, final boolean immersiveModeEnabled)
+	public static void startAppOpenPreloader(final String preloadID, final String adUnitID, final int bufferSize)
+	{
+		AppOpenAdPreloader.start(preloadID, new PreloadConfiguration.Builder(adUnitID).setBufferSize(bufferSize).build(), new PreloadCallbackV2()
+		{
+			@Override
+			public void onAdPreloaded(String preloadID, ResponseInfo responseInfo)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "APP_OPEN_PRELOADER_PRELOADED", preloadID });
+			}
+
+			@Override
+			public void onAdsExhausted(String preloadID)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "APP_OPEN_PRELOADER_EXHAUSTED", preloadID });
+			}
+
+			@Override
+			public void onAdFailedToPreload(String preloadID, AdError adError)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "APP_OPEN_PRELOADER_FAILED_TO_PRELOAD", String.format("Preload ID: %s, Code: %d, Description: %s", preloadID, adError.getCode(), adError.getMessage()) });
+			}
+		});
+	}
+
+	public static boolean destroyAppOpenPreloader(final String preloadID)
+	{
+		return AppOpenAdPreloader.destroy(preloadID);
+	}
+
+	public static void destroyAllAppOpenPreloaders()
+	{
+		AppOpenAdPreloader.destroyAll();
+	}
+
+	public static int getNumAppOpenAdsAvailable(final String preloadID)
+	{
+		return AppOpenAdPreloader.getNumAdsAvailable(preloadID);
+	}
+
+	public static boolean isAppOpenAdAvailable(final String preloadID)
+	{
+		return AppOpenAdPreloader.isAdAvailable(preloadID);
+	}
+
+	public static void loadAppOpenFromPreloader(final String preloadID, final boolean immersiveModeEnabled)
+	{
+		mainActivity.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				adAppOpen = AppOpenAdPreloader.pollAd(preloadID);
+
+				if (adAppOpen != null)
+				{
+					adAppOpen.setImmersiveMode(immersiveModeEnabled);
+					adAppOpen.setFullScreenContentCallback(new FullScreenContentCallback()
+					{
+						@Override
+						public void onAdClicked()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "APP_OPEN_CLICKED", "" });
+						}
+						
+						@Override
+						public void onAdDismissedFullScreenContent()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "APP_OPEN_DISMISSED", "" });
+						}
+
+						@Override
+						public void onAdFailedToShowFullScreenContent(AdError adError)
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "APP_OPEN_FAILED_TO_SHOW", String.format("Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
+						}
+
+						@Override
+						public void onAdShowedFullScreenContent()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "APP_OPEN_SHOWED", "" });
+
+							adAppOpen = null;
+						}
+					});
+
+					if (haxeObject != null)
+						haxeObject.call("onEvent", new Object[] { "APP_OPEN_LOADED", "" });
+				}
+				else
+				{
+					if (haxeObject != null)
+						haxeObject.call("onEvent", new Object[] { "APP_OPEN_FAILED_TO_LOAD", "No preloaded app open ads available in the pool" });
+				}
+			}
+		});
+	}
+
+	public static void loadAppOpen(final String adUnitID, final boolean immersiveModeEnabled)
 	{
 		mainActivity.runOnUiThread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				AppOpenAd.load(mainContext, id, new AdRequest.Builder().build(), new AppOpenAd.AppOpenAdLoadCallback()
+				AppOpenAd.load(mainContext, adUnitID, new AdRequest.Builder().build(), new AppOpenAd.AppOpenAdLoadCallback()
 				{
 					@Override
 					public void onAdLoaded(AppOpenAd ad)
@@ -621,40 +826,40 @@ public class Admob extends Extension
 								if (haxeObject != null)
 									haxeObject.call("onEvent", new Object[] { "APP_OPEN_CLICKED", "" });
 							}
-							
+
 							@Override
 							public void onAdDismissedFullScreenContent()
 							{
 								if (haxeObject != null)
-									haxeObject.call("onEvent", new Object[]{ "APP_OPEN_DISMISSED", "" });
+									haxeObject.call("onEvent", new Object[] { "APP_OPEN_DISMISSED", "" });
 							}
 
 							@Override
 							public void onAdFailedToShowFullScreenContent(AdError adError)
 							{
 								if (haxeObject != null)
-									haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_SHOW", String.format("Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
+									haxeObject.call("onEvent", new Object[] { "APP_OPEN_FAILED_TO_SHOW", String.format("Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
 							}
 
 							@Override
 							public void onAdShowedFullScreenContent()
 							{
 								if (haxeObject != null)
-									haxeObject.call("onEvent", new Object[]{"APP_OPEN_SHOWED", ""});
+									haxeObject.call("onEvent", new Object[] { "APP_OPEN_SHOWED", "" });
 
 								adAppOpen = null;
 							}
 						});
 
 						if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[]{ "APP_OPEN_LOADED", "" });
+							haxeObject.call("onEvent", new Object[] { "APP_OPEN_LOADED", "" });
 					}
 
 					@Override
 					public void onAdFailedToLoad(LoadAdError loadAdError)
 					{
 						if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_LOAD", String.format("Code: %d, Description: %s", loadAdError.getCode(), loadAdError.getMessage()) });
+							haxeObject.call("onEvent", new Object[] { "APP_OPEN_FAILED_TO_LOAD", String.format("Code: %d, Description: %s", loadAdError.getCode(), loadAdError.getMessage()) });
 
 						adAppOpen = null;
 					}
@@ -668,7 +873,7 @@ public class Admob extends Extension
 		if (adAppOpen != null)
 			mainActivity.runOnUiThread(() -> adAppOpen.show(mainActivity));
 		else if (haxeObject != null)
-			haxeObject.call("onEvent", new Object[]{ "APP_OPEN_FAILED_TO_SHOW", "You need to load App Open Ad first!" });
+			haxeObject.call("onEvent", new Object[] { "APP_OPEN_FAILED_TO_SHOW", "You need to load App Open Ad first!" });
 	}
 
 	public static void setVolume(final float vol)
@@ -737,9 +942,9 @@ public class Admob extends Extension
 					public void onAdInspectorClosed(AdInspectorError adInspectorError)
 					{
 						if (adInspectorError != null && haxeObject != null)
-							haxeObject.call("onEvent", new Object[]{ "AD_INSPECTOR_CLOSED", String.format("Code: %d, Description: %s", adInspectorError.getCode(), adInspectorError.getMessage()) });
+							haxeObject.call("onEvent", new Object[] { "AD_INSPECTOR_CLOSED", String.format("Code: %d, Description: %s", adInspectorError.getCode(), adInspectorError.getMessage()) });
 						else if (haxeObject != null)
-							haxeObject.call("onEvent", new Object[]{ "AD_INSPECTOR_CLOSED", "" });
+							haxeObject.call("onEvent", new Object[] { "AD_INSPECTOR_CLOSED", "" });
 					}
 				});
 			}
