@@ -1,5 +1,6 @@
-package extension.admob.ios;
+package extension.admob;
 
+#if ios
 /**
  * Enum representing the different statuses for App Tracking Transparency (ATT) in iOS.
  * 
@@ -7,7 +8,7 @@ package extension.admob.ios;
  *
  * @see https://stackoverflow.com/questions/63499520/app-tracking-transparency-how-does-effect-apps-showing-ads-idfa-ios14/63522856#63522856
  */
-enum abstract ATTStatus(String) from String to String
+enum abstract AdmobATTStatus(String) from String to String
 {
 	/**
 	 * The user has not yet made a choice regarding tracking.
@@ -34,3 +35,4 @@ enum abstract ATTStatus(String) from String to String
 	 */
 	final UNKNOWN = 'UNKNOWN';
 }
+#end
