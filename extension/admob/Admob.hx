@@ -111,6 +111,96 @@ class Admob
 		#end
 	}
 
+	#if android
+	/**
+	 * Starts the interstitial ad preloader with the specified preload ID and buffer size.
+	 * 
+	 * @param preloadID The identifier for the interstitial ad preloader.
+	 * @param adUnitId The ad unit ID to be used for loading interstitial ads.
+	 * @param bufferSize The number of interstitial ads to preload.
+	 */
+	public static function startInterstitialPreloader(preloadID:String, adUnitId:String, bufferSize:Int):Void
+	{
+		final startInterstitialPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startInterstitialPreloader', '(Ljava/lang/String;Ljava/lang/String;I)V');
+
+		if (startInterstitialPreloaderJNI != null)
+			startInterstitialPreloaderJNI(preloadID, adUnitId, bufferSize);
+	}
+
+	/**
+	 * Stops preloading for the specified interstitial ad preloader identified by `preloadID` and destroys all associated preloaded ads.
+	 *
+	 * @param preloadID The unique identifier for the interstitial ad preloader to be destroyed.
+	 * @return `true` if the preloader was successfully destroyed, `false` otherwise.
+	 */
+	public static function destroyInterstitialPreloader(preloadID:String):Bool
+	{
+		final destroyInterstitialPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyInterstitialPreloader', '(Ljava/lang/String;)Z');
+
+		if (destroyInterstitialPreloaderJNI != null)
+			return destroyInterstitialPreloaderJNI(preloadID);
+
+		return false;
+	}
+
+	/**
+	 * Stops preloading and destroys all preloaded interstitial ads for every preload configuration.
+	 */
+	public static function destroyAllInterstitialPreloaders():Void
+	{
+		final destroyAllInterstitialPreloadersJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllInterstitialPreloaders', '()V');
+
+		if (destroyAllInterstitialPreloadersJNI != null)
+			destroyAllInterstitialPreloadersJNI();
+	}
+
+	/**
+	 * Returns the number of interstitial ads available for the given preload ID.
+	 * 
+	 * @param preloadID The identifier for the interstitial ad preloader.
+	 * @return The number of available interstitial ads.
+	 */
+	public static function getNumInterstitialAdsAvailable(preloadID:String):Int
+	{
+		final getNumInterstitialAdsAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumInterstitialAdsAvailable', '(Ljava/lang/String;)I');
+
+		if (getNumInterstitialAdsAvailableJNI != null)
+			return getNumInterstitialAdsAvailableJNI(preloadID);
+
+		return 0;
+	}
+
+	/**
+	 * Checks if an interstitial ad is available for the specified preload ID.
+	 * 
+	 * @param preloadID The identifier for the interstitial ad preloader.
+	 * @return `true` if an interstitial ad is available, `false` otherwise.
+	 */
+	public static function isInterstitialAdAvailable(preloadID:String):Bool
+	{
+		final isInterstitialAdAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isInterstitialAdAvailable', '(Ljava/lang/String;)Z');
+
+		if (isInterstitialAdAvailableJNI != null)
+			return isInterstitialAdAvailableJNI(preloadID);
+
+		return false;
+	}
+
+	/**
+	 * Loads an interstitial ad from the pool for the specified preload ID.
+	 * 
+	 * @param preloadID The identifier for the interstitial ad preloader.
+	 * @param immersiveModeEnabled Whether immersive mode should be enabled (default is true).
+	 */
+	public static function loadAdInterstitialFromPoll(preloadID:String, immersiveModeEnabled:Bool = true):Void
+	{
+		final loadAdInterstitialFromPollJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadAdInterstitialFromPoll', '(Ljava/lang/String;Z)V');
+
+		if (loadAdInterstitialFromPollJNI != null)
+			loadAdInterstitialFromPollJNI(preloadID, immersiveModeEnabled);
+	}
+	#end
+
 	/**
 	 * Loads an interstitial ad.
 	 *

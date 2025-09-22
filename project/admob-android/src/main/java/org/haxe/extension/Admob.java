@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.google.android.gms.ads.appopen.*;
 import com.google.android.gms.ads.initialization.*;
 import com.google.android.gms.ads.interstitial.*;
+import com.google.android.gms.ads.preload.*;
 import com.google.android.gms.ads.rewarded.*;
 import com.google.android.gms.ads.*;
 import com.google.android.ump.*;
@@ -327,6 +328,109 @@ public class Admob extends Extension
 		}
 	}
 
+	public static void startInterstitialPreloader(final String preloadId, final String adUnitId, final int bufferSize)
+	{
+		InterstitialAdPreloader.start(preloadId, new PreloadConfiguration.Builder(adUnitId).setBufferSize(bufferSize).build(), new PreloadCallbackV2()
+		{
+			@Override
+			public void onAdPreloaded(String preloadId, ResponseInfo responseInfo)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_PRELOADED", preloadId });
+			}
+
+			@Override
+			public void onAdsExhausted(String preloadId)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_EXHAUSTED", preloadId });
+			}
+
+			@Override
+			public void onAdFailedToPreload(String preloadId, AdError adError)
+			{
+				if (haxeObject != null)
+					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD", String.format("Preload ID: %s, Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
+			}
+		});
+	}
+
+	public static boolean destroyInterstitialPreloader(final String preloadId)
+	{
+		return InterstitialAdPreloader.destroy(preloadId);
+	}
+
+	public static void destroyAllInterstitialPreloaders()
+	{
+		InterstitialAdPreloader.destroyAll();
+	}
+
+	public static int getNumInterstitialAdsAvailable(final String preloadId)
+	{
+		return InterstitialAdPreloader.getNumAdsAvailable(preloadId);
+	}
+
+	public static boolean isInterstitialAdAvailable(final String preloadId)
+	{
+		return InterstitialAdPreloader.isAdAvailable(preloadId);
+	}
+
+	public static void loadAdInterstitialFromPoll(final String preloadId, final boolean immersiveModeEnabled)
+	{
+		mainActivity.runOnUiThread(new Runnable()
+		{
+			public void run()
+			{
+				adInterstitial = InterstitialAdPreloader.pollAd(preloadId);
+
+				if (adInterstitial != null)
+				{
+					adInterstitial.setImmersiveMode(immersiveModeEnabled);
+					adInterstitial.setFullScreenContentCallback(new FullScreenContentCallback()
+					{
+						@Override
+						public void onAdClicked()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_CLICKED", "" });
+						}
+
+						@Override
+						public void onAdDismissedFullScreenContent()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_DISMISSED", "" });
+						}
+
+						@Override
+						public void onAdFailedToShowFullScreenContent(AdError adError)
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_SHOW", String.format("Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
+						}
+
+						@Override
+						public void onAdShowedFullScreenContent()
+						{
+							if (haxeObject != null)
+								haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_SHOWED", "" });
+
+							adInterstitial = null;
+						}
+					});
+
+					if (haxeObject != null)
+						haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_LOADED", "" });
+				}
+				else
+				{
+					if (haxeObject != null)
+						haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_FAILED_TO_LOAD", "No preloaded interstitial available in the pool" });
+				}
+			}
+		});
+	}
+
 	public static void loadInterstitial(final String id, final boolean immersiveModeEnabled)
 	{
 		mainActivity.runOnUiThread(new Runnable()
@@ -348,7 +452,7 @@ public class Admob extends Extension
 								if (haxeObject != null)
 									haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_CLICKED", "" });
 							}
-							
+
 							@Override
 							public void onAdDismissedFullScreenContent()
 							{

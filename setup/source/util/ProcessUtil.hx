@@ -22,7 +22,7 @@ class ProcessUtil
 	 * This method will return true if the command is found, and false otherwise.
 	 * 
 	 * @param cmd The command to check for existence.
-	 * @return True if the command exists, false otherwise.
+	 * @return `true` if the command exists, `false` otherwise.
 	 */
 	public static function commandExists(cmd:String):Bool
 	{

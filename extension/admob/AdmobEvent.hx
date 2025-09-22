@@ -89,6 +89,23 @@ class AdmobEvent
 	 */
 	public static inline final BANNER_CLOSED:String = 'BANNER_CLOSED';
 
+	#if android
+	/**
+	 * Event dispatched when an interstitial ad has been successfully preloaded.
+	 */
+	public static inline final INTERSTITIAL_PRELOADER_PRELOADED:String = 'INTERSTITIAL_PRELOADER_PRELOADED';
+
+	/**
+	 * Event dispatched when the interstitial ad preloader has exhausted its available ads.
+	 */
+	public static inline final INTERSTITIAL_PRELOADER_EXHAUSTED:String = 'INTERSTITIAL_PRELOADER_EXHAUSTED';
+
+	/**
+	 * Event dispatched when the interstitial ad preloader fails to preload an ad.
+	 */
+	public static inline final INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD:String = 'INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD';
+	#end
+
 	/**
 	 * Event triggered when an interstitial ad is successfully loaded.
 	 */
