@@ -55,7 +55,6 @@ class AdmobEvent
 	 */
 	public static inline final CONSENT_NOT_REQUIRED:String = 'CONSENT_NOT_REQUIRED';
 
-	#if ios
 	/**
 	 * Event triggered for the App Tracking Transparency (ATT) status on iOS.
 	 */
@@ -70,7 +69,6 @@ class AdmobEvent
 	 * Event constant indicating that the AVM (Audio Video Manager) has stopped playing audio.
 	 */
 	public static inline final AVM_DID_STOP_PLAYING_AUDIO:String = 'AVM_DID_STOP_PLAYING_AUDIO';
-	#end
 
 	/**
 	 * Event triggered when a banner ad is successfully loaded.
@@ -97,7 +95,6 @@ class AdmobEvent
 	 */
 	public static inline final BANNER_CLOSED:String = 'BANNER_CLOSED';
 
-	#if android
 	/**
 	 * Event dispatched when an interstitial ad has been successfully preloaded.
 	 */
@@ -112,7 +109,6 @@ class AdmobEvent
 	 * Event dispatched when the interstitial ad preloader fails to preload an ad.
 	 */
 	public static inline final INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD:String = 'INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD';
-	#end
 
 	/**
 	 * Event triggered when an interstitial ad is successfully loaded.
@@ -144,7 +140,6 @@ class AdmobEvent
 	 */
 	public static inline final INTERSTITIAL_DISMISSED:String = 'INTERSTITIAL_DISMISSED';
 
-	#if android
 	/**
 	 * Event dispatched when a rewarded ad has been successfully preloaded.
 	 */
@@ -159,7 +154,6 @@ class AdmobEvent
 	 * Event dispatched when the rewarded ad preloader fails to preload an ad.
 	 */
 	public static inline final REWARDED_PRELOADER_FAILED_TO_PRELOAD:String = "REWARDED_PRELOADER_FAILED_TO_PRELOAD";
-	#end
 
 	/**
 	 * Event triggered when a rewarded ad is successfully loaded.
@@ -196,7 +190,6 @@ class AdmobEvent
 	 */
 	public static inline final REWARDED_DISMISSED:String = 'REWARDED_DISMISSED';
 
-	#if android
 	/**
 	 * Event dispatched when an app open ad has been successfully preloaded.
 	 */
@@ -211,7 +204,6 @@ class AdmobEvent
 	 * Event dispatched when the app open ad preloader fails to preload an ad.
 	 */
 	public static inline final APP_OPEN_PRELOADER_FAILED_TO_PRELOAD:String = "APP_OPEN_PRELOADER_FAILED_TO_PRELOAD";
-	#end
 
 	/**
 	 * Event triggered when an app open ad is successfully loaded.
@@ -316,8 +308,8 @@ class AdmobEvent
 	{
 		final parts:Array<String> = ['AdmobEvent<$name>'];
 
-	    if (preloadID != null)
-        	parts.push('preloadID=$preloadID');
+		if (preloadID != null)
+			parts.push('preloadID=$preloadID');
 
 		if (errorCode != null || errorDescription != null)
 			parts.push('error(code=$errorCode, description=$errorDescription)');

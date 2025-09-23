@@ -40,10 +40,10 @@ class Admob
 	public static function configureConsentMetadata(gdprConsent:Bool, ccpaConsent:Bool):Void
 	{
 		#if android
-		final configureConsentMetadataJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureConsentMetadata', '(ZZ)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureConsentMetadata', '(ZZ)V');
 
-		if (configureConsentMetadataJNI != null)
-			configureConsentMetadataJNI(gdprConsent, ccpaConsent);
+		if (jni != null)
+			jni(gdprConsent, ccpaConsent);
 		#elseif ios
 		configureConsentMetadataAdmob(gdprConsent, ccpaConsent);
 		#end
@@ -59,10 +59,10 @@ class Admob
 	public static function init(testingAds:Bool = false, childDirected:Bool = false, enableRDP:Bool = false):Void
 	{
 		#if android
-		final initJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'init', '(ZZZLorg/haxe/lime/HaxeObject;)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'init', '(ZZZLorg/haxe/lime/HaxeObject;)V');
 
-		if (initJNI != null)
-			initJNI(testingAds, childDirected, enableRDP, new CallBackHandler());
+		if (jni != null)
+			jni(testingAds, childDirected, enableRDP, new CallBackHandler());
 		#elseif ios
 		initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobEvent));
 		#end
@@ -87,10 +87,10 @@ class Admob
 	public static function showBanner(adUnitID:String, size:AdmobBannerSize, align:AdmobBannerAlign):Void
 	{
 		#if android
-		final showBannerJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showBanner', '(Ljava/lang/String;II)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showBanner', '(Ljava/lang/String;II)V');
 
-		if (showBannerJNI != null)
-			showBannerJNI(adUnitID, size, align);
+		if (jni != null)
+			jni(adUnitID, size, align);
 		#elseif ios
 		showBannerAdmob(adUnitID, size, align);
 		#end
@@ -102,16 +102,15 @@ class Admob
 	public static function hideBanner():Void
 	{
 		#if android
-		final hideBannerJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'hideBanner', '()V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'hideBanner', '()V');
 
-		if (hideBannerJNI != null)
-			hideBannerJNI();
+		if (jni != null)
+			jni();
 		#elseif ios
 		hideBannerAdmob();
 		#end
 	}
 
-	#if android
 	/**
 	 * Starts the interstitial ad preloader with the specified preload ID and buffer size.
 	 * 
@@ -121,11 +120,12 @@ class Admob
 	 */
 	public static function startInterstitialPreloader(preloadID:String, adUnitID:String, bufferSize:Int):Void
 	{
-		final startInterstitialPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startInterstitialPreloader',
-			'(Ljava/lang/String;Ljava/lang/String;I)V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startInterstitialPreloader', '(Ljava/lang/String;Ljava/lang/String;I)V');
 
-		if (startInterstitialPreloaderJNI != null)
-			startInterstitialPreloaderJNI(preloadID, adUnitID, bufferSize);
+		if (jni != null)
+			jni(preloadID, adUnitID, bufferSize);
+		#end
 	}
 
 	/**
@@ -136,13 +136,13 @@ class Admob
 	 */
 	public static function destroyInterstitialPreloader(preloadID:String):Bool
 	{
-		final destroyInterstitialPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyInterstitialPreloader',
-			'(Ljava/lang/String;)Z');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyInterstitialPreloader', '(Ljava/lang/String;)Z');
 
-		if (destroyInterstitialPreloaderJNI != null)
-			return destroyInterstitialPreloaderJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : false;
+		#else
 		return false;
+		#end
 	}
 
 	/**
@@ -150,10 +150,12 @@ class Admob
 	 */
 	public static function destroyAllInterstitialPreloaders():Void
 	{
-		final destroyAllInterstitialPreloadersJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllInterstitialPreloaders', '()V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllInterstitialPreloaders', '()V');
 
-		if (destroyAllInterstitialPreloadersJNI != null)
-			destroyAllInterstitialPreloadersJNI();
+		if (jni != null)
+			jni();
+		#end
 	}
 
 	/**
@@ -164,13 +166,13 @@ class Admob
 	 */
 	public static function getNumInterstitialAdsAvailable(preloadID:String):Int
 	{
-		final getNumInterstitialAdsAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumInterstitialAdsAvailable',
-			'(Ljava/lang/String;)I');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumInterstitialAdsAvailable', '(Ljava/lang/String;)I');
 
-		if (getNumInterstitialAdsAvailableJNI != null)
-			return getNumInterstitialAdsAvailableJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : 0;
+		#else
 		return 0;
+		#end
 	}
 
 	/**
@@ -181,13 +183,13 @@ class Admob
 	 */
 	public static function isInterstitialAdAvailable(preloadID:String):Bool
 	{
-		final isInterstitialAdAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isInterstitialAdAvailable',
-			'(Ljava/lang/String;)Z');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isInterstitialAdAvailable', '(Ljava/lang/String;)Z');
 
-		if (isInterstitialAdAvailableJNI != null)
-			return isInterstitialAdAvailableJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : false;
+		#else
 		return false;
+		#end
 	}
 
 	/**
@@ -198,13 +200,13 @@ class Admob
 	 */
 	public static function loadInterstitialFromPreloader(preloadID:String, immersiveModeEnabled:Bool = true):Void
 	{
-		final loadInterstitialFromPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadInterstitialFromPreloader',
-			'(Ljava/lang/String;Z)V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadInterstitialFromPreloader', '(Ljava/lang/String;Z)V');
 
-		if (loadInterstitialFromPreloaderJNI != null)
-			loadInterstitialFromPreloaderJNI(preloadID, immersiveModeEnabled);
+		if (jni != null)
+			jni(preloadID, immersiveModeEnabled);
+		#end
 	}
-	#end
 
 	/**
 	 * Loads an interstitial ad.
@@ -215,10 +217,10 @@ class Admob
 	public static function loadInterstitial(adUnitID:String, immersiveModeEnabled:Bool = true):Void
 	{
 		#if android
-		final loadInterstitialJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadInterstitial', '(Ljava/lang/String;Z)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadInterstitial', '(Ljava/lang/String;Z)V');
 
-		if (loadInterstitialJNI != null)
-			loadInterstitialJNI(adUnitID, immersiveModeEnabled);
+		if (jni != null)
+			jni(adUnitID, immersiveModeEnabled);
 		#elseif ios
 		loadInterstitialAdmob(adUnitID);
 		#end
@@ -230,16 +232,15 @@ class Admob
 	public static function showInterstitial():Void
 	{
 		#if android
-		final showInterstitialJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showInterstitial', '()V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showInterstitial', '()V');
 
-		if (showInterstitialJNI != null)
-			showInterstitialJNI();
+		if (jni != null)
+			jni();
 		#elseif ios
 		showInterstitialAdmob();
 		#end
 	}
 
-	#if android
 	/**
 	 * Starts the rewarded ad preloader with the specified preload ID and buffer size.
 	 * 
@@ -249,11 +250,12 @@ class Admob
 	 */
 	public static function startRewardedPreloader(preloadID:String, adUnitID:String, bufferSize:Int):Void
 	{
-		final startRewardedPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startRewardedPreloader',
-			'(Ljava/lang/String;Ljava/lang/String;I)V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startRewardedPreloader', '(Ljava/lang/String;Ljava/lang/String;I)V');
 
-		if (startRewardedPreloaderJNI != null)
-			startRewardedPreloaderJNI(preloadID, adUnitID, bufferSize);
+		if (jni != null)
+			jni(preloadID, adUnitID, bufferSize);
+		#end
 	}
 
 	/**
@@ -265,13 +267,13 @@ class Admob
 	 */
 	public static function destroyRewardedPreloader(preloadID:String):Bool
 	{
-		final destroyRewardedPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyRewardedPreloader',
-			'(Ljava/lang/String;)Z');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyRewardedPreloader', '(Ljava/lang/String;)Z');
 
-		if (destroyRewardedPreloaderJNI != null)
-			return destroyRewardedPreloaderJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : false;
+		#else
 		return false;
+		#end
 	}
 
 	/**
@@ -279,10 +281,12 @@ class Admob
 	 */
 	public static function destroyAllRewardedPreloaders():Void
 	{
-		final destroyAllRewardedPreloadersJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllRewardedPreloaders', '()V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllRewardedPreloaders', '()V');
 
-		if (destroyAllRewardedPreloadersJNI != null)
-			destroyAllRewardedPreloadersJNI();
+		if (jni != null)
+			jni();
+		#end
 	}
 
 	/**
@@ -293,13 +297,13 @@ class Admob
 	 */
 	public static function getNumRewardedAdsAvailable(preloadID:String):Int
 	{
-		final getNumRewardedAdsAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumRewardedAdsAvailable',
-			'(Ljava/lang/String;)I');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumRewardedAdsAvailable', '(Ljava/lang/String;)I');
 
-		if (getNumRewardedAdsAvailableJNI != null)
-			return getNumRewardedAdsAvailableJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : 0;
+		#else
 		return 0;
+		#end
 	}
 
 	/**
@@ -310,12 +314,13 @@ class Admob
 	 */
 	public static function isRewardedAdAvailable(preloadID:String):Bool
 	{
-		final isRewardedAdAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isRewardedAdAvailable', '(Ljava/lang/String;)Z');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isRewardedAdAvailable', '(Ljava/lang/String;)Z');
 
-		if (isRewardedAdAvailableJNI != null)
-			return isRewardedAdAvailableJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : false;
+		#else
 		return false;
+		#end
 	}
 
 	/**
@@ -326,12 +331,13 @@ class Admob
 	 */
 	public static function loadRewardedFromPreloader(preloadID:String, immersiveModeEnabled:Bool = true):Void
 	{
-		final loadRewardedFromPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadRewardedFromPreloader', '(Ljava/lang/String;Z)V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadRewardedFromPreloader', '(Ljava/lang/String;Z)V');
 
-		if (loadRewardedFromPreloaderJNI != null)
-			loadRewardedFromPreloaderJNI(preloadID, immersiveModeEnabled);
+		if (jni != null)
+			jni(preloadID, immersiveModeEnabled);
+		#end
 	}
-	#end
 
 	/**
 	 * Loads a rewarded ad.
@@ -342,10 +348,10 @@ class Admob
 	public static function loadRewarded(adUnitID:String, immersiveModeEnabled:Bool = true):Void
 	{
 		#if android
-		final loadRewardedJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadRewarded', '(Ljava/lang/String;Z)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadRewarded', '(Ljava/lang/String;Z)V');
 
-		if (loadRewardedJNI != null)
-			loadRewardedJNI(adUnitID, immersiveModeEnabled);
+		if (jni != null)
+			jni(adUnitID, immersiveModeEnabled);
 		#elseif ios
 		loadRewardedAdmob(adUnitID);
 		#end
@@ -357,16 +363,15 @@ class Admob
 	public static function showRewarded():Void
 	{
 		#if android
-		final showRewardedJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showRewarded', '()V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showRewarded', '()V');
 
-		if (showRewardedJNI != null)
-			showRewardedJNI();
+		if (jni != null)
+			jni();
 		#elseif ios
 		showRewardedAdmob();
 		#end
 	}
 
-	#if android
 	/**
 	 * Starts the app open ad preloader with the specified preload ID and buffer size.
 	 * 
@@ -376,11 +381,12 @@ class Admob
 	 */
 	public static function startAppOpenPreloader(preloadID:String, adUnitID:String, bufferSize:Int):Void
 	{
-		final startAppOpenPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startAppOpenPreloader',
-			'(Ljava/lang/String;Ljava/lang/String;I)V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'startAppOpenPreloader', '(Ljava/lang/String;Ljava/lang/String;I)V');
 
-		if (startAppOpenPreloaderJNI != null)
-			startAppOpenPreloaderJNI(preloadID, adUnitID, bufferSize);
+		if (jni != null)
+			jni(preloadID, adUnitID, bufferSize);
+		#end
 	}
 
 	/**
@@ -392,12 +398,13 @@ class Admob
 	 */
 	public static function destroyAppOpenPreloader(preloadID:String):Bool
 	{
-		final destroyAppOpenPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAppOpenPreloader', '(Ljava/lang/String;)Z');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAppOpenPreloader', '(Ljava/lang/String;)Z');
 
-		if (destroyAppOpenPreloaderJNI != null)
-			return destroyAppOpenPreloaderJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : false;
+		#else
 		return false;
+		#end
 	}
 
 	/**
@@ -405,10 +412,12 @@ class Admob
 	 */
 	public static function destroyAllAppOpenPreloaders():Void
 	{
-		final destroyAllAppOpenPreloadersJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllAppOpenPreloaders', '()V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'destroyAllAppOpenPreloaders', '()V');
 
-		if (destroyAllAppOpenPreloadersJNI != null)
-			destroyAllAppOpenPreloadersJNI();
+		if (jni != null)
+			jni();
+		#end
 	}
 
 	/**
@@ -419,13 +428,13 @@ class Admob
 	 */
 	public static function getNumAppOpenAdsAvailable(preloadID:String):Int
 	{
-		final getNumAppOpenAdsAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumAppOpenAdsAvailable',
-			'(Ljava/lang/String;)I');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getNumAppOpenAdsAvailable', '(Ljava/lang/String;)I');
 
-		if (getNumAppOpenAdsAvailableJNI != null)
-			return getNumAppOpenAdsAvailableJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : 0;
+		#else
 		return 0;
+		#end
 	}
 
 	/**
@@ -436,12 +445,13 @@ class Admob
 	 */
 	public static function isAppOpenAdAvailable(preloadID:String):Bool
 	{
-		final isAppOpenAdAvailableJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isAppOpenAdAvailable', '(Ljava/lang/String;)Z');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isAppOpenAdAvailable', '(Ljava/lang/String;)Z');
 
-		if (isAppOpenAdAvailableJNI != null)
-			return isAppOpenAdAvailableJNI(preloadID);
-
+		return jni != null ? jni(preloadID) : false;
+		#else
 		return false;
+		#end
 	}
 
 	/**
@@ -452,12 +462,13 @@ class Admob
 	 */
 	public static function loadAppOpenFromPreloader(preloadID:String, immersiveModeEnabled:Bool = true):Void
 	{
-		final loadAppOpenFromPreloaderJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadAppOpenFromPreloader', '(Ljava/lang/String;Z)V');
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadAppOpenFromPreloader', '(Ljava/lang/String;Z)V');
 
-		if (loadAppOpenFromPreloaderJNI != null)
-			loadAppOpenFromPreloaderJNI(preloadID, immersiveModeEnabled);
+		if (jni != null)
+			jni(preloadID, immersiveModeEnabled);
+		#end
 	}
-	#end
 
 	/**
 	 * Loads a app open ad.
@@ -468,10 +479,10 @@ class Admob
 	public static function loadAppOpen(adUnitID:String, immersiveModeEnabled:Bool = true):Void
 	{
 		#if android
-		final loadAppOpenJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadAppOpen', '(Ljava/lang/String;Z)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'loadAppOpen', '(Ljava/lang/String;Z)V');
 
-		if (loadAppOpenJNI != null)
-			loadAppOpenJNI(adUnitID, immersiveModeEnabled);
+		if (jni != null)
+			jni(adUnitID, immersiveModeEnabled);
 		#elseif ios
 		loadAppOpenAdmob(adUnitID);
 		#end
@@ -483,10 +494,10 @@ class Admob
 	public static function showAppOpen():Void
 	{
 		#if android
-		final showAppOpenJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showAppOpen', '()V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showAppOpen', '()V');
 
-		if (showAppOpenJNI != null)
-			showAppOpenJNI();
+		if (jni != null)
+			jni();
 		#elseif ios
 		showAppOpenAdmob();
 		#end
@@ -500,10 +511,10 @@ class Admob
 	public static function setVolume(vol:Float):Void
 	{
 		#if android
-		final setVolumeJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'setVolume', '(F)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'setVolume', '(F)V');
 
-		if (setVolumeJNI != null)
-			setVolumeJNI(vol);
+		if (jni != null)
+			jni(vol);
 		#elseif ios
 		setVolumeAdmob(vol);
 		#end
@@ -518,9 +529,9 @@ class Admob
 	public static function getTCFConsentForPurpose(purpose:Int = 0):Int
 	{
 		#if android
-		final getTCFConsentForPurposeJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
 
-		return getTCFConsentForPurposeJNI != null ? getTCFConsentForPurposeJNI(purpose) : -1;
+		return jni != null ? jni(purpose) : -1;
 		#elseif ios
 		return getTCFConsentForPurposeAdmob(purpose);
 		#end
@@ -534,9 +545,9 @@ class Admob
 	public static function getTCFPurposeConsent():String
 	{
 		#if android
-		final getTCFPurposeConsentJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFPurposeConsent', '()Ljava/lang/String;');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFPurposeConsent', '()Ljava/lang/String;');
 
-		return getTCFPurposeConsentJNI != null ? getTCFPurposeConsentJNI() : '';
+		return jni != null ? jni() : '';
 		#elseif ios
 		final cString:cpp.CastCharStar = getTCFPurposeConsentAdmob();
 
@@ -561,9 +572,9 @@ class Admob
 	public static function getUSPrivacy():String
 	{
 		#if android
-		final getUSPrivacyJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getUSPrivacy', '()Ljava/lang/String;');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getUSPrivacy', '()Ljava/lang/String;');
 
-		return getUSPrivacyJNI != null ? getUSPrivacyJNI() : '';
+		return jni != null ? jni() : '';
 		#elseif ios
 		final cString:cpp.CastCharStar = getUSPrivacyAdmob();
 
@@ -588,9 +599,9 @@ class Admob
 	public static function isPrivacyOptionsRequired():Bool
 	{
 		#if android
-		final isPrivacyOptionsRequiredJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isPrivacyOptionsRequired', '()Z');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'isPrivacyOptionsRequired', '()Z');
 
-		return isPrivacyOptionsRequiredJNI != null ? isPrivacyOptionsRequiredJNI() : false;
+		return jni != null ? jni() : false;
 		#elseif ios
 		return isPrivacyOptionsRequiredAdmob();
 		#end
@@ -602,10 +613,10 @@ class Admob
 	public static function showPrivacyOptionsForm():Void
 	{
 		#if android
-		final showPrivacyOptionsFormJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showPrivacyOptionsForm', '()V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'showPrivacyOptionsForm', '()V');
 
-		if (showPrivacyOptionsFormJNI != null)
-			showPrivacyOptionsFormJNI();
+		if (jni != null)
+			jni();
 		#elseif ios
 		showPrivacyOptionsFormAdmob();
 		#end
@@ -617,24 +628,16 @@ class Admob
 	public static function openAdInspector():Void
 	{
 		#if android
-		final openAdInspectorJNI:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'openAdInspector', '()V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'openAdInspector', '()V');
 
-		if (openAdInspectorJNI != null)
-			openAdInspectorJNI();
+		if (jni != null)
+			jni();
 		#elseif ios
 		openAdInspectorAdmob();
 		#end
 	}
 
 	#if android
-	/**
-	 * Retrieves or creates a cached static method reference.
-	 * @param className The name of the Java class containing the method.
-	 * @param methodName The name of the method to call.
-	 * @param signature The JNI method signature string (e.g., "()V", "(Ljava/lang/String;)V").
-	 * @param cache Whether to cache the result (default true).
-	 * @return A dynamic reference to the static method, or null if it couldn't be created.
-	 */
 	@:noCompletion
 	private static function createJNIStaticMethod(className:String, methodName:String, signature:String, cache:Bool = true):Null<Dynamic>
 	{
