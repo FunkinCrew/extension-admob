@@ -8,7 +8,7 @@ typedef void (*AdmobCallback)(const char* event, const char* value);
  * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
  * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
  */
-void Admob_ConfigureConsentMetadata(bool gdprConsent, bool ccpaConsent);
+void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent);
 
 /**
  * Initializes the AdMob system with configuration flags and a callback.

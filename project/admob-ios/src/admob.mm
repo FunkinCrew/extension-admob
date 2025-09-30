@@ -332,7 +332,7 @@ static RewardedDelegate *rewardedDelegate = nil;
 static AppOpenAdDelegate *appOpenDelegate = nil;
 static AudioVideoManagerDelegate *avmDelegate = nil;
 
-void Admob_ConfigureConsentMetadata(bool gdprConsent, bool ccpaConsent)
+void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent)
 {
 	UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
 	[gdprMetaData set:@"gdpr.consent" value:gdprConsent ? @YES : @NO];

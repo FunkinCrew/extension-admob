@@ -38,7 +38,7 @@ public class Admob extends Extension
 	private static ConsentInformation consentInformation;
 	private static HaxeObject haxeObject;
 
-	public static void configureConsentMetadata(final boolean gdprConsent, final boolean ccpaConsent)
+	public static void configureUnity(final boolean gdprConsent, final boolean ccpaConsent)
 	{
 		MetaData gdprMetaData = new MetaData(mainActivity);
 		gdprMetaData.set("gdpr.consent", gdprConsent);

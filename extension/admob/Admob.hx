@@ -37,15 +37,15 @@ class Admob
 	 * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
 	 * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
 	 */
-	public static function configureConsentMetadata(gdprConsent:Bool, ccpaConsent:Bool):Void
+	public static function configureUnity(gdprConsent:Bool, ccpaConsent:Bool):Void
 	{
 		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureConsentMetadata', '(ZZ)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureUnity', '(ZZ)V');
 
 		if (jni != null)
 			jni(gdprConsent, ccpaConsent);
 		#elseif ios
-		configureConsentMetadataAdmob(gdprConsent, ccpaConsent);
+		configureUnityAdmob(gdprConsent, ccpaConsent);
 		#end
 	}
 
@@ -654,9 +654,9 @@ class Admob
 		return staticMethodsCache.get(key);
 	}
 	#elseif ios
-	@:native('Admob_ConfigureConsentMetadata')
+	@:native('Admob_ConfigureUnity')
 	@:noCompletion
-	extern private static function configureConsentMetadataAdmob(gdprConsent:Bool, ccpaConsent:Bool):Void;
+	extern private static function configureUnityAdmob(gdprConsent:Bool, ccpaConsent:Bool):Void;
 
 	@:native('Admob_Init')
 	@:noCompletion
