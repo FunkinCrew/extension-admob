@@ -12,7 +12,8 @@ class Main
 	private static final URLS:Array<String> = [
 		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
 		'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.1/UnityAds.zip',
-		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.1.0.zip'
+		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.1.0.zip',
+		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.6.0.5.0.zip'
 	];
 
 	@:noCompletion

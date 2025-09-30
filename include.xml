@@ -7,6 +7,8 @@
 	<section if="android">
 		<dependency name="extension-admob" path="project/admob-android" />
 
+		<config:android gradle-maven-repositories="https://artifact.bytedance.com/repository/pangle" />
+
 		<config:android extension="org.haxe.extension.Admob" />
 	</section>
 
@@ -19,14 +21,10 @@
 		</section>
 
 		<section if="simulator">
-			<dependency
-				path="project/admob-ios/frameworks/arm64_x86_64-simulator/GoogleMobileAds.framework" />
-			<dependency
-				path="project/admob-ios/frameworks/arm64_x86_64-simulator/UserMessagingPlatform.framework" />
-			<dependency
-				path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAds.framework" />
-			<dependency
-				path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAdapter.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/GoogleMobileAds.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UserMessagingPlatform.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAds.framework" />
+			<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAdapter.framework" />
 		</section>
 
 		<dependency name="JavaScriptCore.framework" />

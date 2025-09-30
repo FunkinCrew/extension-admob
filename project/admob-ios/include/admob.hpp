@@ -11,6 +11,14 @@ typedef void (*AdmobCallback)(const char* event, const char* value);
 void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent);
 
 /**
+ * Configures `GDPR` and `PA` consent metadata for `Pangle` mediation.
+ * 
+ * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
+ * @param paConsent The user's PA consent status (true for consent, false for no consent).
+ */
+void Admob_ConfigurePangle(bool gdprConsent, bool paConsent);
+
+/**
  * Initializes the AdMob system with configuration flags and a callback.
  * 
  * @param testingAds Enables test ads if true.
