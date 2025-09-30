@@ -94,7 +94,7 @@ public class Admob extends Extension
 			@Override
 			public void onInitializationComplete(InitializationStatus initializationStatus)
 			{
-				if (haxeObject != null) 
+				if (haxeObject != null)
 					haxeObject.call("onEvent", new Object[] { "INIT_OK", MobileAds.getVersion().toString() });
 			}
 		});
@@ -350,7 +350,7 @@ public class Admob extends Extension
 			public void onAdFailedToPreload(String preloadID, AdError adError)
 			{
 				if (haxeObject != null)
-					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD", String.format("Preload ID: %s, Code: %d, Description: %s", adError.getCode(), adError.getMessage()) });
+					haxeObject.call("onEvent", new Object[] { "INTERSTITIAL_PRELOADER_FAILED_TO_PRELOAD", String.format("Preload ID: %s, Code: %d, Description: %s", preloadID, adError.getCode(), adError.getMessage()) });
 			}
 		});
 	}
@@ -767,7 +767,7 @@ public class Admob extends Extension
 							if (haxeObject != null)
 								haxeObject.call("onEvent", new Object[] { "APP_OPEN_CLICKED", "" });
 						}
-						
+
 						@Override
 						public void onAdDismissedFullScreenContent()
 						{
