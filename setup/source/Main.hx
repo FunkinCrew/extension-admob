@@ -125,7 +125,7 @@ class Main
 
 					FileUtil.deletePath(Path.join([TEMP_DIR, filename]));
 
-					if (filename == Path.withoutDirectory(Path.withoutExtension(PANGLE_URL)))
+					if (filename == Path.withoutDirectory(PANGLE_URL))
 						FileUtil.deletePath(Path.join([TEMP_DIR, PANGLE_DIR, 'InternationalDemo']));
 
 					Sys.println(ANSIUtil.apply('Removed "$filename" archive.', [Yellow]));
