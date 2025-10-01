@@ -9,18 +9,29 @@ import util.ProcessUtil;
 class Main
 {
 	@:noCompletion
-	private static final URLS:Array<String> = [
+	private static final ADMOB_URLS:Array<String> = [
 		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
-		'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.1/UnityAds.zip',
 		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.1.0.zip',
 		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.6.0.5.0.zip'
 	];
 
 	@:noCompletion
-	private static final OUTPUT_DIR:String = 'project/admob-ios/frameworks';
+	private static final UNITY_URL:String = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.1/UnityAds.zip';
 
 	@:noCompletion
-	private static final TEMP_DIR:String = '.temp_sdk';
+	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/bdcff0951a27364156359a45e5f5cee0.zip';
+
+	@:noCompletion
+	private static final PANGLE_DIR:String = 'oversea_union_platform_iOS_7.6.0.6';
+
+	@:noCompletion
+	private static final BUNDLES_DIR:String = 'project/admob-ios/bundles';
+
+	@:noCompletion
+	private static final FRAMEWORKS_DIR:String = 'project/admob-ios/frameworks';
+
+	@:noCompletion
+	private static final TEMP_DIR:String = '.temp_sdks';
 
 	public static function main():Void
 	{
@@ -55,13 +66,16 @@ class Main
 	@:noCompletion
 	private static function setupFrameworks():Void
 	{
-		FileUtil.deletePath(OUTPUT_DIR);
-		FileUtil.createDirectory(OUTPUT_DIR);
+		FileUtil.deletePath(BUNDLES_DIR);
+		FileUtil.createDirectory(BUNDLES_DIR);
+
+		FileUtil.deletePath(FRAMEWORKS_DIR);
+		FileUtil.createDirectory(FRAMEWORKS_DIR);
 
 		FileUtil.deletePath(TEMP_DIR);
 		FileUtil.createDirectory(TEMP_DIR);
 
-		for (url in URLS)
+		for (url in ADMOB_URLS.concat([UNITY_URL, PANGLE_URL]))
 		{
 			final filename:String = Path.withoutDirectory(url);
 
@@ -69,13 +83,12 @@ class Main
 			{
 				Sys.println(ANSIUtil.apply('Downloading "$filename" from "$url"...', [Blue]));
 
-				final result:Int = ProcessUtil.runCommand('curl', ['-s', '-L', '-o', filename, url]);
+				final result:Int = ProcessUtil.runCommand('curl', ['-s', '-L', '-o', Path.join([TEMP_DIR, filename]), url]);
 
 				if (result != 0)
 				{
 					Sys.println(ANSIUtil.apply('Failed to download "$filename".', [Red]));
 
-					FileUtil.deletePath(filename);
 					FileUtil.deletePath(TEMP_DIR);
 
 					Sys.exit(result);
@@ -87,7 +100,6 @@ class Main
 			{
 				Sys.println(ANSIUtil.apply('Command not found "curl".', [Red]));
 
-				FileUtil.deletePath(filename);
 				FileUtil.deletePath(TEMP_DIR);
 
 				Sys.exit(1);
@@ -97,13 +109,12 @@ class Main
 			{
 				Sys.println(ANSIUtil.apply('Unzipping "$filename" to "$TEMP_DIR"...', [Blue]));
 
-				final result:Int = ProcessUtil.runCommand('unzip', ['-q', filename, '-d', TEMP_DIR]);
+				final result:Int = ProcessUtil.runCommand('unzip', ['-q', Path.join([TEMP_DIR, filename]), '-d', TEMP_DIR]);
 
 				if (result != 0)
 				{
 					Sys.println(ANSIUtil.apply('Failed to unzip "$filename".', [Red]));
 
-					FileUtil.deletePath(filename);
 					FileUtil.deletePath(TEMP_DIR);
 
 					Sys.exit(result);
@@ -112,7 +123,10 @@ class Main
 				{
 					Sys.println(ANSIUtil.apply('Successfully unzipped "$filename".', [Green]));
 
-					FileUtil.deletePath(filename);
+					FileUtil.deletePath(Path.join([TEMP_DIR, filename]));
+
+					if (filename == Path.withoutDirectory(Path.withoutExtension(PANGLE_URL)))
+						FileUtil.deletePath(Path.join([TEMP_DIR, PANGLE_DIR, 'InternationalDemo']));
 
 					Sys.println(ANSIUtil.apply('Removed "$filename" archive.', [Yellow]));
 				}
@@ -121,36 +135,61 @@ class Main
 			{
 				Sys.println(ANSIUtil.apply('Command not found "unzip".', [Red]));
 
-				FileUtil.deletePath(filename);
 				FileUtil.deletePath(TEMP_DIR);
 
 				Sys.exit(1);
 			}
 		}
 
-		for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
 		{
-			final path:String = Path.join([TEMP_DIR, dependency]);
-
-			if (sys.FileSystem.isDirectory(path) && Path.extension(path) == 'xcframework')
-				findFrameworks(path);
-			else if (sys.FileSystem.isDirectory(path))
+			function searchDirs(path:String, extension:String, matched:String->Void):Void
 			{
 				for (file in sys.FileSystem.readDirectory(path))
 				{
 					final filePath:String = Path.join([path, file]);
 
-					if (sys.FileSystem.isDirectory(filePath) && Path.extension(filePath) == 'xcframework')
-						findFrameworks(filePath);
+					if (sys.FileSystem.isDirectory(filePath))
+					{
+						if (Path.extension(filePath) == extension)
+						{
+							matched(filePath);
+						}
+						else
+						{
+							searchDirs(filePath, extension, matched);
+						}
+					}
 				}
+			}
+
+			for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
+			{
+				final path:String = Path.join([TEMP_DIR, dependency]);
+
+				if (sys.FileSystem.isDirectory(path) && Path.extension(path) == 'xcframework')
+					findFrameworks(path);
+				else if (sys.FileSystem.isDirectory(path))
+					searchDirs(path, 'xcframework', findFrameworks);
+				else if (!sys.FileSystem.isDirectory(path))
+					FileUtil.deletePath(path);
+			}
+
+			for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
+			{
+				final path:String = Path.join([TEMP_DIR, dependency]);
+
+				if (sys.FileSystem.isDirectory(path) && Path.extension(path) == 'bundle')
+					copyBundle(path);
+				else if (sys.FileSystem.isDirectory(path))
+					searchDirs(path, 'bundle', copyBundle);
+				else if (!sys.FileSystem.isDirectory(path))
+					FileUtil.deletePath(path);
 			}
 		}
 
 		Sys.println(ANSIUtil.apply('Cleaning up...', [Yellow]));
 
 		FileUtil.deletePath(TEMP_DIR);
-
-		Sys.println(ANSIUtil.apply('Frameworks have been organized in "$OUTPUT_DIR"!', [Green]));
 	}
 
 	@:noCompletion
@@ -186,7 +225,7 @@ class Main
 				{
 					final archName:String = extractArchName(archDir);
 
-					final destDir:String = Path.join([OUTPUT_DIR, archName]);
+					final destDir:String = Path.join([FRAMEWORKS_DIR, archName]);
 					final frameworkName:String = Path.withoutDirectory(frameworkDir);
 					final destPath:String = Path.join([destDir, frameworkName]);
 
@@ -225,5 +264,15 @@ class Main
 			return regex.matched(1);
 
 		return dirName;
+	}
+
+	@:noCompletion
+	private static function copyBundle(filePath:String):Void
+	{
+		Sys.println(ANSIUtil.apply('Copying "${Path.withoutDirectory(filePath)}" to "$BUNDLES_DIR"...', [Blue]));
+
+		FileUtil.copyDirectory(filePath, Path.join([BUNDLES_DIR, Path.withoutDirectory(filePath)]));
+
+		Sys.println(ANSIUtil.apply('Successfully copied "${Path.withoutDirectory(filePath)}" to "$BUNDLES_DIR".', [Green]));
 	}
 }
