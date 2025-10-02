@@ -4,6 +4,9 @@
 
 A Haxe/[Lime](https://lime.openfl.org) extension for integrating [Google AdMob](https://extension.admob.google.com/home) on iOS and Android.
 
+> [!NOTE]
+> This extension only works with [this fork](https://github.com/FunkinCrew/lime/tree/mobile/main) of [Lime](https://lime.openfl.org).
+
 ### Installation
 
 To install **extension-admob**, follow these steps:
