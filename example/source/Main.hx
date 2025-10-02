@@ -58,10 +58,13 @@ class Main extends lime.app.Application
 
 	public override function onWindowCreate():Void
 	{
-		// Ensure privacy and consent information is configured properly.
+		// Set Unity consent
 		Admob.configureUnity(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
-		// Initialize Admob with required settings.
+		// Set Pangle consent
+		Admob.configurePangle(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
+
+		// Init AdMob
 		Admob.init(true);
 	}
 

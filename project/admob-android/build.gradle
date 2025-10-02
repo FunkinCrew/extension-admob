@@ -25,4 +25,7 @@ dependencies
 	// Unity Ads SDK and Mediation Adapter
 	implementation('com.unity3d.ads:unity-ads:4.16.1')
 	implementation('com.google.ads.mediation:unity:4.16.1.0')
+
+	// Pangle Mediation Adapter
+	implementation("com.google.ads.mediation:pangle:7.6.0.3.0")
 }
