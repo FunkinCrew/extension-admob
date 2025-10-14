@@ -11,12 +11,12 @@ class Main
 	@:noCompletion
 	private static final ADMOB_URLS:Array<String> = [
 		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
-		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.1.0.zip',
+		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.2.0.zip',
 		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.6.0.5.0.zip'
 	];
 
 	@:noCompletion
-	private static final UNITY_URL:String = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.1/UnityAds.zip';
+	private static final UNITY_URL:String = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.3/UnityAds.zip';
 
 	@:noCompletion
 	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/bdcff0951a27364156359a45e5f5cee0.zip';
