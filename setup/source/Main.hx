@@ -12,7 +12,7 @@ class Main
 	private static final ADMOB_URLS:Array<String> = [
 		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
 		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.3.0.zip',
-		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.7.0.6.0.zip'
+		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.8.0.5.0.zip'
 	];
 
 	@:noCompletion
