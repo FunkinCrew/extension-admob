@@ -19,10 +19,10 @@ class Main
 	private static final UNITY_URL:String = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.3/UnityAds.zip';
 
 	@:noCompletion
-	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/7786f8818b1fc50571e8666dce25c593.zip';
+	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/630e33e3a473272bc2a8272339bed350.zip';
 
 	@:noCompletion
-	private static final PANGLE_DIR:String = 'oversea_union_platform_iOS_7.7.0.7';
+	private static final PANGLE_DIR:String = 'oversea_union_platform_iOS_7.8.0.5';
 
 	@:noCompletion
 	private static final BUNDLES_DIR:String = 'project/admob-ios/bundles';
