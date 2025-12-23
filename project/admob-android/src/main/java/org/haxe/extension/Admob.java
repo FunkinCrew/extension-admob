@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowMetrics;
 import android.widget.RelativeLayout;
+import com.bytedance.sdk.openadsdk.api.PAGConstant;
 import com.google.android.gms.ads.appopen.*;
 import com.google.android.gms.ads.initialization.*;
 import com.google.android.gms.ads.interstitial.*;
@@ -19,6 +20,7 @@ import com.google.android.gms.ads.rewarded.*;
 import com.google.android.gms.ads.*;
 import com.google.android.ump.*;
 import com.unity3d.ads.metadata.MetaData;
+import com.google.ads.mediation.pangle.PangleMediationAdapter;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
 import java.security.MessageDigest;
@@ -47,6 +49,12 @@ public class Admob extends Extension
 		MetaData ccpaMetaData = new MetaData(mainActivity);
 		ccpaMetaData.set("privacy.consent", ccpaConsent);
 		ccpaMetaData.commit();
+	}
+
+	public static void configurePangle(final boolean gdprConsent, final boolean paConsent)
+	{
+		PangleMediationAdapter.setGDPRConsent(gdprConsent ? PAGConstant.PAGGDPRConsentType.PAG_GDPR_CONSENT_TYPE_CONSENT : PAGConstant.PAGGDPRConsentType.PAG_GDPR_CONSENT_TYPE_NO_CONSENT);
+		PangleMediationAdapter.setPAConsent(paConsent ? PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_CONSENT : PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_NO_CONSENT);
 	}
 
 	private static void initMobileAds(final boolean testingAds, final boolean childDirected, final boolean enableRDP)
