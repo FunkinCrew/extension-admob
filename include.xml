@@ -7,6 +7,8 @@
 	<section if="android">
 		<config:android extension="org.haxe.extension.Admob" />
 
+		<config:android gradle-maven-repositories="https://artifact.bytedance.com/repository/pangle" />
+
 		<dependency name="extension-admob" path="project/admob-android" />
 	</section>
 
@@ -19,6 +21,8 @@
 				<dependency path="project/admob-ios/frameworks/arm64/UserMessagingPlatform.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/UnityAds.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/UnityAdapter.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64/PAGAdSDK.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64/PangleAdapter.framework" />
 			</section>
 
 			<section if="simulator">
@@ -26,10 +30,32 @@
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UserMessagingPlatform.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAds.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAdapter.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/PAGAdSDK.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/PangleAdapter.framework" />
 			</section>
 
+			<dependency path="project/admob-ios/bundles/PAGAdSDK.bundle" />
+
+			<dependency name="Accelerate.framework" />
+			<dependency name="AdSupport.framework" />
 			<dependency name="AppTrackingTransparency.framework" />
+			<dependency name="CoreMedia.framework" />
+			<dependency name="CoreTelephony.framework" />
 			<dependency name="JavaScriptCore.framework" />
+			<dependency name="MobileCoreServices.framework" />
+			<dependency name="Security.framework" />
+			<dependency name="StoreKit.framework" />
+			<dependency name="SystemConfiguration.framework" />
+			<dependency name="WebKit.framework" />
+
+			<dependency name="libbz2.tbd" />
+			<dependency name="libc++.tbd" />
+			<dependency name="libc++abi.tbd" />
+			<dependency name="libiconv.tbd" />
+			<dependency name="libresolv.9.tbd" />
+			<dependency name="libsqlite3.tbd" />
+			<dependency name="libxml2.tbd" />
+			<dependency name="libz.tbd" />
 		</section>
 
 		<template path="templates" />

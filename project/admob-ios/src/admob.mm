@@ -6,6 +6,8 @@
 #import <UserMessagingPlatform/UserMessagingPlatform.h>
 #import <UnityAds/UnityAds.h>
 #import <UnityAdapter/UnityAdapter.h>
+#import <PAGAdSDK/PAGSdk.h>
+#import <PangleAdapter/PangleAdapter.h>
 
 static AdmobCallback admobCallback = nullptr;
 static GADBannerView *bannerView = nil;
@@ -383,6 +385,12 @@ void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent)
 	UADSMetaData *ccpaMetaData = [[UADSMetaData alloc] init];
 	[ccpaMetaData set:@"privacy.consent" value:ccpaConsent ? @YES : @NO];
 	[ccpaMetaData commit];
+}
+
+void Admob_ConfigurePangle(bool gdprConsent, bool paConsent)
+{
+    [GADMediationAdapterPangle setGDPRConsent:gdprConsent ? PAGGDPRConsentTypeConsent : PAGGDPRConsentTypeNoConsent];
+    [GADMediationAdapterPangle setPAConsent:paConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
 }
 
 static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
