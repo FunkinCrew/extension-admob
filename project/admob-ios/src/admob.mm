@@ -64,6 +64,7 @@ static void dispatchCallback(const char *event, const char *value)
 
 @interface InterstitialDelegate : NSObject <GADFullScreenContentDelegate>
 
+@property(nonatomic, weak) UIViewController *_presentingViewController;
 @property(nonatomic, strong) GADInterstitialAd *_ad;
 
 - (void)loadWithAdUnitID:(const char *)adUnitID;
@@ -105,9 +106,13 @@ static void dispatchCallback(const char *event, const char *value)
 
 - (void)show
 {
-	if (self._ad != nil && [self._ad canPresentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController] error:nil])
+	UIViewController *vc = [UIApplication.sharedApplication.keyWindow rootViewController];
+
+	if (self._ad != nil && [self._ad canPresentFromRootViewController:vc error:nil])
 	{
-		[self._ad presentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController]];
+		self._presentingViewController = vc;
+
+		[self._ad presentFromRootViewController:vc];
 
 		dispatchCallback("INTERSTITIAL_SHOWED", "");
 	}
@@ -122,7 +127,16 @@ static void dispatchCallback(const char *event, const char *value)
 
 - (void)adDidDismissFullScreenContent:(id<GADFullScreenPresentingAd>)ad
 {
-	dispatchCallback("INTERSTITIAL_DISMISSED", "");
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (admobCallback)
+			admobCallback("INTERSTITIAL_DISMISSED", "");
+
+		if (@available(iOS 11.0, *))
+		{
+			if (self._presentingViewController)
+				[self._presentingViewController setNeedsUpdateOfHomeIndicatorAutoHidden];
+		}
+	});
 }
 
 - (void)ad:(id<GADFullScreenPresentingAd>)ad didFailToPresentFullScreenContentWithError:(NSError *)error
@@ -143,6 +157,7 @@ static void dispatchCallback(const char *event, const char *value)
 
 @interface RewardedDelegate : NSObject <GADFullScreenContentDelegate>
 
+@property(nonatomic, weak) UIViewController *_presentingViewController;
 @property(nonatomic, strong) GADRewardedAd *_ad;
 
 - (void)loadWithAdUnitID:(const char *)adUnitID;
@@ -184,9 +199,13 @@ static void dispatchCallback(const char *event, const char *value)
 
 - (void)show
 {
-	if (self._ad != nil && [self._ad canPresentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController] error:nil])
+	UIViewController *vc = [UIApplication.sharedApplication.keyWindow rootViewController];
+
+	if (self._ad != nil && [self._ad canPresentFromRootViewController:vc error:nil])
 	{
-		[self._ad presentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController] userDidEarnRewardHandler:^{
+		self._presentingViewController = vc;
+
+		[self._ad presentFromRootViewController:vc userDidEarnRewardHandler:^{
 			if (admobCallback)
 			{
 				char *value = strdup([[NSString stringWithFormat:@"Type: %@, Amount: %d", self._ad.adReward.type, self._ad.adReward.amount.intValue] UTF8String]);
@@ -212,7 +231,16 @@ static void dispatchCallback(const char *event, const char *value)
 
 - (void)adDidDismissFullScreenContent:(id<GADFullScreenPresentingAd>)ad
 {
-	dispatchCallback("REWARDED_DISMISSED", "");
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (admobCallback)
+			admobCallback("REWARDED_DISMISSED", "");
+
+		if (@available(iOS 11.0, *))
+		{
+			if (self._presentingViewController)
+				[self._presentingViewController setNeedsUpdateOfHomeIndicatorAutoHidden];
+		}
+	});
 }
 
 - (void)ad:(id<GADFullScreenPresentingAd>)ad didFailToPresentFullScreenContentWithError:(NSError *)error
@@ -233,6 +261,7 @@ static void dispatchCallback(const char *event, const char *value)
 
 @interface AppOpenAdDelegate : NSObject <GADFullScreenContentDelegate>
 
+@property(nonatomic, weak) UIViewController *_presentingViewController;
 @property(nonatomic, strong) GADAppOpenAd *_ad;
 
 - (void)loadWithAdUnitID:(const char *)adUnitID;
@@ -273,9 +302,13 @@ static void dispatchCallback(const char *event, const char *value)
 
 - (void)show
 {
-	if (self._ad != nil && [self._ad canPresentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController] error:nil])
+	UIViewController *vc = [UIApplication.sharedApplication.keyWindow rootViewController];
+
+	if (self._ad != nil && [self._ad canPresentFromRootViewController:vc error:nil])
 	{
-		[self._ad presentFromRootViewController:[UIApplication.sharedApplication.keyWindow rootViewController]];
+		self._presentingViewController = vc;
+
+		[self._ad presentFromRootViewController:vc];
 
 		dispatchCallback("APP_OPEN_SHOWED", "");
 	}
@@ -290,7 +323,16 @@ static void dispatchCallback(const char *event, const char *value)
 
 - (void)adDidDismissFullScreenContent:(id<GADFullScreenPresentingAd>)ad
 {
-	dispatchCallback("APP_OPEN_DISMISSED", "");
+	dispatch_async(dispatch_get_main_queue(), ^{
+		if (admobCallback)
+			admobCallback("APP_OPEN_DISMISSED", "");
+
+		if (@available(iOS 11.0, *))
+		{
+			if (self._presentingViewController)
+				[self._presentingViewController setNeedsUpdateOfHomeIndicatorAutoHidden];
+		}
+	});
 }
 
 - (void)ad:(id<GADFullScreenPresentingAd>)ad didFailToPresentFullScreenContentWithError:(NSError *)error
