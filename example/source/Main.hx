@@ -30,13 +30,10 @@ class Main extends lime.app.Application
 			{
 				case AdmobEvent.INIT_OK:
 					trace("Admob initialized successfully.");
+					trace(" - Privacy options required: " + Admob.isPrivacyOptionsRequired());
+					trace(" - TCF purpose consent: " + Admob.getTCFPurposeConsent());
+					trace(" - US privacy: " + Admob.getUSPrivacy());
 
-					trace("Privacy options required: " + Admob.isPrivacyOptionsRequired());
-					trace("IAB TCF purpose consent: " + Admob.getTCFPurposeConsent());
-					trace("IAB US privacy: " + Admob.getUSPrivacy());
-
-					Admob.openAdInspector();
-				case AdmobEvent.AD_INSPECTOR_CLOSED:
 					Admob.loadAppOpen(APP_OPEN_ID);
 				case AdmobEvent.APP_OPEN_LOADED:
 					Admob.showAppOpen();
