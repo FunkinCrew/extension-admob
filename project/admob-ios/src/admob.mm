@@ -113,8 +113,6 @@ static void dispatchCallback(const char *event, const char *value)
 		self._presentingViewController = vc;
 
 		[self._ad presentFromRootViewController:vc];
-
-		dispatchCallback("INTERSTITIAL_SHOWED", "");
 	}
 	else
 		dispatchCallback("INTERSTITIAL_FAILED_TO_SHOW", "Interstitial ad not ready.");
@@ -123,6 +121,11 @@ static void dispatchCallback(const char *event, const char *value)
 - (void)adDidRecordClick:(id<GADFullScreenPresentingAd>)ad
 {
 	dispatchCallback("INTERSTITIAL_CLICKED", "");
+}
+
+- (void)adWillPresentFullScreenContent:(id<GADFullScreenPresentingAd>)ad
+{
+	dispatchCallback("INTERSTITIAL_SHOWED", "");
 }
 
 - (void)adDidDismissFullScreenContent:(id<GADFullScreenPresentingAd>)ad
@@ -217,8 +220,6 @@ static void dispatchCallback(const char *event, const char *value)
 				});
 			}
 		}];
-
-		dispatchCallback("REWARDED_SHOWED", "");
 	}
 	else
 		dispatchCallback("REWARDED_FAILED_TO_SHOW", "Rewarded ad not ready.");
@@ -227,6 +228,11 @@ static void dispatchCallback(const char *event, const char *value)
 - (void)adDidRecordClick:(id<GADFullScreenPresentingAd>)ad
 {
 	dispatchCallback("REWARDED_CLICKED", "");
+}
+
+- (void)adWillPresentFullScreenContent:(id<GADFullScreenPresentingAd>)ad
+{
+	dispatchCallback("REWARDED_SHOWED", "");
 }
 
 - (void)adDidDismissFullScreenContent:(id<GADFullScreenPresentingAd>)ad
@@ -309,8 +315,6 @@ static void dispatchCallback(const char *event, const char *value)
 		self._presentingViewController = vc;
 
 		[self._ad presentFromRootViewController:vc];
-
-		dispatchCallback("APP_OPEN_SHOWED", "");
 	}
 	else
 		dispatchCallback("APP_OPEN_FAILED_TO_SHOW", "App Open ad not ready.");
@@ -319,6 +323,11 @@ static void dispatchCallback(const char *event, const char *value)
 - (void)adDidRecordClick:(id<GADFullScreenPresentingAd>)ad
 {
 	dispatchCallback("APP_OPEN_CLICKED", "");
+}
+
+- (void)adWillPresentFullScreenContent:(id<GADFullScreenPresentingAd>)ad
+{
+	dispatchCallback("APP_OPEN_SHOWED", "");
 }
 
 - (void)adDidDismissFullScreenContent:(id<GADFullScreenPresentingAd>)ad
