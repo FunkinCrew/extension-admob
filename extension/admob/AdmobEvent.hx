@@ -61,16 +61,6 @@ class AdmobEvent
 	public static inline final ATT_STATUS:String = 'ATT_STATUS';
 
 	/**
-	 * Event constant indicating that the AVM (Audio Video Manager) is about to play audio.
-	 */
-	public static inline final AVM_WILL_PLAY_AUDIO:String = 'AVM_WILL_PLAY_AUDIO';
-
-	/**
-	 * Event constant indicating that the AVM (Audio Video Manager) has stopped playing audio.
-	 */
-	public static inline final AVM_DID_STOP_PLAYING_AUDIO:String = 'AVM_DID_STOP_PLAYING_AUDIO';
-
-	/**
 	 * Event triggered when a banner ad is successfully loaded.
 	 */
 	public static inline final BANNER_LOADED:String = 'BANNER_LOADED';
