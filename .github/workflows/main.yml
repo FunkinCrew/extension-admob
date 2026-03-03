@@ -19,7 +19,7 @@ jobs:
       - name: Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.6
+          haxe-version: 4.3.7
 
       - name: Install Haxe Libraries
         run: |
@@ -27,10 +27,13 @@ jobs:
           haxelib dev extension-admob .
 
       - name: Setup hxcpp Library
-        run: haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet --never --skip-dependencies && haxelib run lime rebuild hxcpp
+        run: haxelib git hxcpp https://github.com/FunkinCrew/hxcpp.git --quiet --never --skip-dependencies && haxelib run lime rebuild hxcpp
 
       - name: List Installed Haxe Libraries
         run: haxelib list
+
+      - name: Rebuild Lime
+        run: haxelib run lime rebuild macos -release && haxelib run lime rebuild android -release
 
       - name: Configure Environment
         run: |
@@ -57,7 +60,7 @@ jobs:
       - name: Setup Haxe
         uses: krdlab/setup-haxe@master
         with:
-          haxe-version: 4.3.6
+          haxe-version: 4.3.7
 
       - name: Install Haxe Libraries
         run: |
@@ -65,7 +68,7 @@ jobs:
           haxelib dev extension-admob .
 
       - name: Setup hxcpp Library
-        run: haxelib git hxcpp https://github.com/HaxeFoundation/hxcpp.git --quiet --never --skip-dependencies && haxelib run lime rebuild hxcpp
+        run: haxelib git hxcpp https://github.com/FunkinCrew/hxcpp.git --quiet --never --skip-dependencies && haxelib run lime rebuild hxcpp
 
       - name: List Installed Haxe Libraries
         run: haxelib list
@@ -75,6 +78,9 @@ jobs:
   
       - name: Setup Frameworks
         run: haxelib run extension-admob setup
+
+      - name: Rebuild Lime
+        run: haxelib run lime rebuild macos -release && haxelib run lime rebuild ios -release
 
       - name: Build
         run: cd example && haxelib run lime build ios -nosign -debug
