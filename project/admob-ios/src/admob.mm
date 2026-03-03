@@ -380,7 +380,7 @@ void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent)
 
 void Admob_ConfigurePangle(bool gdprConsent, bool paConsent)
 {
-    [GADMediationAdapterPangle setGDPRConsent:gdprConsent ? PAGGDPRConsentTypeConsent : PAGGDPRConsentTypeNoConsent];
+    [GADMediationAdapterPangle setGDPRConsent:gdprConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
     [GADMediationAdapterPangle setPAConsent:paConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
 }
 
@@ -616,8 +616,8 @@ void Admob_ShowBanner(const char *adUnitID, int size, int align)
 			if (@available(iOS 11.0, *))
 				frame = UIEdgeInsetsInsetRect(frame, keyWindow.rootViewController.view.safeAreaInsets);
 
-			adSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(frame.size.width);
-			
+			adSize = GADLargeAnchoredAdaptiveBannerAdSizeWithWidth(frame.size.width);
+
 			break;
 		}
 
