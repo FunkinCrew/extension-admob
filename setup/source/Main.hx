@@ -13,17 +13,17 @@ class Main
 		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
 		'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip',
 		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip',
-		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.8.0.5.0.zip'
+		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip'
 	];
 
 	@:noCompletion
 	private static final UNITY_URL:String = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.5/UnityAds.zip';
 
 	@:noCompletion
-	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/630e33e3a473272bc2a8272339bed350.zip';
+	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip';
 
 	@:noCompletion
-	private static final PANGLE_DIR:String = 'oversea_union_platform_iOS_7.8.0.5';
+	private static final PANGLE_DIR:String = 'oversea_union_platform_iOS_7.9.0.6';
 
 	@:noCompletion
 	private static final BUNDLES_DIR:String = 'project/admob-ios/bundles';
