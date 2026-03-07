@@ -20,6 +20,25 @@ class Main
 	@:noCompletion
 	private static final TEMP_DIR:String = '.temp_sdks';
 
+	@:noCompletion
+	private static function buildFrameworksToDownload():Array<String>
+	{
+		var urls:Array<String> = [];
+
+		// Google Mobile Services (GMS) and User Messaging Platform (UMP)
+		urls.push('https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip');
+
+		// Unity Ads SDK and Mediation Adapter
+		urls.push('https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip');
+		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip');
+
+		// Pangle Ads SDK and Mediation Adapter
+		urls.push('https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip');
+		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip');
+
+		return urls;
+	}
+
 	public static function main():Void
 	{
 		final path:String = Sys.getCwd();
@@ -58,20 +77,7 @@ class Main
 
 		FileUtil.createDirectory(TEMP_DIR);
 
-		var urls:Array<String> = [];
-
-		// Google Mobile Services (GMS) and User Messaging Platform (UMP)
-		urls.push('https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip');
-
-		// Unity Ads SDK and Mediation Adapter
-		urls.push('https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip');
-		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip');
-
-		// Pangle Ads SDK and Mediation Adapter
-		urls.push('https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip');
-		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip');
-
-		for (url in urls)
+		for (url in buildFrameworksToDownload())
 		{
 			final filename:String = Path.withoutDirectory(url);
 
