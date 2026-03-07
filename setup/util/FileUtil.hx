@@ -22,9 +22,27 @@ class FileUtil
 
 		if (FileSystem.isDirectory(path))
 		{
-			// Delete all files and subdirectories in the directory
-			for (file in FileSystem.readDirectory(path))
-				deletePath(Path.join([path, file]));
+			var files:Array<String> = FileSystem.readDirectory(path);
+
+			if (files.length > 0)
+			{
+				if (Sys.systemName() == "Windows")
+				{
+					// Some archives extracted on Windows (especially ones created on macOS/Linux) may mark files as read-only.
+					// This prevents recursive deletion from working.
+					// Remove the read-only attribute from all files and directories before cleanup.
+					ProcessUtil.runCommand("attrib", [
+						"-R",
+						"/S",
+						"/D",
+						Path.join([FileSystem.absolutePath(path), "\\*"]).split('/').join('\\')
+					]);
+				}
+
+				// Delete all files and subdirectories in the directory
+				for (file in files)
+					deletePath(Path.join([path, file]));
+			}
 
 			FileSystem.deleteDirectory(path);
 		}

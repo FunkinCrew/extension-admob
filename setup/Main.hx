@@ -1,29 +1,16 @@
 package;
 
+import sys.FileSystem;
 import haxe.io.Path;
 import util.ANSIUtil;
 import util.FileUtil;
 import util.ProcessUtil;
 
+using StringTools;
+
 @:nullSafety
 class Main
 {
-	@:noCompletion
-	private static final ADMOB_URLS:Array<String> = [
-		'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip',
-		'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip',
-		'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip'
-	];
-
-	@:noCompletion
-	private static final UNITY_URL:String = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip';
-
-	@:noCompletion
-	private static final PANGLE_URL:String = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip';
-
-	@:noCompletion
-	private static final PANGLE_DIR:String = 'oversea_union_platform_iOS_7.9.0.6';
-
 	@:noCompletion
 	private static final BUNDLES_DIR:String = 'project/admob-ios/bundles';
 
@@ -36,11 +23,8 @@ class Main
 	public static function main():Void
 	{
 		final path:String = Sys.getCwd();
-
 		final args:Array<String> = Sys.args();
-
 		final last:Null<String> = args.pop();
-
 		final command:Null<String> = args.shift();
 
 		if (command != null)
@@ -49,8 +33,6 @@ class Main
 			{
 				case 'setup':
 					setupFrameworks();
-				case 'rebuild':
-					rebuildLib();
 				default:
 					Sys.println(ANSIUtil.apply('Unknown command "$command".', [Red]));
 					Sys.exit(1);
@@ -73,9 +55,23 @@ class Main
 		FileUtil.createDirectory(FRAMEWORKS_DIR);
 
 		FileUtil.deletePath(TEMP_DIR);
+
 		FileUtil.createDirectory(TEMP_DIR);
 
-		for (url in ADMOB_URLS.concat([UNITY_URL, PANGLE_URL]))
+		var urls:Array<String> = [];
+
+		// Google Mobile Services (GMS) and User Messaging Platform (UMP)
+		urls.push('https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip');
+
+		// Unity Ads SDK and Mediation Adapter
+		urls.push('https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip');
+		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip');
+
+		// Pangle Ads SDK and Mediation Adapter
+		urls.push('https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip');
+		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip');
+
+		for (url in urls)
 		{
 			final filename:String = Path.withoutDirectory(url);
 
@@ -124,9 +120,6 @@ class Main
 					Sys.println(ANSIUtil.apply('Successfully unzipped "$filename".', [Green]));
 
 					FileUtil.deletePath(Path.join([TEMP_DIR, filename]));
-
-					if (filename == Path.withoutDirectory(PANGLE_URL))
-						FileUtil.deletePath(Path.join([TEMP_DIR, PANGLE_DIR, 'InternationalDemo']));
 
 					Sys.println(ANSIUtil.apply('Removed "$filename" archive.', [Yellow]));
 				}
@@ -190,24 +183,6 @@ class Main
 		Sys.println(ANSIUtil.apply('Cleaning up...', [Yellow]));
 
 		FileUtil.deletePath(TEMP_DIR);
-	}
-
-	@:noCompletion
-	private static function rebuildLib():Void
-	{
-		final lastCwd:String = Sys.getCwd();
-
-		Sys.setCwd(Path.join([lastCwd, 'setup']));
-
-		final result:Int = ProcessUtil.runCommand('haxe', ['build.hxml']);
-
-		if (result != 0)
-		{
-			Sys.println(ANSIUtil.apply('Failed to rebuild.', [Red]));
-			Sys.exit(result);
-		}
-		else
-			Sys.println(ANSIUtil.apply('Successfully rebuilt "extension-admob" runner.', [Green]));
 	}
 
 	@:noCompletion

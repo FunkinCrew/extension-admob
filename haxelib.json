@@ -19,6 +19,8 @@
 		"android",
 		"ios"
 	],
+	"classPath": "setup",
+	"main": "Main",
 	"description": "A Haxe/Lime extension for integrating Google AdMob on iOS and Android.",
 	"version": "3.0.0",
 	"releasenote": "Updated to support Lime and lots of other cool features.",
