@@ -8,6 +8,7 @@
 #import <UnityAdapter/UnityAdapter.h>
 #import <PAGAdSDK/PAGSdk.h>
 #import <PangleAdapter/PangleAdapter.h>
+#import <VungleAdsSDK/VungleAdsSDK.h>
 
 static AdmobCallback admobCallback = nullptr;
 static GADBannerView *bannerView = nil;
@@ -382,6 +383,11 @@ void Admob_ConfigurePangle(bool gdprConsent, bool paConsent)
 {
     [GADMediationAdapterPangle setGDPRConsent:gdprConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
     [GADMediationAdapterPangle setPAConsent:paConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
+}
+
+void Admob_ConfigureVungle(bool ccpaConsent)
+{
+	[VunglePrivacySettings setCCPAStatus:ccpaConsent];
 }
 
 static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)

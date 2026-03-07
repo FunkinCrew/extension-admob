@@ -35,6 +35,10 @@ class Run
 		urls.push('https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip');
 		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip');
 
+		// Vungle Ads SDK and Mediation Adapter
+		urls.push('https://vungle2-cdn-prod.s3.us-east-1.amazonaws.com/sdks/ios/7.7.x/VungleAds-7.7.1.zip');
+		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/liftoffmonetize/LiftoffMonetizeAdapter-7.7.1.0.zip');
+
 		return urls;
 	}
 
