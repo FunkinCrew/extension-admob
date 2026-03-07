@@ -1,6 +1,5 @@
 package;
 
-import sys.FileSystem;
 import haxe.io.Path;
 import util.ANSIUtil;
 import util.FileUtil;
@@ -9,7 +8,7 @@ import util.ProcessUtil;
 using StringTools;
 
 @:nullSafety
-class Main
+class Run
 {
 	@:noCompletion
 	private static final BUNDLES_DIR:String = 'project/admob-ios/bundles';

@@ -51,7 +51,6 @@ class Main extends lime.app.Application
 
 			trace(event.toString());
 		});
-	}
 
 	public override function onWindowCreate():Void
 	{
