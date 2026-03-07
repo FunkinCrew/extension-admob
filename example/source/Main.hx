@@ -20,10 +20,9 @@ class Main extends lime.app.Application
 	private static final BANNER_ID:String = "/21775744923/example/fixed-size-banner";
 	#end
 
-	public function new():Void
+	public override function onWindowCreate():Void
 	{
-		super();
-
+		// Setup Event Listener
 		Admob.onEvent.add(function(event:AdmobEvent):Void
 		{
 			switch (event.name)
@@ -52,8 +51,6 @@ class Main extends lime.app.Application
 			trace(event.toString());
 		});
 
-	public override function onWindowCreate():Void
-	{
 		// Set Unity consent
 		Admob.configureUnity(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
