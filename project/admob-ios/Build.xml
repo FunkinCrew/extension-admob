@@ -21,6 +21,9 @@
 			<compilerflag value="-F${haxelib:extension-admob}/project/admob-ios/frameworks/arm64_x86_64-simulator" if="HXCPP_ARM64 || HXCPP_X86_64" />
 		</section>
 
+		<compilerflag value="-fmodules" />
+		<compilerflag value="-fcxx-modules" />
+
 		<file name="${haxelib:extension-admob}/project/admob-ios/src/admob.mm" />
 	</files>
 

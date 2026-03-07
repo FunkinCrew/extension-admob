@@ -21,6 +21,7 @@ import com.google.android.gms.ads.*;
 import com.google.android.ump.*;
 import com.unity3d.ads.metadata.MetaData;
 import com.google.ads.mediation.pangle.PangleMediationAdapter;
+import com.vungle.ads.VunglePrivacySettings;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
 import java.security.MessageDigest;
@@ -55,6 +56,11 @@ public class Admob extends Extension
 	{
 		PangleMediationAdapter.setGDPRConsent(gdprConsent ? PAGConstant.PAGGDPRConsentType.PAG_GDPR_CONSENT_TYPE_CONSENT : PAGConstant.PAGGDPRConsentType.PAG_GDPR_CONSENT_TYPE_NO_CONSENT);
 		PangleMediationAdapter.setPAConsent(paConsent ? PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_CONSENT : PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_NO_CONSENT);
+	}
+
+	public static void configureVungle(final boolean ccpaConsent)
+	{
+		VunglePrivacySettings.setCCPAStatus(ccpaConsent);
 	}
 
 	private static void initMobileAds(final boolean testingAds, final boolean childDirected, final boolean enableRDP)

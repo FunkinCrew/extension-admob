@@ -19,6 +19,13 @@ void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent);
 void Admob_ConfigurePangle(bool gdprConsent, bool paConsent);
 
 /**
+ * Configures `CCPA` consent metadata for `Liftoff Monetize` (previously Vungle) mediation.
+ * 
+ * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
+ */
+void Admob_ConfigureVungle(bool ccpaConsent);
+
+/**
  * Initializes the AdMob system with configuration flags and a callback.
  * 
  * @param testingAds Enables test ads if true.

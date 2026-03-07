@@ -23,6 +23,8 @@
 				<dependency path="project/admob-ios/frameworks/arm64/UnityAdapter.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/PAGAdSDK.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/PangleAdapter.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64/VungleAdsSDK.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64/LiftoffMonetizeAdapter.framework" />
 			</section>
 
 			<section if="simulator">
@@ -32,6 +34,8 @@
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAdapter.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/PAGAdSDK.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/PangleAdapter.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/VungleAdsSDK.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/LiftoffMonetizeAdapter.framework" />
 			</section>
 
 			<dependency path="project/admob-ios/bundles/PAGAdSDK.bundle" />
@@ -39,10 +43,16 @@
 			<dependency name="Accelerate.framework" />
 			<dependency name="AdSupport.framework" />
 			<dependency name="AppTrackingTransparency.framework" />
+			<dependency name="AudioToolbox.framework" />
+			<dependency name="AVFoundation.framework" />
+			<dependency name="CFNetwork.framework" />
+			<dependency name="CoreGraphics.framework" />
 			<dependency name="CoreMedia.framework" />
 			<dependency name="CoreTelephony.framework" />
 			<dependency name="JavaScriptCore.framework" />
+			<dependency name="MediaPlayer.framework" />
 			<dependency name="MobileCoreServices.framework" />
+			<dependency name="QuartzCore.framework" />
 			<dependency name="Security.framework" />
 			<dependency name="StoreKit.framework" />
 			<dependency name="SystemConfiguration.framework" />

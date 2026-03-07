@@ -68,6 +68,23 @@ class Admob
 	}
 
 	/**
+	 * Configures `CCPA` consent metadata for `Liftoff Monetize` (previously Vungle) mediation.
+	 * 
+	 * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
+	 */
+	public static function configureVungle(ccpaConsent:Bool):Void
+	{
+		#if android
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureVungle', '(Z)V');
+
+		if (jni != null)
+			jni(ccpaConsent);
+		#elseif ios
+		configureVungleAdmob(ccpaConsent);
+		#end
+	}
+
+	/**
 	 * Initializes the AdMob extension.
 	 * 
 	 * @param testingAds Whether to use testing ads.
@@ -679,6 +696,10 @@ class Admob
 	@:native('Admob_ConfigurePangle')
 	@:noCompletion
 	extern private static function configurePangleAdmob(gdprConsent:Bool, paConsent:Bool):Void;
+
+	@:native('Admob_ConfigureVungle')
+	@:noCompletion
+	extern private static function configureVungleAdmob(ccpaConsent:Bool):Void;
 
 	@:native('Admob_Init')
 	@:noCompletion
