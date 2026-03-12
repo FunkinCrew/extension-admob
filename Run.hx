@@ -1,11 +1,21 @@
 package;
 
+import sys.FileSystem;
 import haxe.io.Path;
 import util.ANSIUtil;
 import util.FileUtil;
 import util.ProcessUtil;
 
 using StringTools;
+
+class FrameworkSDK
+{
+	public var downloadLink:String = '';
+	public var needExtractDir:Bool = false;
+	public var directoriesToRemove:Array<String> = [];
+
+	public function new():Void {}
+}
 
 @:nullSafety
 class Run
@@ -20,26 +30,49 @@ class Run
 	private static final TEMP_DIR:String = '.temp_sdks';
 
 	@:noCompletion
-	private static function buildFrameworksToDownload():Array<String>
+	private static function buildFrameworks():Array<FrameworkSDK>
 	{
-		var urls:Array<String> = [];
+		final sdks:Array<FrameworkSDK> = [];
 
 		// Google Mobile Services (GMS) and User Messaging Platform (UMP)
-		urls.push('https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip');
+		final gms:FrameworkSDK = new FrameworkSDK();
+		gms.downloadLink = 'https://dl.google.com/googleadmobadssdk/googlemobileadssdkios.zip';
+		sdks.push(gms);
 
-		// Unity Ads SDK and Mediation Adapter
-		urls.push('https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip');
-		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip');
+		// Unity Ads SDK
+		final unityAds:FrameworkSDK = new FrameworkSDK();
+		unityAds.downloadLink = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip';
+		unityAds.needExtractDir = true;
+		sdks.push(unityAds);
 
-		// Pangle Ads SDK and Mediation Adapter
-		urls.push('https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip');
-		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip');
+		// Unity Mediation Adapter
+		final unityAdapter:FrameworkSDK = new FrameworkSDK();
+		unityAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip';
+		sdks.push(unityAdapter);
 
-		// Vungle Ads SDK and Mediation Adapter
-		urls.push('https://vungle2-cdn-prod.s3.us-east-1.amazonaws.com/sdks/ios/7.7.x/VungleAds-7.7.1.zip');
-		urls.push('https://dl.google.com/googleadmobadssdk/mediation/ios/liftoffmonetize/LiftoffMonetizeAdapter-7.7.1.0.zip');
+		// Pangle Ads SDK
+		final pangleAds:FrameworkSDK = new FrameworkSDK();
+		pangleAds.downloadLink = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip';
+		sdks.push(pangleAds);
 
-		return urls;
+		// Pangle Mediation Adapter
+		final pangleAdapter:FrameworkSDK = new FrameworkSDK();
+		pangleAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip';
+		sdks.push(pangleAdapter);
+
+		// Vungle Ads SDK
+		final vungleAds:FrameworkSDK = new FrameworkSDK();
+		vungleAds.downloadLink = 'https://vungle2-cdn-prod.s3.us-east-1.amazonaws.com/sdks/ios/7.7.x/VungleAds-7.7.1.zip';
+		vungleAds.needExtractDir = true;
+		vungleAds.directoriesToRemove = ['dynamic'];
+		sdks.push(vungleAds);
+
+		// Liftoff Monetize Adapter
+		final liftoffAdapter:FrameworkSDK = new FrameworkSDK();
+		liftoffAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/liftoffmonetize/LiftoffMonetizeAdapter-7.7.1.0.zip';
+		sdks.push(liftoffAdapter);
+
+		return sdks;
 	}
 
 	public static function main():Void
@@ -70,6 +103,12 @@ class Run
 	@:noCompletion
 	private static function setupFrameworks():Void
 	{
+		if (!ProcessUtil.commandExists('curl') || !ProcessUtil.commandExists('unzip'))
+		{
+			Sys.println(ANSIUtil.apply('Missing required tools: curl, unzip', [Red]));
+			Sys.exit(1);
+		}
+
 		FileUtil.deletePath(BUNDLES_DIR);
 		FileUtil.createDirectory(BUNDLES_DIR);
 
@@ -80,118 +119,98 @@ class Run
 
 		FileUtil.createDirectory(TEMP_DIR);
 
-		for (url in buildFrameworksToDownload())
+		for (framework in buildFrameworks())
 		{
-			final filename:String = Path.withoutDirectory(url);
-
-			if (ProcessUtil.commandExists('curl'))
-			{
-				Sys.println(ANSIUtil.apply('Downloading "$filename" from "$url"...', [Blue]));
-
-				final result:Int = ProcessUtil.runCommand('curl', ['-s', '-L', '-o', Path.join([TEMP_DIR, filename]), url]);
-
-				if (result != 0)
-				{
-					Sys.println(ANSIUtil.apply('Failed to download "$filename".', [Red]));
-
-					FileUtil.deletePath(TEMP_DIR);
-
-					Sys.exit(result);
-				}
-				else
-					Sys.println(ANSIUtil.apply('Successfully downloaded "$filename".', [Green]));
-			}
-			else
-			{
-				Sys.println(ANSIUtil.apply('Command not found "curl".', [Red]));
-
-				FileUtil.deletePath(TEMP_DIR);
-
-				Sys.exit(1);
-			}
-
-			if (ProcessUtil.commandExists('unzip'))
-			{
-				Sys.println(ANSIUtil.apply('Unzipping "$filename" to "$TEMP_DIR"...', [Blue]));
-
-				final result:Int = ProcessUtil.runCommand('unzip', ['-q', Path.join([TEMP_DIR, filename]), '-d', TEMP_DIR]);
-
-				if (result != 0)
-				{
-					Sys.println(ANSIUtil.apply('Failed to unzip "$filename".', [Red]));
-
-					FileUtil.deletePath(TEMP_DIR);
-
-					Sys.exit(result);
-				}
-				else
-				{
-					Sys.println(ANSIUtil.apply('Successfully unzipped "$filename".', [Green]));
-
-					FileUtil.deletePath(Path.join([TEMP_DIR, filename]));
-
-					Sys.println(ANSIUtil.apply('Removed "$filename" archive.', [Yellow]));
-				}
-			}
-			else
-			{
-				Sys.println(ANSIUtil.apply('Command not found "unzip".', [Red]));
-
-				FileUtil.deletePath(TEMP_DIR);
-
-				Sys.exit(1);
-			}
+			setupFramework(framework);
 		}
 
+		for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
 		{
-			function searchDirs(path:String, extension:String, matched:String->Void):Void
+			final path:String = Path.join([TEMP_DIR, dependency]);
+
+			if (sys.FileSystem.isDirectory(path))
 			{
-				for (file in sys.FileSystem.readDirectory(path))
-				{
-					final filePath:String = Path.join([path, file]);
-
-					if (sys.FileSystem.isDirectory(filePath))
-					{
-						if (Path.extension(filePath) == extension)
-						{
-							matched(filePath);
-						}
-						else
-						{
-							searchDirs(filePath, extension, matched);
-						}
-					}
-				}
-			}
-
-			for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
-			{
-				final path:String = Path.join([TEMP_DIR, dependency]);
-
-				if (sys.FileSystem.isDirectory(path) && Path.extension(path) == 'xcframework')
-					findFrameworks(path);
-				else if (sys.FileSystem.isDirectory(path))
-					searchDirs(path, 'xcframework', findFrameworks);
-				else if (!sys.FileSystem.isDirectory(path))
-					FileUtil.deletePath(path);
-			}
-
-			for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
-			{
-				final path:String = Path.join([TEMP_DIR, dependency]);
-
-				if (sys.FileSystem.isDirectory(path) && Path.extension(path) == 'bundle')
+				if (Path.extension(path) == 'bundle')
 					copyBundle(path);
-				else if (sys.FileSystem.isDirectory(path))
+				else if (Path.extension(path) == 'xcframework')
+					findFrameworks(path);
+				else
+				{
 					searchDirs(path, 'bundle', copyBundle);
-				else if (!sys.FileSystem.isDirectory(path))
-					FileUtil.deletePath(path);
+					searchDirs(path, 'xcframework', findFrameworks);
+				}
 			}
 		}
 
-		Sys.println(ANSIUtil.apply('Cleaning up...', [Yellow]));
+		Sys.println(ANSIUtil.apply('Removing temporary files...', [Yellow]));
 
 		FileUtil.deletePath(TEMP_DIR);
+	}
+
+	@:noCompletion
+	private static function setupFramework(framework:FrameworkSDK):Void
+	{
+		final filename:String = Path.withoutDirectory(framework.downloadLink);
+		final extractDirectory:String = framework.needExtractDir ? Path.join([TEMP_DIR, Path.withoutExtension(filename)]) : TEMP_DIR;
+
+		Sys.println(ANSIUtil.apply('Downloading $filename...', [Blue]));
+
+		final downloadResult:Int = ProcessUtil.runCommand('curl', ['-s', '-L', '-o', Path.join([TEMP_DIR, filename]), framework.downloadLink]);
+
+		if (downloadResult != 0)
+		{
+			Sys.println(ANSIUtil.apply('Download failed: $filename', [Red]));
+			FileUtil.deletePath(TEMP_DIR);
+			Sys.exit(downloadResult);
+		}
+
+		Sys.println(ANSIUtil.apply('Extracting $filename...', [Yellow]));
+
+		if (!FileSystem.exists(extractDirectory))
+			FileUtil.createDirectory(extractDirectory);
+
+		final unzipResult:Int = ProcessUtil.runCommand('unzip', ['-q', Path.join([TEMP_DIR, filename]), '-d', extractDirectory]);
+
+		if (unzipResult != 0)
+		{
+			Sys.println(ANSIUtil.apply('Extraction failed: $filename', [Red]));
+			FileUtil.deletePath(TEMP_DIR);
+			Sys.exit(unzipResult);
+		}
+
+		if (framework.directoriesToRemove != null)
+		{
+			for (directory in framework.directoriesToRemove)
+			{
+				final path:String = Path.join([extractDirectory, directory]);
+
+				if (FileSystem.isDirectory(path))
+					FileUtil.deletePath(path);
+			}
+		}
+
+		Sys.println(ANSIUtil.apply('Installed $filename', [Green]));
+	}
+
+	@:noCompletion
+	private static function searchDirs(path:String, extension:String, matched:String->Void):Void
+	{
+		for (file in sys.FileSystem.readDirectory(path))
+		{
+			final filePath:String = Path.join([path, file]);
+
+			if (sys.FileSystem.isDirectory(filePath))
+			{
+				if (Path.extension(filePath) == extension)
+				{
+					matched(filePath);
+				}
+				else
+				{
+					searchDirs(filePath, extension, matched);
+				}
+			}
+		}
 	}
 
 	@:noCompletion
@@ -208,19 +227,13 @@ class Run
 				if (frameworkDir != null)
 				{
 					final archName:String = extractArchName(archDir);
-
 					final destDir:String = Path.join([FRAMEWORKS_DIR, archName]);
 					final frameworkName:String = Path.withoutDirectory(frameworkDir);
-					final destPath:String = Path.join([destDir, frameworkName]);
 
-					Sys.println(ANSIUtil.apply('Copying "$frameworkName" to "$destDir"...', [Blue]));
+					FileUtil.copyDirectory(frameworkDir, Path.join([destDir, frameworkName]));
 
-					FileUtil.copyDirectory(frameworkDir, destPath);
-
-					Sys.println(ANSIUtil.apply('Successfully copied "$frameworkName" to "$destDir".', [Green]));
+					Sys.println(ANSIUtil.apply('Framework $frameworkName -> $archName', [Cyan]));
 				}
-				else
-					Sys.println(ANSIUtil.apply('No ".framework" file found in "$archDir".', [Blue]));
 			}
 		}
 	}
@@ -253,10 +266,29 @@ class Run
 	@:noCompletion
 	private static function copyBundle(filePath:String):Void
 	{
-		Sys.println(ANSIUtil.apply('Copying "${Path.withoutDirectory(filePath)}" to "$BUNDLES_DIR"...', [Blue]));
+		if (!isBundleInFramework(filePath))
+		{
+			final bundleName:String = Path.withoutDirectory(filePath);
 
-		FileUtil.copyDirectory(filePath, Path.join([BUNDLES_DIR, Path.withoutDirectory(filePath)]));
+			FileUtil.copyDirectory(filePath, Path.join([BUNDLES_DIR, bundleName]));
 
-		Sys.println(ANSIUtil.apply('Successfully copied "${Path.withoutDirectory(filePath)}" to "$BUNDLES_DIR".', [Green]));
+			Sys.println(ANSIUtil.apply('Bundle $bundleName -> bundles', [Magenta]));
+		}
+	}
+
+	@:noCompletion
+	private static function isBundleInFramework(filePath:String):Bool
+	{
+		var current:String = filePath;
+
+		while (current.length > 0)
+		{
+			if (Path.extension(current) == 'framework')
+				return true;
+
+			current = Path.directory(current);
+		}
+
+		return false;
 	}
 }
