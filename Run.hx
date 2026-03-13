@@ -124,23 +124,8 @@ class Run
 			setupFramework(framework);
 		}
 
-		for (dependency in sys.FileSystem.readDirectory(TEMP_DIR))
-		{
-			final path:String = Path.join([TEMP_DIR, dependency]);
-
-			if (sys.FileSystem.isDirectory(path))
-			{
-				if (Path.extension(path) == 'bundle')
-					copyBundle(path);
-				else if (Path.extension(path) == 'xcframework')
-					findFrameworks(path);
-				else
-				{
-					searchDirs(path, 'bundle', copyBundle);
-					searchDirs(path, 'xcframework', findFrameworks);
-				}
-			}
-		}
+		searchAndCopy(TEMP_DIR, 'xcframework', copyFrameworks);
+		searchAndCopy(TEMP_DIR, 'bundle', copyBundle);
 
 		Sys.println(ANSIUtil.apply('Removing temporary files...', [Yellow]));
 
@@ -193,6 +178,23 @@ class Run
 	}
 
 	@:noCompletion
+	private static function searchAndCopy(dir:String, extension:String, copyTo:String->Void):Void
+	{
+		for (name in sys.FileSystem.readDirectory(dir))
+		{
+			final path:String = Path.join([dir, name]);
+
+			if (sys.FileSystem.isDirectory(path))
+			{
+				if (Path.extension(path) == extension)
+					copyTo(path);
+				else
+					searchDirs(path, extension, copyTo);
+			}
+		}
+	}
+
+	@:noCompletion
 	private static function searchDirs(path:String, extension:String, matched:String->Void):Void
 	{
 		for (file in sys.FileSystem.readDirectory(path))
@@ -214,7 +216,7 @@ class Run
 	}
 
 	@:noCompletion
-	private static function findFrameworks(filePath:String):Void
+	private static function copyFrameworks(filePath:String):Void
 	{
 		for (archDir in sys.FileSystem.readDirectory(filePath))
 		{
