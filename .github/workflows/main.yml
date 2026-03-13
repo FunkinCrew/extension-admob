@@ -83,11 +83,11 @@ jobs:
         run: haxelib run lime rebuild macos -release && haxelib run lime rebuild ios -release
 
       - name: Build
-        run: cd example && haxelib run lime build ios -nosign -debug
+        run: cd example && haxelib run lime build ios -nosign -release
 
       - name: Create IPA
         run: |
-          cd example/export/ios/build/Debug-iphoneos
+          cd example/export/ios/build/Release-iphoneos
           mkdir Payload
           mv *.app Payload
           zip -r Sample.ipa Payload
@@ -96,5 +96,5 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: iOSBuild
-          path: example/export/ios/build/Debug-iphoneos/Sample.ipa
+          path: example/export/ios/build/Release-iphoneos/Sample.ipa
           if-no-files-found: warn
