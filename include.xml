@@ -19,23 +19,35 @@
 			<section unless="simulator">
 				<dependency path="project/admob-ios/frameworks/arm64/GoogleMobileAds.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/UserMessagingPlatform.framework" />
+
 				<dependency path="project/admob-ios/frameworks/arm64/UnityAds.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/UnityAdapter.framework" />
+
 				<dependency path="project/admob-ios/frameworks/arm64/PAGAdSDK.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/PangleAdapter.framework" />
+
 				<dependency path="project/admob-ios/frameworks/arm64/VungleAdsSDK.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64/LiftoffMonetizeAdapter.framework" />
+
+				<dependency path="project/admob-ios/frameworks/arm64/AppLovinSDK.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64/AppLovinAdapter.framework" />
 			</section>
 
 			<section if="simulator">
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/GoogleMobileAds.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UserMessagingPlatform.framework" />
+
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAds.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/UnityAdapter.framework" />
+
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/PAGAdSDK.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/PangleAdapter.framework" />
+
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/VungleAdsSDK.framework" />
 				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/LiftoffMonetizeAdapter.framework" />
+
+				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/AppLovinSDK.framework" />
+				<dependency path="project/admob-ios/frameworks/arm64_x86_64-simulator/AppLovinAdapter.framework" />
 			</section>
 
 			<dependency path="project/admob-ios/bundles/PAGAdSDK.bundle" />

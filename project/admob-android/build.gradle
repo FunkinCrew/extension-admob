@@ -31,4 +31,7 @@ dependencies
 
 	// Vungle Mediation Adapter
 	implementation("com.google.ads.mediation:vungle:7.7.0.1")
+
+	// AppLovin Mediation Adapter
+	implementation("com.google.ads.mediation:applovin:13.6.1.0")
 }

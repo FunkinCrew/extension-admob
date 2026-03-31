@@ -22,6 +22,7 @@ import com.google.android.ump.*;
 import com.unity3d.ads.metadata.MetaData;
 import com.google.ads.mediation.pangle.PangleMediationAdapter;
 import com.vungle.ads.VunglePrivacySettings;
+import com.applovin.sdk.AppLovinPrivacySettings;
 import org.haxe.extension.Extension;
 import org.haxe.lime.HaxeObject;
 import java.security.MessageDigest;
@@ -104,6 +105,12 @@ public class Admob extends Extension
 		VunglePrivacySettings.setCCPAStatus(ccpaConsent);
 	}
 
+	private static void configureAppLovin(final boolean hasUserConsent, final boolean doNotSell)
+	{
+		AppLovinPrivacySettings.setHasUserConsent(hasUserConsent);
+		AppLovinPrivacySettings.setDoNotSell(doNotSell);
+	}
+
 	private static void initMobileAds(final boolean testingAds, final boolean childDirected, final boolean enableRDP)
 	{
 		RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
@@ -151,6 +158,7 @@ public class Admob extends Extension
 		configureUnity(gdprConsent, ccpaConsent);
 		configurePangle(paConsent);
 		configureVungle(ccpaConsent);
+		configureAppLovin(gdprConsent, ccpaConsent);
 
 		MobileAds.initialize(mainContext, new OnInitializationCompleteListener()
 		{

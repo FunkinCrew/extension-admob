@@ -72,6 +72,16 @@ class Run
 		liftoffAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/liftoffmonetize/LiftoffMonetizeAdapter-7.7.1.0.zip';
 		sdks.push(liftoffAdapter);
 
+		// AppLovin MAX SDK
+		final applovinAds:FrameworkSDK = new FrameworkSDK();
+		applovinAds.downloadLink = 'https://artifacts.applovin.com/ios/com/applovin/applovin-sdk/applovin-ios-sdk-13.6.2.zip';
+		sdks.push(applovinAds);
+
+		// AppLovin MAX Adapter
+		final applovinAdapter:FrameworkSDK = new FrameworkSDK();
+		applovinAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/applovin/AppLovinAdapter-13.6.1.0.zip';
+		sdks.push(applovinAdapter);
+
 		return sdks;
 	}
 
