@@ -9,6 +9,9 @@
 #import <PAGAdSDK/PAGSdk.h>
 #import <PangleAdapter/PangleAdapter.h>
 #import <VungleAdsSDK/VungleAdsSDK.h>
+#import <LiftoffMonetizeAdapter/VungleAdapter.h>
+#import <AppLovinSDK/AppLovinSDK.h>
+#import <AppLovinAdapter/AppLovinAdapter.h>
 
 static AdmobCallback admobCallback = nullptr;
 static GADBannerView *bannerView = nil;
@@ -431,6 +434,12 @@ static void configureVungle(bool ccpaConsent)
 	[VunglePrivacySettings setCCPAStatus:ccpaConsent ? @YES : @NO];
 }
 
+static void configureAppLovin(bool hasUserConsent, bool doNotSell)
+{
+    [ALPrivacySettings setHasUserConsent:hasUserConsent];
+    [ALPrivacySettings setDoNotSell:doNotSell];
+}
+
 static void initAdmob()
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
@@ -441,6 +450,7 @@ static void initAdmob()
 		configureUnity(gdprConsent, ccpaConsent);
 		configurePangle(paConsent);
 		configureVungle(ccpaConsent);
+		configureAppLovin(gdprConsent, ccpaConsent);
 
 		[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
 		{
