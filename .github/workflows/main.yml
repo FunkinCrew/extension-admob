@@ -23,7 +23,7 @@ jobs:
 
       - name: Install Haxe Libraries
         run: |
-          haxelib git lime https://github.com/FunkinCrew/lime.git mobile/main --quiet --never --skip-dependencies
+          haxelib git lime https://github.com/FunkinCrew/lime.git --quiet --never --skip-dependencies
           haxelib dev extension-admob .
 
       - name: Setup hxcpp Library
@@ -67,7 +67,7 @@ jobs:
 
       - name: Install Haxe Libraries
         run: |
-          haxelib git lime https://github.com/FunkinCrew/lime.git mobile/main --quiet --never --skip-dependencies
+          haxelib git lime https://github.com/FunkinCrew/lime.git --quiet --never --skip-dependencies
           haxelib dev extension-admob .
 
       - name: Setup hxcpp Library
