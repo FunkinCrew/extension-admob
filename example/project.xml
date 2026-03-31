@@ -18,10 +18,4 @@
 	<haxelib name="extension-admob" />
 
 	<haxeflag name="-dce" value="full" />
-
-	<config:android gradle-version="8.9" />
-	<config:android gradle-plugin="8.7.3" />
-
-	<config:android minimum-sdk-version="23" />
-	<config:android target-sdk-version="34" />
 </project>
