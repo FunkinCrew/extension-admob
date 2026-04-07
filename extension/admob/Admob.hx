@@ -52,18 +52,17 @@ class Admob
 	/**
 	 * Configures `GDPR` and `PA` (similar to CCPA) consent metadata for `Pangle` mediation.
 	 * 
-	 * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
 	 * @param paConsent The user's PA consent status (true for consent, false for no consent).
 	 */
-	public static function configurePangle(gdprConsent:Bool, paConsent:Bool):Void
+	public static function configurePangle(paConsent:Bool):Void
 	{
 		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configurePangle', '(ZZ)V');
+		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configurePangle', '(Z)V');
 
 		if (jni != null)
-			jni(gdprConsent, paConsent);
+			jni(paConsent);
 		#elseif ios
-		configurePangleAdmob(gdprConsent, paConsent);
+		configurePangleAdmob(paConsent);
 		#end
 	}
 
@@ -695,7 +694,7 @@ class Admob
 
 	@:native('Admob_ConfigurePangle')
 	@:noCompletion
-	extern private static function configurePangleAdmob(gdprConsent:Bool, paConsent:Bool):Void;
+	extern private static function configurePangleAdmob(paConsent:Bool):Void;
 
 	@:native('Admob_ConfigureVungle')
 	@:noCompletion

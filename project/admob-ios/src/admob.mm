@@ -379,9 +379,8 @@ void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent)
 	[ccpaMetaData commit];
 }
 
-void Admob_ConfigurePangle(bool gdprConsent, bool paConsent)
+void Admob_ConfigurePangle(bool paConsent)
 {
-    [GADMediationAdapterPangle setGDPRConsent:gdprConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
     [GADMediationAdapterPangle setPAConsent:paConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
 }
 
@@ -395,10 +394,7 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 	dispatch_async(dispatch_get_main_queue(), ^{
 		if (testingAds)
 		{
-			GADMediationAdapterUnity.testMode = @YES;
-
-			NSString *UDIDString = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-			const char *cStr = [UDIDString UTF8String];
+			const char *cStr = [[[[UIDevice currentDevice] identifierForVendor] UUIDString] UTF8String];
 			unsigned char digest[16];
 			CC_MD5(cStr, strlen(cStr), digest);
 

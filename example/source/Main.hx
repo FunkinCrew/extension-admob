@@ -55,7 +55,7 @@ class Main extends lime.app.Application
 		Admob.configureUnity(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
 		// Set Pangle consent
-		Admob.configurePangle(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
+		Admob.configurePangle(StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
 		// Set Vungle consent
 		Admob.configureVungle(StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));

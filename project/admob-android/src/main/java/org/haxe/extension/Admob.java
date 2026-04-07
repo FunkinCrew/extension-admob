@@ -52,9 +52,8 @@ public class Admob extends Extension
 		ccpaMetaData.commit();
 	}
 
-	public static void configurePangle(final boolean gdprConsent, final boolean paConsent)
+	public static void configurePangle(final boolean paConsent)
 	{
-		PangleMediationAdapter.setGDPRConsent(gdprConsent ? PAGConstant.PAGGDPRConsentType.PAG_GDPR_CONSENT_TYPE_CONSENT : PAGConstant.PAGGDPRConsentType.PAG_GDPR_CONSENT_TYPE_NO_CONSENT);
 		PangleMediationAdapter.setPAConsent(paConsent ? PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_CONSENT : PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_NO_CONSENT);
 	}
 
