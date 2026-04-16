@@ -32,58 +32,6 @@ class Admob
 	#end
 
 	/**
-	 * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
-	 * 
-	 * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
-	 * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
-	 */
-	public static function configureUnity(gdprConsent:Bool, ccpaConsent:Bool):Void
-	{
-		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureUnity', '(ZZ)V');
-
-		if (jni != null)
-			jni(gdprConsent, ccpaConsent);
-		#elseif ios
-		configureUnityAdmob(gdprConsent, ccpaConsent);
-		#end
-	}
-
-	/**
-	 * Configures `GDPR` and `PA` (similar to CCPA) consent metadata for `Pangle` mediation.
-	 * 
-	 * @param paConsent The user's PA consent status (true for consent, false for no consent).
-	 */
-	public static function configurePangle(paConsent:Bool):Void
-	{
-		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configurePangle', '(Z)V');
-
-		if (jni != null)
-			jni(paConsent);
-		#elseif ios
-		configurePangleAdmob(paConsent);
-		#end
-	}
-
-	/**
-	 * Configures `CCPA` consent metadata for `Liftoff Monetize` (previously Vungle) mediation.
-	 * 
-	 * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
-	 */
-	public static function configureVungle(ccpaConsent:Bool):Void
-	{
-		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'configureVungle', '(Z)V');
-
-		if (jni != null)
-			jni(ccpaConsent);
-		#elseif ios
-		configureVungleAdmob(ccpaConsent);
-		#end
-	}
-
-	/**
 	 * Initializes the AdMob extension.
 	 * 
 	 * @param testingAds Whether to use testing ads.
@@ -555,77 +503,6 @@ class Admob
 	}
 
 	/**
-	 * Retrieves the user's consent status for a specific IAB Transparency and Consent Framework (TCF) purpose.
-	 *
-	 * @param purpose The index of the purpose (0-based, as per the TCF specification).
-	 * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
-	 */
-	public static function getTCFConsentForPurpose(purpose:Int = 0):Int
-	{
-		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFConsentForPurpose', '(I)I');
-
-		return jni != null ? jni(purpose) : -1;
-		#elseif ios
-		return getTCFConsentForPurposeAdmob(purpose);
-		#end
-	}
-
-	/**
-	 * Retrieves the IAB Transparency and Consent Framework (TCF) PurposeConsents string.
-	 *
-	 * @return A string representing the TCF PurposeConsents, or an empty string if unavailable.
-	 */
-	public static function getTCFPurposeConsent():String
-	{
-		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getTCFPurposeConsent', '()Ljava/lang/String;');
-
-		return jni != null ? jni() : '';
-		#elseif ios
-		final cString:cpp.CastCharStar = getTCFPurposeConsentAdmob();
-
-		if (cString != null)
-		{
-			final haxeString:String = new String(untyped cString);
-
-			cpp.Stdlib.nativeFree(untyped cString);
-
-			return haxeString;
-		}
-
-		return '';
-		#end
-	}
-
-	/**
-	 * Retrieves the IAB US Privacy String.
-	 *
-	 * @return A string representing the IAB US Privacy string, or an empty string if unavailable.
-	 */
-	public static function getUSPrivacy():String
-	{
-		#if android
-		final jni:Null<Dynamic> = createJNIStaticMethod('org/haxe/extension/Admob', 'getUSPrivacy', '()Ljava/lang/String;');
-
-		return jni != null ? jni() : '';
-		#elseif ios
-		final cString:cpp.CastCharStar = getUSPrivacyAdmob();
-
-		if (cString != null)
-		{
-			final haxeString:String = new String(untyped cString);
-
-			cpp.Stdlib.nativeFree(untyped cString);
-
-			return haxeString;
-		}
-
-		return '';
-		#end
-	}
-
-	/**
 	 * Checks if privacy options are required.
 	 *
 	 * @return `true` if required, `false` otherwise.
@@ -688,18 +565,6 @@ class Admob
 		return staticMethodsCache.get(key);
 	}
 	#elseif ios
-	@:native('Admob_ConfigureUnity')
-	@:noCompletion
-	extern private static function configureUnityAdmob(gdprConsent:Bool, ccpaConsent:Bool):Void;
-
-	@:native('Admob_ConfigurePangle')
-	@:noCompletion
-	extern private static function configurePangleAdmob(paConsent:Bool):Void;
-
-	@:native('Admob_ConfigureVungle')
-	@:noCompletion
-	extern private static function configureVungleAdmob(ccpaConsent:Bool):Void;
-
 	@:native('Admob_Init')
 	@:noCompletion
 	extern private static function initAdmob(testingAds:Bool, childDirected:Bool, enableRDP:Bool,
@@ -740,18 +605,6 @@ class Admob
 	@:native('Admob_SetVolume')
 	@:noCompletion
 	extern private static function setVolumeAdmob(volume:Single):Void;
-
-	@:native('Admob_GetTCFConsentForPurpose')
-	@:noCompletion
-	extern private static function getTCFConsentForPurposeAdmob(purpose:Int):Int;
-
-	@:native('Admob_GetTCFPurposeConsent')
-	@:noCompletion
-	extern private static function getTCFPurposeConsentAdmob():cpp.CastCharStar;
-
-	@:native('Admob_GetUSPrivacy')
-	@:noCompletion
-	extern private static function getUSPrivacyAdmob():cpp.CastCharStar;
 
 	@:native('Admob_IsPrivacyOptionsRequired')
 	@:noCompletion

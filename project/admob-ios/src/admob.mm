@@ -368,7 +368,49 @@ static InterstitialDelegate *interstitialDelegate = nil;
 static RewardedDelegate *rewardedDelegate = nil;
 static AppOpenAdDelegate *appOpenDelegate = nil;
 
-void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent)
+static bool getGDPRConsent()
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    NSString *tcString = [prefs stringForKey:@"IABTCF_TCString"];
+    NSString *purposeConsents = [prefs stringForKey:@"IABTCF_PurposeConsents"];
+
+    // TCF exists + Purpose 1 consent required
+    return tcString.length > 0 && (purposeConsents.length > 0 && [purposeConsents characterAtIndex:0] == '1');
+}
+
+static bool getCCPAConsent()
+{
+    NSString *usPrivacy = [NSUserDefaults.standardUserDefaults stringForKey:@"IABUSPrivacy_String"];
+
+    // No signal = no opt-out
+    if (usPrivacy.length < 3)
+        return true;
+
+    // 'Y' = opted out of sale
+    return [usPrivacy characterAtIndex:2] != 'Y';
+}
+
+static bool getPAConsent()
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+
+    NSString *tcString = [prefs stringForKey:@"IABTCF_TCString"];
+    NSString *usPrivacy = [prefs stringForKey:@"IABUSPrivacy_String"];
+
+    // GDPR takes priority if TCF exists
+    if (tcString.length > 0)
+        return getGDPRConsent();
+
+    // Otherwise CCPA if available
+    if (usPrivacy.length > 0)
+        return getCCPAConsent();
+
+    // Default allow (no signal)
+    return true;
+}
+
+static void configureUnity(bool gdprConsent, bool ccpaConsent)
 {
 	UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
 	[gdprMetaData set:@"gdpr.consent" value:gdprConsent ? @YES : @NO];
@@ -379,14 +421,43 @@ void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent)
 	[ccpaMetaData commit];
 }
 
-void Admob_ConfigurePangle(bool paConsent)
+static void configurePangle(bool paConsent)
 {
     [GADMediationAdapterPangle setPAConsent:paConsent ? PAGPAConsentTypeConsent : PAGPAConsentTypeNoConsent];
 }
 
-void Admob_ConfigureVungle(bool ccpaConsent)
+static void configureVungle(bool ccpaConsent)
 {
-	[VunglePrivacySettings setCCPAStatus:ccpaConsent];
+	[VunglePrivacySettings setCCPAStatus:ccpaConsent ? @YES : @NO];
+}
+
+static void initAdmob()
+{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		bool gdprConsent = getGDPRConsent();
+		bool ccpaConsent = getCCPAConsent();
+		bool paConsent = getPAConsent();
+
+		configureUnity(gdprConsent, ccpaConsent);
+		configurePangle(paConsent);
+		configureVungle(ccpaConsent);
+
+		[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
+		{
+			GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
+
+			if (admobCallback)
+			{
+				char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
+
+				dispatch_async(dispatch_get_main_queue(), ^{
+					admobCallback("INIT_OK", value);
+
+					free(value);
+				});
+			}
+		}];
+	});
 }
 
 static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
@@ -434,61 +505,17 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 						break;
 					}
 
-					dispatch_async(dispatch_get_main_queue(), ^{
-						[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
-						{
-							GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
-
-							if (admobCallback)
-							{
-								char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
-
-								dispatch_async(dispatch_get_main_queue(), ^{
-									admobCallback("INIT_OK", value);
-
-									free(value);
-								});
-							}
-						}];
-					});
+					initAdmob();
 				}];
 			}
 			else
 			{
-				[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
-				{
-					GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
-
-					if (admobCallback)
-					{
-						char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
-
-						dispatch_async(dispatch_get_main_queue(), ^{
-							admobCallback("INIT_OK", value);
-
-							free(value);
-						});
-					}
-				}];
+				initAdmob();
 			}
 		}
 		else
 		{
-			[[GADMobileAds sharedInstance] startWithCompletionHandler:^(GADInitializationStatus *status)
-			{
-				GADMobileAds.sharedInstance.audioVideoManager.audioSessionIsApplicationManaged = YES;
-
-				if (admobCallback)
-				{
-					char *value = strdup([[NSString stringWithFormat:@"%zd.%zd.%zd", GADMobileAds.sharedInstance.versionNumber.majorVersion, GADMobileAds.sharedInstance.versionNumber.minorVersion, GADMobileAds.sharedInstance.versionNumber.patchVersion] UTF8String]);
-
-					dispatch_async(dispatch_get_main_queue(), ^{
-						admobCallback("INIT_OK", value);
-
-						free(value);
-					});
-				}
-			}];
+			initAdmob();
 		}
 	});
 }
@@ -770,39 +797,6 @@ void Admob_SetVolume(float vol)
 	}
 	else
 		GADMobileAds.sharedInstance.applicationMuted = true;
-}
-
-int Admob_GetTCFConsentForPurpose(int purpose)
-{
-	NSString *purposeConsents = [NSUserDefaults.standardUserDefaults stringForKey:@"IABTCF_PurposeConsents"];
-
-	if (purposeConsents == nil || purposeConsents.length == 0)
-		return -1;
-
-	if (purpose >= purposeConsents.length)
-		return -1;
-
-	return [[purposeConsents substringWithRange:NSMakeRange(purpose, 1)] integerValue];
-}
-
-char* Admob_GetTCFPurposeConsent(void)
-{
-	NSString *purposeConsents = [NSUserDefaults.standardUserDefaults stringForKey:@"IABTCF_PurposeConsents"];
-
-	if (purposeConsents.length > 0)
-		return strdup([purposeConsents UTF8String]);
-
-	return nullptr;
-}
-
-char* Admob_GetUSPrivacy(void)
-{
-	NSString *usPrivacyString = [NSUserDefaults.standardUserDefaults stringForKey:@"IABUSPrivacy_String"];
-
-	if (usPrivacyString.length > 0)
-		return strdup([usPrivacyString UTF8String]);
-
-	return nullptr;
 }
 
 bool Admob_IsPrivacyOptionsRequired()

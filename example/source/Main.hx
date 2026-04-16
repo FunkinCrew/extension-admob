@@ -30,8 +30,6 @@ class Main extends lime.app.Application
 				case AdmobEvent.INIT_OK:
 					trace("Admob initialized successfully.");
 					trace(" - Privacy options required: " + Admob.isPrivacyOptionsRequired());
-					trace(" - TCF purpose consent: " + Admob.getTCFPurposeConsent());
-					trace(" - US privacy: " + Admob.getUSPrivacy());
 
 					Admob.loadAppOpen(APP_OPEN_ID);
 				case AdmobEvent.APP_OPEN_LOADED:
@@ -50,15 +48,6 @@ class Main extends lime.app.Application
 
 			trace(event.toString());
 		});
-
-		// Set Unity consent
-		Admob.configureUnity(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
-
-		// Set Pangle consent
-		Admob.configurePangle(StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
-
-		// Set Vungle consent
-		Admob.configureVungle(StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
 		// Init AdMob
 		Admob.init(true);

@@ -41,7 +41,49 @@ public class Admob extends Extension
 	private static ConsentInformation consentInformation;
 	private static HaxeObject haxeObject;
 
-	public static void configureUnity(final boolean gdprConsent, final boolean ccpaConsent)
+	private static boolean getGDPRConsent()
+	{
+		SharedPreferences prefs = mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE);
+
+		String tcString = prefs.getString("IABTCF_TCString", "");
+		String purposeConsents = prefs.getString("IABTCF_PurposeConsents", "");
+
+		// TCF exists + Purpose 1 consent required
+		return !tcString.isEmpty() && (!purposeConsents.isEmpty() && purposeConsents.charAt(0) == '1');
+	}
+
+	private static boolean getCCPAConsent()
+	{
+		String usPrivacy = mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "");
+
+		// No signal = no opt-out
+		if (usPrivacy.length() < 3)
+			return true;
+
+		// 'Y' = opted out of sale
+		return usPrivacy.charAt(2) != 'Y';
+	}
+
+	private static boolean getPAConsent()
+	{
+		SharedPreferences prefs = mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE);
+
+		String tcString = prefs.getString("IABTCF_TCString", "");
+		String usPrivacy = prefs.getString("IABUSPrivacy_String", "");
+
+		// GDPR takes priority if TCF exists
+		if (!tcString.isEmpty())
+			return getGDPRConsent();
+
+		// Otherwise CCPA if available
+		if (!usPrivacy.isEmpty())
+			return getCCPAConsent();
+
+		// Default allow (no signal)
+		return true;
+	}
+
+	private static void configureUnity(final boolean gdprConsent, final boolean ccpaConsent)
 	{
 		MetaData gdprMetaData = new MetaData(mainActivity);
 		gdprMetaData.set("gdpr.consent", gdprConsent);
@@ -52,12 +94,12 @@ public class Admob extends Extension
 		ccpaMetaData.commit();
 	}
 
-	public static void configurePangle(final boolean paConsent)
+	private static void configurePangle(final boolean paConsent)
 	{
 		PangleMediationAdapter.setPAConsent(paConsent ? PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_CONSENT : PAGConstant.PAGPAConsentType.PAG_PA_CONSENT_TYPE_NO_CONSENT);
 	}
 
-	public static void configureVungle(final boolean ccpaConsent)
+	private static void configureVungle(final boolean ccpaConsent)
 	{
 		VunglePrivacySettings.setCCPAStatus(ccpaConsent);
 	}
@@ -101,6 +143,14 @@ public class Admob extends Extension
 		}
 
 		MobileAds.setRequestConfiguration(configuration.build());
+
+		boolean gdprConsent = getGDPRConsent();
+		boolean ccpaConsent = getCCPAConsent();
+		boolean paConsent = getPAConsent();
+
+		configureUnity(gdprConsent, ccpaConsent);
+		configurePangle(paConsent);
+		configureVungle(ccpaConsent);
 
 		MobileAds.initialize(mainContext, new OnInitializationCompleteListener()
 		{
@@ -898,26 +948,6 @@ public class Admob extends Extension
 		}
 		else
 			MobileAds.setAppMuted(true);
-	}
-
-	public static int getTCFConsentForPurpose(int purpose)
-	{
-		String purposeConsents = getTCFPurposeConsent();
-
-		if (purposeConsents.length() > purpose)
-			return Character.getNumericValue(purposeConsents.charAt(purpose));
-
-		return -1;
-	}
-
-	public static String getTCFPurposeConsent()
-	{
-		return mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABTCF_PurposeConsents", "");
-	}
-
-	public static String getUSPrivacy()
-	{
-		return mainContext.getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE).getString("IABUSPrivacy_String", "");
 	}
 
 	public static boolean isPrivacyOptionsRequired()

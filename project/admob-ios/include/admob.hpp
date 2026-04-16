@@ -3,28 +3,6 @@
 typedef void (*AdmobCallback)(const char* event, const char* value);
 
 /**
- * Configures `GDPR` and `CCPA` consent metadata for `Unity Ads` mediation.
- * 
- * @param gdprConsent The user's GDPR consent status (true for consent, false for no consent).
- * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
- */
-void Admob_ConfigureUnity(bool gdprConsent, bool ccpaConsent);
-
-/**
- * Configures `GDPR` and `PA` consent metadata for `Pangle` mediation.
- * 
- * @param paConsent The user's PA consent status (true for consent, false for no consent).
- */
-void Admob_ConfigurePangle(bool paConsent);
-
-/**
- * Configures `CCPA` consent metadata for `Liftoff Monetize` (previously Vungle) mediation.
- * 
- * @param ccpaConsent The user's CCPA consent status (true for consent, false for no consent).
- */
-void Admob_ConfigureVungle(bool ccpaConsent);
-
-/**
  * Initializes the AdMob system with configuration flags and a callback.
  * 
  * @param testingAds Enables test ads if true.
@@ -90,28 +68,6 @@ void Admob_ShowAppOpen(void);
  * @param volume A value between 0.0 (muted) and 1.0 (full volume).
  */
 void Admob_SetVolume(float volume);
-
-/**
- * Retrieves the user's consent status for a specific IAB Transparency and Consent Framework (TCF) purpose.
- *
- * @param purpose The index of the purpose (0-based, as per TCF spec).
- * @return `1` if consent is granted, `0` if denied, `-1` if unknown or out of range.
- */
-int Admob_GetTCFConsentForPurpose(int purpose);
-
-/**
- * Retrieves the IAB Transparency and Consent Framework (TCF) PurposeConsents string.
- *
- * @return A dynamically allocated string representing the TCF PurposeConsents (or an empty string if unavailable).
- */
-char* Admob_GetTCFPurposeConsent(void);
-
-/**
- * Retrieves the IAB US Privacy String.
- *
- * @return A dynamically allocated string representing the IAB US Privacy string (or an empty string if unavailable).
- */
-char* Admob_GetUSPrivacy(void);
 
 /**
  * Checks if privacy options are required to be shown to the user.
