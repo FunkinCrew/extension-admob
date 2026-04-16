@@ -414,9 +414,7 @@ static void initMobileAds(bool testingAds, bool childDirected, bool enableRDP)
 
 		if (@available(iOS 14.0, *))
 		{
-			int purpose = Admob_GetTCFConsentForPurpose(0);
-
-			if (purpose == 1 || purpose == -1)
+			if (ATTrackingManager.trackingAuthorizationStatus == ATTrackingManagerAuthorizationStatusNotDetermined)
 			{
 				[ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status)
 				{
