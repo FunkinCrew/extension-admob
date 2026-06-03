@@ -82,6 +82,16 @@ class Run
 		applovinAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/applovin/AppLovinAdapter-13.6.1.0.zip';
 		sdks.push(applovinAdapter);
 
+		// InMobi SDK
+		final inmobiAds:FrameworkSDK = new FrameworkSDK();
+		inmobiAds.downloadLink = 'https://dl.inmobi.com/inmobi-sdk/IM/InMobi-iOS-SDK-11.3.0.zip';
+		sdks.push(inmobiAds);
+
+		// InMobi Adapter
+		final inmobiAdapter:FrameworkSDK = new FrameworkSDK();
+		inmobiAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/inmobi/InMobiAdapter-11.3.0.0.zip';
+		sdks.push(inmobiAdapter);
+
 		return sdks;
 	}
 

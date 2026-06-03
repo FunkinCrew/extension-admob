@@ -39,4 +39,7 @@ dependencies
 
 	// AppLovin Mediation Adapter
 	implementation("com.google.ads.mediation:applovin:13.6.1.0")
+
+	// InMobi Mediation Adapter
+	implementation("com.google.ads.mediation:inmobi:11.3.0.0")
 }
