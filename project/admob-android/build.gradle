@@ -35,5 +35,5 @@ dependencies
 	implementation('com.google.ads.mediation:pangle:8.1.0.5.0')
 
 	// Vungle Mediation Adapter
-	implementation("com.google.ads.mediation:vungle:7.7.0.1")
+	implementation('com.google.ads.mediation:vungle:7.7.4.2')
 }

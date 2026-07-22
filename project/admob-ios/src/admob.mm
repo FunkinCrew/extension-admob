@@ -423,7 +423,7 @@ static void configurePangle(bool paConsent)
 
 static void configureVungle(bool ccpaConsent)
 {
-	[VunglePrivacySettings setCCPAStatus:ccpaConsent ? @YES : @NO];
+	[VunglePrivacySettings setCCPAStatus:ccpaConsent];
 }
 
 static void initAdmob()

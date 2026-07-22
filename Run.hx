@@ -62,14 +62,14 @@ class Run
 
 		// Vungle Ads SDK
 		final vungleAds:FrameworkSDK = new FrameworkSDK();
-		vungleAds.downloadLink = 'https://vungle2-cdn-prod.s3.us-east-1.amazonaws.com/sdks/ios/7.7.x/VungleAds-7.7.1.zip';
+		vungleAds.downloadLink = 'https://vungle2-cdn-prod.s3.us-east-1.amazonaws.com/sdks/ios/7.7.x/VungleAds-7.7.4.zip';
 		vungleAds.needExtractDir = true;
 		vungleAds.directoriesToRemove = ['dynamic'];
 		sdks.push(vungleAds);
 
 		// Liftoff Monetize Adapter
 		final liftoffAdapter:FrameworkSDK = new FrameworkSDK();
-		liftoffAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/liftoffmonetize/LiftoffMonetizeAdapter-7.7.1.0.zip';
+		liftoffAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/liftoffmonetize/LiftoffMonetizeAdapter-7.7.4.0.zip';
 		sdks.push(liftoffAdapter);
 
 		return sdks;
