@@ -659,8 +659,6 @@ void Admob_ShowBanner(const char *adUnitID, int size, int align)
 
 		bannerView.delegate = bannerDelegate;
 
-		[bannerView loadRequest:[GADRequest request]];
-
 		[keyWindow.rootViewController.view addSubview:bannerView];
 
 		switch (align)
@@ -720,6 +718,8 @@ void Admob_ShowBanner(const char *adUnitID, int size, int align)
 			]];
 			break;
 		}
+
+		[bannerView loadRequest:[GADRequest request]];
 	});
 }
 
