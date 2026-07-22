@@ -19,7 +19,7 @@ import com.google.android.gms.ads.preload.*;
 import com.google.android.gms.ads.rewarded.*;
 import com.google.android.gms.ads.*;
 import com.google.android.ump.*;
-import com.unity3d.ads.metadata.MetaData;
+import com.unity3d.ads.UnityAds;
 import com.google.ads.mediation.pangle.PangleMediationAdapter;
 import com.vungle.ads.VunglePrivacySettings;
 import org.haxe.extension.Extension;
@@ -85,13 +85,8 @@ public class Admob extends Extension
 
 	private static void configureUnity(final boolean gdprConsent, final boolean ccpaConsent)
 	{
-		MetaData gdprMetaData = new MetaData(mainActivity);
-		gdprMetaData.set("gdpr.consent", gdprConsent);
-		gdprMetaData.commit();
-
-		MetaData ccpaMetaData = new MetaData(mainActivity);
-		ccpaMetaData.set("privacy.consent", ccpaConsent);
-		ccpaMetaData.commit();
+		UnityAds.setUserConsent(gdprConsent);
+		UnityAds.setUserOptOut(!ccpaConsent);
 	}
 
 	private static void configurePangle(final boolean paConsent)

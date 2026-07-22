@@ -41,13 +41,13 @@ class Run
 
 		// Unity Ads SDK
 		final unityAds:FrameworkSDK = new FrameworkSDK();
-		unityAds.downloadLink = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.16.6/UnityAds.zip';
+		unityAds.downloadLink = 'https://github.com/Unity-Technologies/unity-ads-ios/releases/download/4.19.0/UnityAds.zip';
 		unityAds.needExtractDir = true;
 		sdks.push(unityAds);
 
 		// Unity Mediation Adapter
 		final unityAdapter:FrameworkSDK = new FrameworkSDK();
-		unityAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.16.6.1.zip';
+		unityAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/unity/UnityAdapter-4.19.0.0.zip';
 		sdks.push(unityAdapter);
 
 		// Pangle Ads SDK

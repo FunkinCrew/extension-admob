@@ -412,13 +412,8 @@ static bool getPAConsent()
 
 static void configureUnity(bool gdprConsent, bool ccpaConsent)
 {
-	UADSMetaData *gdprMetaData = [[UADSMetaData alloc] init];
-	[gdprMetaData set:@"gdpr.consent" value:gdprConsent ? @YES : @NO];
-	[gdprMetaData commit];
-
-	UADSMetaData *ccpaMetaData = [[UADSMetaData alloc] init];
-	[ccpaMetaData set:@"privacy.consent" value:ccpaConsent ? @YES : @NO];
-	[ccpaMetaData commit];
+	[UnityAds setUserConsent:gdprConsent];
+	[UnityAds setUserOptOut:!ccpaConsent];
 }
 
 static void configurePangle(bool paConsent)
