@@ -52,12 +52,12 @@ class Run
 
 		// Pangle Ads SDK
 		final pangleAds:FrameworkSDK = new FrameworkSDK();
-		pangleAds.downloadLink = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/b84740e56ae03200c75e8f975378818d.zip';
+		pangleAds.downloadLink = 'https://lf16-pangle.ibytedtos.com/obj/union-pangle/8da4dab64b41069616a492d9c1b4cda2.zip';
 		sdks.push(pangleAds);
 
 		// Pangle Mediation Adapter
 		final pangleAdapter:FrameworkSDK = new FrameworkSDK();
-		pangleAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-7.9.0.6.0.zip';
+		pangleAdapter.downloadLink = 'https://dl.google.com/googleadmobadssdk/mediation/ios/pangle/PangleAdapter-8.1.1.1.0.zip';
 		sdks.push(pangleAdapter);
 
 		// Vungle Ads SDK
