@@ -104,6 +104,7 @@ public class Admob extends Extension
 		VunglePrivacySettings.setCCPAStatus(ccpaConsent);
 	}
 
+	@SuppressWarnings("deprecation")
 	private static void initMobileAds(final boolean testingAds, final boolean childDirected, final boolean enableRDP)
 	{
 		RequestConfiguration.Builder configuration = new RequestConfiguration.Builder();
