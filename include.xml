@@ -59,8 +59,6 @@
 			<dependency name="WebKit.framework" />
 
 			<dependency name="libbz2.tbd" />
-			<dependency name="libc++.tbd" />
-			<dependency name="libc++abi.tbd" />
 			<dependency name="libiconv.tbd" />
 			<dependency name="libresolv.9.tbd" />
 			<dependency name="libsqlite3.tbd" />
