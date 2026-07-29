@@ -13,6 +13,8 @@
 	</section>
 
 	<section if="ios">
+		<config:ios class="Dummy.swift" />
+
 		<config:ios linker-flags="-ObjC" />
 
 		<section>
