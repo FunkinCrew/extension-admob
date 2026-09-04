@@ -46,18 +46,9 @@ class Admob
 		if (jni != null)
 			jni(testingAds, childDirected, enableRDP, new CallBackHandler());
 		#elseif ios
-		initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(onAdmobEvent));
+		initAdmob(testingAds, childDirected, enableRDP, cpp.Callable.fromStaticFunction(AdmobCallbacks.onAdmobEvent));
 		#end
 	}
-
-	#if ios
-	@:noCompletion
-	private static function onAdmobEvent(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
-	{
-		if (onEvent != null)
-			onEvent.dispatch(AdmobEvent.fromEvent((event : String), (value : String)));
-	}
-	#end
 
 	/**
 	 * Shows a banner ad.
@@ -638,6 +629,24 @@ private class CallBackHandler #if (lime >= "8.0.0") implements lime.system.JNI.J
 	{
 		if (Admob.onEvent != null)
 			Admob.onEvent.dispatch(AdmobEvent.fromEvent(event, value));
+	}
+}
+#end
+
+#if ios
+/**
+ * Holds the native AdMob callback.
+ */
+@:access(extension.admob.AdmobEvent)
+@:unreflective
+private class AdmobCallbacks
+{
+	@:noCompletion
+	@:unreflective
+	public static function onAdmobEvent(event:cpp.ConstCharStar, value:cpp.ConstCharStar):Void
+	{
+		if (Admob.onEvent != null)
+			Admob.onEvent.dispatch(AdmobEvent.fromEvent((event : String), (value : String)));
 	}
 }
 #end
